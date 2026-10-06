@@ -7,18 +7,18 @@
    - Bahasa Indonesia → id
 
    This file stores all translatable portfolio copy.
-   Switching behaviour will be handled by main.js.
+   Language switching is handled by main.js.
    ========================================================= */
 
 const FLTranslations = {
   /* =====================================================
-       ENGLISH
-       ===================================================== */
+     ENGLISH
+     ===================================================== */
 
   en: {
     /* -------------------------------------------------
-           META
-        ------------------------------------------------- */
+       META
+       ------------------------------------------------- */
 
     meta: {
       title: "F.Liyanto — Digital Designer",
@@ -28,8 +28,8 @@ const FLTranslations = {
     },
 
     /* -------------------------------------------------
-           NAVIGATION
-        ------------------------------------------------- */
+       NAVIGATION
+       ------------------------------------------------- */
 
     nav: {
       about: "About",
@@ -42,16 +42,16 @@ const FLTranslations = {
     },
 
     /* -------------------------------------------------
-           SCENE LABELS
-        ------------------------------------------------- */
+       SCENE LABELS
+       ------------------------------------------------- */
 
     scene: {
       welcome: "Welcome",
     },
 
     /* -------------------------------------------------
-           GENERAL CONTROLS
-        ------------------------------------------------- */
+       GENERAL CONTROLS
+       ------------------------------------------------- */
 
     controls: {
       continue: "Continue",
@@ -72,8 +72,8 @@ const FLTranslations = {
     },
 
     /* -------------------------------------------------
-           ACCESSIBILITY
-        ------------------------------------------------- */
+       ACCESSIBILITY
+       ------------------------------------------------- */
 
     accessibility: {
       title: "Accessibility",
@@ -84,8 +84,8 @@ const FLTranslations = {
     },
 
     /* -------------------------------------------------
-           WELCOME / HERO
-        ------------------------------------------------- */
+       WELCOME / HERO
+       ------------------------------------------------- */
 
     hero: {
       eyebrow: "Hello & welcome",
@@ -102,8 +102,8 @@ const FLTranslations = {
     },
 
     /* -------------------------------------------------
-           ABOUT
-        ------------------------------------------------- */
+       ABOUT
+       ------------------------------------------------- */
 
     about: {
       label: "About",
@@ -113,10 +113,10 @@ const FLTranslations = {
       intro: "I'm",
 
       paragraphOne:
-        "A digital designer born and raised in Surabaya, Indonesia, now studying abroad and building things from Melbourne, Australia.",
+        "An Indonesian digital designer born and raised in Surabaya, now creating interactive digital experiences from Melbourne, Australia.",
 
       paragraphTwo:
-        "I'm currently completing a Bachelor of Design (Digital Media) at RMIT University, where I spend a lot of time exploring how interfaces can feel expressive, intuitive, and genuinely enjoyable to interact with.",
+        "My work sits between UI design, interaction design and front-end development, with a focus on making digital experiences feel clear, responsive and enjoyable to use.",
 
       paragraphThree:
         "I like work that feels clean without becoming boring, playful without becoming distracting, and functional without losing its personality.",
@@ -127,12 +127,12 @@ const FLTranslations = {
 
       surabayaCaption: "Born & raised",
 
-      melbourneCaption: "Currently studying & designing",
+      melbourneCaption: "Designing & creating",
     },
 
     /* -------------------------------------------------
-           WHAT I DO
-        ------------------------------------------------- */
+       WHAT I DO
+       ------------------------------------------------- */
 
     services: {
       label: "What I Do",
@@ -174,22 +174,25 @@ const FLTranslations = {
     },
 
     /* -------------------------------------------------
-           RECENT PROJECTS
-        ------------------------------------------------- */
+       RECENT PROJECTS
+       ------------------------------------------------- */
 
     projects: {
       label: "Recent Projects",
 
       eyebrow: "A few things I've been building lately.",
 
-      title: "Three projects. Three different ways of thinking.",
+      title:
+        "Selected work across interaction, interface and creative front-end development.",
 
       interactionHint:
         "Scroll or use the controls to move through the projects.",
 
-      readMore: "Read More",
+      readMore: "View live project",
 
-      /* Nada Nusantara */
+      /* ---------------------------------------------
+         NADA NUSANTARA
+         --------------------------------------------- */
 
       nada: {
         preview:
@@ -201,24 +204,28 @@ const FLTranslations = {
           "Nada Nusantara was created solely for educational and non-commercial purposes. Any third-party music, audio, imagery or other copyrighted material used within the project remains the property of its respective copyright holders. No ownership of third-party material is claimed.",
       },
 
-      /* Pulse Diary */
+      /* ---------------------------------------------
+         PULSE DIARY
+         --------------------------------------------- */
 
       pulse: {
         preview:
           "An expressive digital diary exploring how interface behaviour, visual feedback and interaction can make personal reflection feel more engaging.",
       },
 
-      /* Lega */
+      /* ---------------------------------------------
+         LEGA
+         --------------------------------------------- */
 
       lega: {
         preview:
-          "A private emotional reflection experience designed to help people understand what they are feeling without needing to label the emotion first.",
+          "A private emotional reflection experience that uses sliders, templates and visual timelines to help people understand what they are feeling without needing to label the emotion first.",
       },
     },
 
     /* -------------------------------------------------
-           CONTACT
-        ------------------------------------------------- */
+       CONTACT
+       ------------------------------------------------- */
 
     contact: {
       label: "Contact",
@@ -240,8 +247,8 @@ const FLTranslations = {
     },
 
     /* -------------------------------------------------
-           FOOTER
-        ------------------------------------------------- */
+       FOOTER
+       ------------------------------------------------- */
 
     footer: {
       message: "Designed & developed with curiosity.",
@@ -249,24 +256,23 @@ const FLTranslations = {
   },
 
   /* =====================================================
-       BAHASA INDONESIA
-       ===================================================== */
-
+     BAHASA INDONESIA
+     ===================================================== */
   id: {
     /* -------------------------------------------------
-           META
-        ------------------------------------------------- */
+       META
+       ------------------------------------------------- */
 
     meta: {
       title: "F.Liyanto — Desainer Digital",
 
       description:
-        "Portofolio F.Liyanto — desainer digital asal Indonesia dengan fokus pada UI design, interaction design, web design dan front-end.",
+        "Portofolio F.Liyanto — desainer digital asal Indonesia yang berfokus pada UI design, interaction design, web design dan pengalaman front-end.",
     },
 
     /* -------------------------------------------------
-           NAVIGATION
-        ------------------------------------------------- */
+       NAVIGATION
+       ------------------------------------------------- */
 
     nav: {
       about: "Tentang Saya",
@@ -279,16 +285,16 @@ const FLTranslations = {
     },
 
     /* -------------------------------------------------
-           SCENE LABELS
-        ------------------------------------------------- */
+       SCENE LABELS
+       ------------------------------------------------- */
 
     scene: {
       welcome: "Selamat Datang",
     },
 
     /* -------------------------------------------------
-           GENERAL CONTROLS
-        ------------------------------------------------- */
+       GENERAL CONTROLS
+       ------------------------------------------------- */
 
     controls: {
       continue: "Lanjut",
@@ -309,8 +315,8 @@ const FLTranslations = {
     },
 
     /* -------------------------------------------------
-           ACCESSIBILITY
-        ------------------------------------------------- */
+       ACCESSIBILITY
+       ------------------------------------------------- */
 
     accessibility: {
       title: "Aksesibilitas",
@@ -321,8 +327,8 @@ const FLTranslations = {
     },
 
     /* -------------------------------------------------
-           WELCOME / HERO
-        ------------------------------------------------- */
+       WELCOME / HERO
+       ------------------------------------------------- */
 
     hero: {
       eyebrow: "Halo & selamat datang",
@@ -339,8 +345,8 @@ const FLTranslations = {
     },
 
     /* -------------------------------------------------
-           ABOUT
-        ------------------------------------------------- */
+       ABOUT
+       ------------------------------------------------- */
 
     about: {
       label: "Tentang Saya",
@@ -350,26 +356,26 @@ const FLTranslations = {
       intro: "Saya",
 
       paragraphOne:
-        "Seorang desainer digital yang lahir dan besar di Surabaya, Indonesia, dan sekarang sedang menempuh studi di luar negeri sambil membuat berbagai pengalaman digital dari Melbourne, Australia.",
+        "Seorang desainer digital Indonesia yang lahir dan besar di Surabaya, dan sekarang menciptakan pengalaman digital interaktif dari Melbourne, Australia.",
 
       paragraphTwo:
-        "Saat ini saya sedang menyelesaikan Bachelor of Design (Digital Media) di RMIT University, sambil banyak mengeksplorasi bagaimana sebuah interface bisa terasa ekspresif, intuitif, dan benar-benar menyenangkan untuk digunakan.",
+        "Pekerjaan saya berada di antara UI design, interaction design dan front-end development, dengan fokus pada pengalaman digital yang terasa jelas, responsif dan menyenangkan untuk digunakan.",
 
       paragraphThree:
-        "Saya suka desain yang bersih tanpa terasa membosankan, playful tanpa menjadi berlebihan, dan fungsional tanpa kehilangan kepribadiannya.",
+        "Saya suka karya yang terasa bersih tanpa menjadi membosankan, playful tanpa menjadi mengganggu, dan fungsional tanpa kehilangan kepribadiannya.",
 
       indonesia: "Indonesia",
 
       australia: "Australia",
 
-      surabayaCaption: "Lahir & besar di sini",
+      surabayaCaption: "Lahir & besar",
 
-      melbourneCaption: "Sekarang belajar & berkarya di sini",
+      melbourneCaption: "Mendesain & berkarya",
     },
 
     /* -------------------------------------------------
-           WHAT I DO
-        ------------------------------------------------- */
+       WHAT I DO
+       ------------------------------------------------- */
 
     services: {
       label: "Yang Saya Kerjakan",
@@ -411,22 +417,25 @@ const FLTranslations = {
     },
 
     /* -------------------------------------------------
-           RECENT PROJECTS
-        ------------------------------------------------- */
+       RECENT PROJECTS
+       ------------------------------------------------- */
 
     projects: {
       label: "Proyek Terbaru",
 
       eyebrow: "Beberapa hal yang belakangan ini saya kerjakan.",
 
-      title: "Tiga proyek. Tiga cara berpikir yang berbeda.",
+      title:
+        "Karya pilihan yang mengeksplorasi interaksi, interface dan pengembangan front-end kreatif.",
 
       interactionHint:
         "Scroll atau gunakan kontrol untuk berpindah antar proyek.",
 
-      readMore: "Baca Selengkapnya",
+      readMore: "Lihat proyek langsung",
 
-      /* Nada Nusantara */
+      /* ---------------------------------------------
+         NADA NUSANTARA
+         --------------------------------------------- */
 
       nada: {
         preview:
@@ -438,24 +447,28 @@ const FLTranslations = {
           "Nada Nusantara dibuat semata-mata untuk tujuan pendidikan dan non-komersial. Musik, audio, gambar maupun materi berhak cipta dari pihak ketiga yang digunakan dalam proyek ini tetap menjadi milik masing-masing pemegang hak cipta. Tidak ada klaim kepemilikan atas materi pihak ketiga.",
       },
 
-      /* Pulse Diary */
+      /* ---------------------------------------------
+         PULSE DIARY
+         --------------------------------------------- */
 
       pulse: {
         preview:
           "Sebuah digital diary ekspresif yang mengeksplorasi bagaimana perilaku interface, feedback visual dan interaksi dapat membuat proses refleksi pribadi terasa lebih menarik.",
       },
 
-      /* Lega */
+      /* ---------------------------------------------
+         LEGA
+         --------------------------------------------- */
 
       lega: {
         preview:
-          "Sebuah pengalaman refleksi emosional privat yang dirancang untuk membantu seseorang memahami apa yang sedang mereka rasakan tanpa harus langsung memberi label pada emosinya.",
+          "Sebuah pengalaman refleksi emosional pribadi yang menggunakan slider, template dan timeline visual untuk membantu pengguna memahami apa yang mereka rasakan tanpa harus memberi label pada emosinya terlebih dahulu.",
       },
     },
 
     /* -------------------------------------------------
-           CONTACT
-        ------------------------------------------------- */
+       CONTACT
+       ------------------------------------------------- */
 
     contact: {
       label: "Kontak",
@@ -477,8 +490,8 @@ const FLTranslations = {
     },
 
     /* -------------------------------------------------
-           FOOTER
-        ------------------------------------------------- */
+       FOOTER
+       ------------------------------------------------- */
 
     footer: {
       message: "Dirancang & dikembangkan dengan rasa penasaran.",

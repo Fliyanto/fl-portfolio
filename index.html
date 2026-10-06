@@ -42,17 +42,18 @@
     ========================================================== -->
 
     <header class="site-header" data-header>
-      <!-- F.L Wordmark -->
+      <!-- Logo -->
 
       <a
         class="site-logo"
         href="#welcome"
         aria-label="F.Liyanto — Return to welcome"
+        data-scene-target="welcome"
       >
         <span class="site-logo__mark"> F.L </span>
       </a>
 
-      <!-- Desktop Scene Navigation -->
+      <!-- Desktop Navigation -->
 
       <nav class="site-nav" aria-label="Portfolio navigation">
         <button
@@ -95,7 +96,7 @@
       <!-- Header Controls -->
 
       <div class="header-controls">
-        <!-- Language Switcher -->
+        <!-- Language -->
 
         <div
           class="language-switcher"
@@ -123,7 +124,7 @@
           </button>
         </div>
 
-        <!-- Accessibility / Settings Button -->
+        <!-- Accessibility -->
 
         <button
           class="settings-toggle"
@@ -136,7 +137,7 @@
           <span class="settings-toggle__icon" aria-hidden="true"> Aa </span>
         </button>
 
-        <!-- Mobile Navigation Button -->
+        <!-- Mobile Menu -->
 
         <button
           class="nav-toggle"
@@ -153,10 +154,7 @@
     </header>
 
     <!-- =========================================================
-         ACCESSIBILITY SETTINGS PANEL
-
-         Font sizing and reduced-motion controls will be wired
-         up later in JavaScript.
+         ACCESSIBILITY PANEL
     ========================================================== -->
 
     <aside
@@ -192,13 +190,22 @@
         </p>
 
         <div class="font-size-controls" role="group" aria-label="Text size">
-          <button type="button" data-font-size="small">A</button>
-
-          <button class="is-active" type="button" data-font-size="default">
+          <button type="button" data-font-size="small" aria-pressed="false">
             A
           </button>
 
-          <button type="button" data-font-size="large">A</button>
+          <button
+            class="is-active"
+            type="button"
+            data-font-size="default"
+            aria-pressed="true"
+          >
+            A
+          </button>
+
+          <button type="button" data-font-size="large" aria-pressed="false">
+            A
+          </button>
         </div>
       </div>
 
@@ -223,6 +230,7 @@
       class="mobile-nav"
       id="mobile-navigation"
       aria-label="Mobile portfolio navigation"
+      hidden
       data-mobile-nav
     >
       <button
@@ -264,29 +272,22 @@
 
     <!-- =========================================================
          MAIN EXPERIENCE
-
-         Each major part of the portfolio is treated as a SCENE,
-         rather than a normal stacked webpage section.
-
-         Scroll, click and keyboard interactions will eventually
-         control the same GSAP scene timelines.
     ========================================================== -->
 
     <main class="portfolio-experience" id="main-content" data-portfolio>
       <!-- =====================================================
-             SCENE 00 — WELCOME
-
-             This scene will stay pinned while the user progresses
-             through several visual states.
-        ====================================================== -->
+           SCENE 00 — WELCOME
+      ====================================================== -->
 
       <section
         class="scene scene--welcome"
         id="welcome"
         data-scene="welcome"
         data-scene-index="0"
+        data-scene-status="active"
+        aria-current="true"
       >
-        <!-- Decorative Background Shapes -->
+        <!-- Background Shapes -->
 
         <div class="scene-shapes scene-shapes--welcome" aria-hidden="true">
           <span
@@ -314,78 +315,98 @@
           <!-- Scene Indicator -->
 
           <div class="scene-indicator" aria-hidden="true">
-            <span>00</span>
+            <span> 00 </span>
+
             <span class="scene-indicator__line"></span>
+
             <span data-i18n="scene.welcome"> Welcome </span>
           </div>
 
-          <!-- Welcome State 01 -->
+          <!-- =================================================
+               OPENING SEQUENCE
 
-          <div class="welcome__intro" data-welcome-state="intro">
-            <p class="welcome__eyebrow" data-i18n="hero.eyebrow">
-              Hello & welcome
-            </p>
+               One Continue action plays:
+               Intro → Specialisms → Statement → About
+          ================================================== -->
 
-            <h1 class="welcome__title">
-              <span class="welcome__title-small" data-i18n="hero.portfolioOf">
-                Portfolio of
+          <div class="welcome__sequence" data-welcome-sequence>
+            <!-- State 01 — Introduction -->
+
+            <div class="welcome__intro" data-welcome-state="intro">
+              <p class="welcome__eyebrow" data-i18n="hero.eyebrow">
+                Hello & welcome
+              </p>
+
+              <h1 class="welcome__title">
+                <span class="welcome__title-small" data-i18n="hero.portfolioOf">
+                  Portfolio of
+                </span>
+
+                <span class="welcome__name" data-welcome-name> F.Liyanto </span>
+              </h1>
+            </div>
+
+            <!-- State 02 — Specialisms -->
+
+            <div
+              class="welcome__specialisms"
+              data-welcome-state="specialisms"
+              aria-label="Design specialisations"
+            >
+              <span
+                class="welcome-specialism welcome-specialism--ui"
+                data-i18n="hero.ui"
+              >
+                UI Design
               </span>
 
-              <span class="welcome__name" data-welcome-name> F.Liyanto </span>
-            </h1>
+              <span
+                class="welcome-specialism welcome-specialism--interaction"
+                data-i18n="hero.interaction"
+              >
+                Interaction Design
+              </span>
+
+              <span
+                class="welcome-specialism welcome-specialism--frontend"
+                data-i18n="hero.frontend"
+              >
+                Front-End
+              </span>
+            </div>
+
+            <!-- State 03 — Statement -->
+
+            <div class="welcome__statement" data-welcome-state="statement">
+              <p class="welcome__statement-text" data-i18n="hero.statement">
+                I like making digital things that feel alive.
+              </p>
+            </div>
           </div>
 
-          <!-- Welcome State 02 -->
+          <!-- =================================================
+               PRIMARY OPENING CONTROL
 
-          <div
-            class="welcome__specialisms"
-            data-welcome-state="specialisms"
-            aria-label="Design specialisations"
-          >
-            <span
-              class="welcome-specialism welcome-specialism--ui"
-              data-i18n="hero.ui"
-            >
-              UI Design
-            </span>
-
-            <span
-              class="welcome-specialism welcome-specialism--interaction"
-              data-i18n="hero.interaction"
-            >
-              Interaction Design
-            </span>
-
-            <span
-              class="welcome-specialism welcome-specialism--frontend"
-              data-i18n="hero.frontend"
-            >
-              Front-End
-            </span>
-          </div>
-
-          <!-- Welcome State 03 -->
-
-          <div class="welcome__statement" data-welcome-state="statement">
-            <p class="welcome__statement-text" data-i18n="hero.statement">
-              I like making digital things that feel alive.
-            </p>
-          </div>
-
-          <!-- Scroll / Click Progress -->
+               animations.js owns this control directly.
+               Do not add data-scene-continue here.
+          ================================================== -->
 
           <div class="scene-progress">
             <button
               class="scene-progress__continue"
               type="button"
-              data-scene-continue
+              data-welcome-continue
             >
               <span data-i18n="controls.continue"> Continue </span>
 
               <span class="scene-progress__arrow" aria-hidden="true"> ↓ </span>
             </button>
 
-            <div class="scene-progress__steps" aria-hidden="true">
+            <div
+              class="scene-progress__steps"
+              aria-hidden="true"
+              data-welcome-progress
+            >
               <span class="is-active"></span>
               <span></span>
               <span></span>
@@ -398,21 +419,18 @@
           </div>
         </div>
       </section>
-
       <!-- =====================================================
-             SCENE 01 — ABOUT
-
-             Surabaya → Melbourne becomes part of the story rather
-             than a decorative timeline.
-        ====================================================== -->
+           SCENE 01 — ABOUT
+      ====================================================== -->
 
       <section
         class="scene scene--about"
         id="about"
         data-scene="about"
         data-scene-index="1"
+        data-scene-status="inactive"
       >
-        <!-- Decorative Shapes -->
+        <!-- Background Shapes -->
 
         <div class="scene-shapes scene-shapes--about" aria-hidden="true">
           <span class="shape shape--about-one" data-shape="about-one"></span>
@@ -429,7 +447,7 @@
           <!-- Scene Indicator -->
 
           <div class="scene-indicator">
-            <span>01</span>
+            <span> 01 </span>
 
             <span class="scene-indicator__line" aria-hidden="true"></span>
 
@@ -451,15 +469,15 @@
 
             <div class="about__story">
               <p data-i18n="about.paragraphOne">
-                A digital designer born and raised in Surabaya, Indonesia, now
-                studying abroad and building things from Melbourne, Australia.
+                An Indonesian digital designer born and raised in Surabaya, now
+                creating interactive digital experiences from Melbourne,
+                Australia.
               </p>
 
               <p data-i18n="about.paragraphTwo">
-                I'm currently completing a Bachelor of Design (Digital Media) at
-                RMIT University, where I spend a lot of time exploring how
-                interfaces can feel expressive, intuitive, and genuinely
-                enjoyable to interact with.
+                My work sits between UI design, interaction design and front-end
+                development, with a focus on making digital experiences feel
+                clear, responsive and enjoyable to use.
               </p>
 
               <p data-i18n="about.paragraphThree">
@@ -471,8 +489,8 @@
           </div>
 
           <!-- =================================================
-                     SURABAYA → MELBOURNE TRAVEL STORY
-                ================================================== -->
+               SURABAYA → MELBOURNE
+          ================================================== -->
 
           <div class="travel-story" data-travel-story>
             <!-- Surabaya -->
@@ -509,11 +527,11 @@
                   class="travel-route__path"
                   data-travel-path
                   d="
-                                    M 20 175
-                                    C 210 25,
-                                      560 25,
-                                      780 150
-                                "
+                    M 20 175
+                    C 210 25,
+                      560 25,
+                      780 150
+                  "
                 />
               </svg>
 
@@ -538,14 +556,19 @@
                 class="travel-location__caption"
                 data-i18n="about.melbourneCaption"
               >
-                Currently studying & designing
+                Designing & creating
               </p>
             </div>
           </div>
 
           <!-- Continue -->
 
-          <button class="scene-next" type="button" data-scene-continue>
+          <button
+            class="scene-next"
+            type="button"
+            data-scene-continue
+            data-scene-target="services"
+          >
             <span data-i18n="controls.next"> Next </span>
 
             <span aria-hidden="true"> ↓ </span>
@@ -554,17 +577,15 @@
       </section>
 
       <!-- =====================================================
-             SCENE 02 — WHAT I DO
-
-             Each discipline is a distinct interactive object.
-             Clicking one expands it and reveals more information.
-        ====================================================== -->
+           SCENE 02 — WHAT I DO
+      ====================================================== -->
 
       <section
         class="scene scene--services"
         id="what-i-do"
         data-scene="services"
         data-scene-index="2"
+        data-scene-status="inactive"
       >
         <!-- Background Shapes -->
 
@@ -584,7 +605,7 @@
           <!-- Scene Indicator -->
 
           <div class="scene-indicator">
-            <span>02</span>
+            <span> 02 </span>
 
             <span class="scene-indicator__line" aria-hidden="true"></span>
 
@@ -609,8 +630,8 @@
           </div>
 
           <!-- =================================================
-                     INTERACTIVE DISCIPLINES
-                ================================================== -->
+               DISCIPLINE GRID
+          ================================================== -->
 
           <div class="discipline-playground" data-discipline-playground>
             <!-- UI DESIGN -->
@@ -620,6 +641,7 @@
                 class="discipline__trigger"
                 type="button"
                 aria-expanded="false"
+                aria-controls="discipline-ui-details"
                 data-discipline-trigger="ui"
               >
                 <span class="discipline__number"> 01 </span>
@@ -631,7 +653,12 @@
                 <span class="discipline__symbol" aria-hidden="true"> + </span>
               </button>
 
-              <div class="discipline__details" data-discipline-details="ui">
+              <div
+                class="discipline__details"
+                id="discipline-ui-details"
+                data-discipline-details="ui"
+                aria-hidden="true"
+              >
                 <p
                   class="discipline__description"
                   data-i18n="services.ui.description"
@@ -659,6 +686,7 @@
                 class="discipline__trigger"
                 type="button"
                 aria-expanded="false"
+                aria-controls="discipline-interaction-details"
                 data-discipline-trigger="interaction"
               >
                 <span class="discipline__number"> 02 </span>
@@ -675,7 +703,9 @@
 
               <div
                 class="discipline__details"
+                id="discipline-interaction-details"
                 data-discipline-details="interaction"
+                aria-hidden="true"
               >
                 <p
                   class="discipline__description"
@@ -704,6 +734,7 @@
                 class="discipline__trigger"
                 type="button"
                 aria-expanded="false"
+                aria-controls="discipline-frontend-details"
                 data-discipline-trigger="frontend"
               >
                 <span class="discipline__number"> 03 </span>
@@ -720,7 +751,9 @@
 
               <div
                 class="discipline__details"
+                id="discipline-frontend-details"
                 data-discipline-details="frontend"
+                aria-hidden="true"
               >
                 <p
                   class="discipline__description"
@@ -746,6 +779,7 @@
                 class="discipline__trigger"
                 type="button"
                 aria-expanded="false"
+                aria-controls="discipline-web-details"
                 data-discipline-trigger="web"
               >
                 <span class="discipline__number"> 04 </span>
@@ -757,7 +791,12 @@
                 <span class="discipline__symbol" aria-hidden="true"> + </span>
               </button>
 
-              <div class="discipline__details" data-discipline-details="web">
+              <div
+                class="discipline__details"
+                id="discipline-web-details"
+                data-discipline-details="web"
+                aria-hidden="true"
+              >
                 <p
                   class="discipline__description"
                   data-i18n="services.web.description"
@@ -776,12 +815,13 @@
             </article>
           </div>
 
-          <!-- Continue Into Recent Projects -->
+          <!-- Continue Into Projects -->
 
           <button
             class="scene-next scene-next--projects"
             type="button"
             data-scene-continue
+            data-scene-target="projects"
           >
             <span data-i18n="controls.projects"> See recent projects </span>
 
@@ -789,12 +829,19 @@
           </button>
         </div>
       </section>
+      <!-- =====================================================
+           SCENE 03 — RECENT PROJECTS
+      ====================================================== -->
+
       <section
         class="scene scene--projects"
         id="recent-projects"
         data-scene="projects"
         data-scene-index="3"
+        data-scene-status="inactive"
       >
+        <!-- Background Shapes -->
+
         <div class="scene-shapes scene-shapes--projects" aria-hidden="true">
           <span
             class="shape shape--projects-one"
@@ -808,13 +855,17 @@
         </div>
 
         <div class="scene__inner projects">
+          <!-- Scene Indicator -->
+
           <div class="scene-indicator">
-            <span>03</span>
+            <span> 03 </span>
 
             <span class="scene-indicator__line" aria-hidden="true"></span>
 
             <span data-i18n="projects.label"> Recent Projects </span>
           </div>
+
+          <!-- Projects Heading -->
 
           <div class="projects__heading">
             <p class="projects__eyebrow" data-i18n="projects.eyebrow">
@@ -822,14 +873,19 @@
             </p>
 
             <h2 class="projects__title" data-i18n="projects.title">
-              Three projects. Three different ways of thinking.
+              Selected work across interaction, interface and creative front-end
+              development.
             </h2>
           </div>
 
+          <!-- =================================================
+               PROJECT STAGE
+          ================================================== -->
+
           <div class="project-stage" data-project-stage>
-            <!-- =========================================
-                         VERTICAL PROJECT TIMELINE
-                    ========================================== -->
+            <!-- =============================================
+                 PROJECT TIMELINE
+            ============================================== -->
 
             <aside
               class="project-progress"
@@ -845,6 +901,8 @@
               </div>
 
               <div class="project-progress__markers">
+                <!-- Nada Nusantara -->
+
                 <button
                   class="project-progress__marker is-active"
                   type="button"
@@ -852,31 +910,33 @@
                   aria-label="Show Nada Nusantara"
                   aria-current="true"
                 >
-                  <span class="project-progress__dot"></span>
+                  <span class="project-progress__dot" aria-hidden="true"></span>
 
                   <span class="project-progress__label"> Nada Nusantara </span>
                 </button>
+
+                <!-- Pulse Diary -->
 
                 <button
                   class="project-progress__marker"
                   type="button"
                   data-project-jump="pulse-diary"
                   aria-label="Show Pulse Diary"
-                  aria-current="false"
                 >
-                  <span class="project-progress__dot"></span>
+                  <span class="project-progress__dot" aria-hidden="true"></span>
 
                   <span class="project-progress__label"> Pulse Diary </span>
                 </button>
+
+                <!-- Lega -->
 
                 <button
                   class="project-progress__marker"
                   type="button"
                   data-project-jump="lega"
                   aria-label="Show Lega"
-                  aria-current="false"
                 >
-                  <span class="project-progress__dot"></span>
+                  <span class="project-progress__dot" aria-hidden="true"></span>
 
                   <span class="project-progress__label"> Lega </span>
                 </button>
@@ -885,14 +945,14 @@
               <div class="project-progress__year">2026</div>
             </aside>
 
-            <!-- =========================================
-                         PROJECT DISPLAY AREA
-                    ========================================== -->
+            <!-- =============================================
+                 PROJECT DISPLAY
+            ============================================== -->
 
             <div class="project-display" data-project-display>
-              <!-- =====================================
-                             NADA NUSANTARA
-                        ====================================== -->
+              <!-- =========================================
+                   PROJECT 01 — NADA NUSANTARA
+              ========================================== -->
 
               <article
                 class="project-panel project-panel--nada is-active"
@@ -900,7 +960,7 @@
                 data-project-theme="rhythm"
                 aria-hidden="false"
               >
-                <!-- Project-specific Visual -->
+                <!-- Decorative Rhythm Visual -->
 
                 <div
                   class="project-visual project-visual--rhythm"
@@ -914,64 +974,76 @@
                   <span class="rhythm-line"></span>
                 </div>
 
-                <div class="project-panel__meta">
-                  <span class="project-panel__number"> 01 </span>
+                <!-- Shared Project Content Frame -->
 
-                  <span class="project-panel__date"> Jul — Oct 2025 </span>
-                </div>
+                <div class="project-panel__content">
+                  <div class="project-panel__meta">
+                    <span class="project-panel__number"> 01 </span>
 
-                <h3 class="project-panel__name">Nada Nusantara</h3>
+                    <span class="project-panel__date"> Jul — Oct 2025 </span>
+                  </div>
 
-                <ul
-                  class="project-panel__disciplines"
-                  aria-label="Nada Nusantara disciplines"
-                >
-                  <li>Interaction Design</li>
-                  <li>Web Design</li>
-                  <li>Front-End</li>
-                </ul>
+                  <h3 class="project-panel__name">Nada Nusantara</h3>
 
-                <div class="project-preview" data-project-preview>
-                  <p
-                    class="project-preview__text"
-                    data-i18n="projects.nada.preview"
+                  <ul
+                    class="project-panel__disciplines"
+                    aria-label="Nada Nusantara disciplines"
                   >
-                    An interactive web experience exploring Indonesian music,
-                    culture and digital storytelling through sound, movement and
-                    playful interaction.
-                  </p>
+                    <li>Interaction Design</li>
+
+                    <li>Web Design</li>
+
+                    <li>Front-End</li>
+                  </ul>
+
+                  <div class="project-preview">
+                    <p
+                      class="project-preview__text"
+                      data-i18n="projects.nada.preview"
+                    >
+                      An interactive web experience exploring Indonesian music,
+                      culture and digital storytelling through sound, movement
+                      and playful interaction.
+                    </p>
+                  </div>
+
+                  <div class="project-panel__actions">
+                    <a
+                      class="project-read-more"
+                      href="https://nadanusantarafinal.netlify.app/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-project-read-more="nada-nusantara"
+                    >
+                      <span data-i18n="projects.readMore">
+                        View live project
+                      </span>
+
+                      <span aria-hidden="true"> ↗ </span>
+                    </a>
+                  </div>
+
+                  <!-- Educational Copyright Note -->
+
+                  <details class="project-disclaimer">
+                    <summary data-i18n="projects.nada.disclaimerLabel">
+                      Educational use disclaimer
+                    </summary>
+
+                    <p data-i18n="projects.nada.disclaimer">
+                      Nada Nusantara was created solely for educational and
+                      non-commercial purposes. Any third-party music, audio,
+                      imagery or other copyrighted material used within the
+                      project remains the property of its respective copyright
+                      holders. No ownership of third-party material is claimed.
+                    </p>
+                  </details>
                 </div>
-
-                <div class="project-panel__actions">
-                  <a
-                    class="project-read-more"
-                    href="projects/nada-nusantara.html"
-                    data-project-read-more="nada-nusantara"
-                  >
-                    <span data-i18n="projects.readMore"> Read More </span>
-
-                    <span aria-hidden="true"> ↗ </span>
-                  </a>
-                </div>
-
-                <details class="project-disclaimer">
-                  <summary data-i18n="projects.nada.disclaimerLabel">
-                    Educational use disclaimer
-                  </summary>
-
-                  <p data-i18n="projects.nada.disclaimer">
-                    Nada Nusantara was created solely for educational and
-                    non-commercial purposes. Any third-party music, audio,
-                    imagery or other copyrighted material used within the
-                    project remains the property of its respective copyright
-                    holders. No ownership of third-party material is claimed.
-                  </p>
-                </details>
               </article>
 
-              <!-- =====================================
-                             PULSE DIARY
-                        ====================================== -->
+              <!-- =========================================
+                   PROJECT 02 — PULSE DIARY
+              ========================================== -->
 
               <article
                 class="project-panel project-panel--pulse"
@@ -979,148 +1051,188 @@
                 data-project-theme="pulse"
                 aria-hidden="true"
               >
-                <!-- Project-specific Visual -->
+                <!-- Decorative Pulse Visual -->
 
                 <div
                   class="project-visual project-visual--pulse"
                   aria-hidden="true"
                 >
-                  <span class="pulse-ring"></span>
-                  <span class="pulse-ring"></span>
-                  <span class="pulse-ring"></span>
+                  <span class="pulse-ring pulse-ring--outer"></span>
+
+                  <span class="pulse-ring pulse-ring--middle"></span>
+
+                  <span class="pulse-ring pulse-ring--inner"></span>
+
                   <span class="pulse-core"></span>
+
+                  <span class="pulse-marker pulse-marker--one"> ✦ </span>
+
+                  <span class="pulse-marker pulse-marker--two"> ● </span>
+
+                  <span class="pulse-marker pulse-marker--three"> + </span>
                 </div>
 
-                <div class="project-panel__meta">
-                  <span class="project-panel__number"> 02 </span>
+                <!-- Shared Project Content Frame -->
 
-                  <span class="project-panel__date"> 2026 </span>
-                </div>
+                <div class="project-panel__content">
+                  <div class="project-panel__meta">
+                    <span class="project-panel__number"> 02 </span>
 
-                <h3 class="project-panel__name">Pulse Diary</h3>
+                    <span class="project-panel__date"> 2026 </span>
+                  </div>
 
-                <ul
-                  class="project-panel__disciplines"
-                  aria-label="Pulse Diary disciplines"
-                >
-                  <li>UI Design</li>
-                  <li>Interaction Design</li>
-                  <li>Creative Coding</li>
-                </ul>
+                  <h3 class="project-panel__name">Pulse Diary</h3>
 
-                <div class="project-preview" data-project-preview>
-                  <p
-                    class="project-preview__text"
-                    data-i18n="projects.pulse.preview"
+                  <ul
+                    class="project-panel__disciplines"
+                    aria-label="Pulse Diary disciplines"
                   >
-                    An expressive digital diary exploring how interface
-                    behaviour, visual feedback and interaction can make personal
-                    reflection feel more engaging.
-                  </p>
-                </div>
+                    <li>UI Design</li>
 
-                <div class="project-panel__actions">
-                  <a
-                    class="project-read-more"
-                    href="projects/pulse-diary.html"
-                    data-project-read-more="pulse-diary"
-                  >
-                    <span data-i18n="projects.readMore"> Read More </span>
+                    <li>Interaction Design</li>
 
-                    <span aria-hidden="true"> ↗ </span>
-                  </a>
+                    <li>Creative Coding</li>
+                  </ul>
+
+                  <div class="project-preview">
+                    <p
+                      class="project-preview__text"
+                      data-i18n="projects.pulse.preview"
+                    >
+                      An expressive digital diary exploring how interface
+                      behaviour, visual feedback and interaction can make
+                      personal reflection feel more engaging.
+                    </p>
+                  </div>
+
+                  <div class="project-panel__actions">
+                    <a
+                      class="project-read-more"
+                      href="https://pulsediary.netlify.app/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-project-read-more="pulse-diary"
+                    >
+                      <span data-i18n="projects.readMore">
+                        View live project
+                      </span>
+
+                      <span aria-hidden="true"> ↗ </span>
+                    </a>
+                  </div>
                 </div>
               </article>
 
-              <!-- =====================================
-                             LEGA
-                        ====================================== -->
+              <!-- =========================================
+                   PROJECT 03 — LEGA
+              ========================================== -->
 
               <article
                 class="project-panel project-panel--lega"
                 data-project-panel="lega"
-                data-project-theme="sliders"
+                data-project-theme="lega"
                 aria-hidden="true"
               >
-                <!-- Project-specific Visual -->
+                <!-- Decorative Reflection Visual -->
 
                 <div
-                  class="project-visual project-visual--sliders"
+                  class="project-visual project-visual--lega"
                   aria-hidden="true"
                 >
-                  <div class="lega-slider">
-                    <span></span>
-                    <i></i>
+                  <div class="lega-visual__orb">
+                    <span
+                      class="lega-visual__ring lega-visual__ring--outer"
+                    ></span>
+                    <span
+                      class="lega-visual__ring lega-visual__ring--middle"
+                    ></span>
+                    <span
+                      class="lega-visual__ring lega-visual__ring--inner"
+                    ></span>
+
+                    <span class="lega-visual__core"> ✦ </span>
                   </div>
 
-                  <div class="lega-slider">
-                    <span></span>
-                    <i></i>
-                  </div>
+                  <div class="lega-visual__sliders">
+                    <span class="lega-visual__slider lega-visual__slider--one">
+                      <span></span>
+                    </span>
 
-                  <div class="lega-slider">
-                    <span></span>
-                    <i></i>
-                  </div>
+                    <span class="lega-visual__slider lega-visual__slider--two">
+                      <span></span>
+                    </span>
 
-                  <div class="lega-slider">
-                    <span></span>
-                    <i></i>
-                  </div>
+                    <span
+                      class="lega-visual__slider lega-visual__slider--three"
+                    >
+                      <span></span>
+                    </span>
 
-                  <div class="lega-slider">
-                    <span></span>
-                    <i></i>
+                    <span class="lega-visual__slider lega-visual__slider--four">
+                      <span></span>
+                    </span>
+
+                    <span class="lega-visual__slider lega-visual__slider--five">
+                      <span></span>
+                    </span>
                   </div>
                 </div>
 
-                <div class="project-panel__meta">
-                  <span class="project-panel__number"> 03 </span>
+                <!-- Shared Project Content Frame -->
 
-                  <span class="project-panel__date"> 2026 — Ongoing </span>
-                </div>
+                <div class="project-panel__content">
+                  <div class="project-panel__meta">
+                    <span class="project-panel__number"> 03 </span>
 
-                <h3 class="project-panel__name">Lega</h3>
+                    <span class="project-panel__date"> 2026 </span>
+                  </div>
 
-                <ul
-                  class="project-panel__disciplines"
-                  aria-label="Lega disciplines"
-                >
-                  <li>UI Design</li>
-                  <li>Interaction Design</li>
-                  <li>UX Research</li>
-                  <li>Front-End</li>
-                </ul>
+                  <h3 class="project-panel__name">Lega</h3>
 
-                <div class="project-preview" data-project-preview>
-                  <p
-                    class="project-preview__text"
-                    data-i18n="projects.lega.preview"
+                  <ul
+                    class="project-panel__disciplines"
+                    aria-label="Lega disciplines"
                   >
-                    A private emotional reflection experience designed to help
-                    people understand what they are feeling without needing to
-                    label the emotion first.
-                  </p>
-                </div>
+                    <li>UI Design</li>
 
-                <div class="project-panel__actions">
-                  <a
-                    class="project-read-more"
-                    href="projects/lega.html"
-                    data-project-read-more="lega"
-                  >
-                    <span data-i18n="projects.readMore"> Read More </span>
+                    <li>Interaction Design</li>
 
-                    <span aria-hidden="true"> ↗ </span>
-                  </a>
+                    <li>Front-End</li>
+                  </ul>
+
+                  <div class="project-preview">
+                    <p
+                      class="project-preview__text"
+                      data-i18n="projects.lega.preview"
+                    >
+                      A private emotional reflection experience that uses
+                      sliders, templates and visual timelines to help people
+                      understand what they are feeling without needing to label
+                      the emotion first.
+                    </p>
+                  </div>
+
+                  <div class="project-panel__actions">
+                    <a
+                      class="project-read-more"
+                      href="#"
+                      data-project-read-more="lega"
+                    >
+                      <span data-i18n="projects.readMore">
+                        View live project
+                      </span>
+
+                      <span aria-hidden="true"> ↗ </span>
+                    </a>
+                  </div>
                 </div>
               </article>
             </div>
           </div>
 
-          <!-- =============================================
-                     PROJECT NAVIGATION
-                ============================================== -->
+          <!-- =================================================
+               PROJECT NAVIGATION
+          ================================================== -->
 
           <div class="project-controls">
             <button
@@ -1134,7 +1246,11 @@
               <span data-i18n="controls.previousProject"> Previous </span>
             </button>
 
-            <div class="project-controls__counter" aria-live="polite">
+            <div
+              class="project-controls__counter"
+              aria-live="polite"
+              aria-label="Current project"
+            >
               <span data-project-current> 01 </span>
 
               <span aria-hidden="true"> / </span>
@@ -1153,8 +1269,6 @@
             </button>
           </div>
 
-          <!-- Scroll / Click Hint -->
-
           <p
             class="projects__interaction-hint"
             data-i18n="projects.interactionHint"
@@ -1162,12 +1276,13 @@
             Scroll or use the controls to move through the projects.
           </p>
 
-          <!-- Continue to Contact -->
+          <!-- Continue Into Contact -->
 
           <button
             class="scene-next scene-next--contact"
             type="button"
             data-scene-continue
+            data-scene-target="contact"
           >
             <span data-i18n="controls.contact"> Let's connect </span>
 
@@ -1175,17 +1290,19 @@
           </button>
         </div>
       </section>
-
       <!-- =====================================================
-             SCENE 04 — CONTACT
-        ====================================================== -->
+           SCENE 04 — CONTACT
+      ====================================================== -->
 
       <section
         class="scene scene--contact"
         id="contact"
         data-scene="contact"
         data-scene-index="4"
+        data-scene-status="inactive"
       >
+        <!-- Background Shapes -->
+
         <div class="scene-shapes scene-shapes--contact" aria-hidden="true">
           <span
             class="shape shape--contact-one"
@@ -1204,13 +1321,17 @@
         </div>
 
         <div class="scene__inner contact">
+          <!-- Scene Indicator -->
+
           <div class="scene-indicator">
-            <span>04</span>
+            <span> 04 </span>
 
             <span class="scene-indicator__line" aria-hidden="true"></span>
 
             <span data-i18n="contact.label"> Contact </span>
           </div>
+
+          <!-- Contact Copy -->
 
           <div class="contact__content">
             <p class="contact__eyebrow" data-i18n="contact.eyebrow">
@@ -1226,11 +1347,12 @@
               hello? Feel free to reach out.
             </p>
 
-            <!-- =========================================
-                         SOCIAL / CONTACT LINKS
+            <!-- =================================================
+                 CONTACT LINKS
 
-                         Replace placeholder URLs later.
-                    ========================================== -->
+                 Placeholder destinations can be replaced later.
+                 main.js keeps "#" links inactive until then.
+            ================================================== -->
 
             <div class="contact-links">
               <!-- Email -->
@@ -1263,7 +1385,7 @@
                 <span class="contact-link__arrow" aria-hidden="true"> ↗ </span>
               </a>
 
-              <!-- Social / GitHub Placeholder -->
+              <!-- Social / Portfolio Profile -->
 
               <a
                 class="contact-link"
@@ -1288,7 +1410,7 @@
             </div>
           </div>
 
-          <!-- Large F.L Ending Mark -->
+          <!-- Large Ending Mark -->
 
           <div class="contact__brand" aria-hidden="true" data-contact-brand>
             F.L
@@ -1325,9 +1447,6 @@
 
     <!-- =========================================================
          CUSTOM POINTER
-
-         Desktop only.
-         Hidden automatically on touch devices later.
     ========================================================== -->
 
     <div class="custom-cursor" aria-hidden="true" data-cursor>
@@ -1346,14 +1465,17 @@
 
     <!-- =========================================================
          PORTFOLIO JAVASCRIPT
+
+         Load order matters:
+         1. Translation data
+         2. Project data
+         3. Main application state
+         4. Animation controller
     ========================================================== -->
 
     <script src="js/translations.js"></script>
-
     <script src="js/projects.js"></script>
-
     <script src="js/main.js"></script>
-
     <script src="js/animations.js"></script>
   </body>
 </html>

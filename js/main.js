@@ -7,24 +7,20 @@
   "use strict";
 
   /* =====================================================
-       01 — CORE CONSTANTS
-       ===================================================== */
+     01 — CORE CONSTANTS
+     ===================================================== */
 
   const SCENE_ORDER = ["welcome", "about", "services", "projects", "contact"];
 
   const STORAGE_KEYS = {
     language: "flPortfolio.language",
-
     fontSize: "flPortfolio.fontSize",
-
     reducedMotion: "flPortfolio.reducedMotion",
   };
 
   const DEFAULTS = {
     language: "en",
-
     fontSize: "default",
-
     reducedMotion: false,
   };
 
@@ -33,8 +29,8 @@
   const VALID_FONT_SIZES = ["small", "default", "large"];
 
   /* =====================================================
-       02 — SITE STATE
-       ===================================================== */
+     02 — SITE STATE
+     ===================================================== */
 
   const FLState = {
     language: DEFAULTS.language,
@@ -51,24 +47,14 @@
 
     settingsOpen: false,
 
-    touch: {
-      tracking: false,
+    initialised: false,
 
-      scene: null,
-
-      startX: 0,
-
-      startY: 0,
-
-      startScrollY: 0,
-
-      startTime: 0,
-    },
+    historyNavigationPending: false,
   };
 
   /* =====================================================
-       03 — DOM CACHE
-       ===================================================== */
+     03 — DOM CACHE
+     ===================================================== */
 
   const FLDom = {};
 
@@ -139,24 +125,30 @@
       "[data-project-progress-fill]",
     );
 
+    /*
+     * Read-more links are cached separately so unfinished
+     * project destinations such as Lega can remain inert
+     * until a real project URL is supplied.
+     */
+
+    FLDom.projectReadMore = Array.from(
+      document.querySelectorAll("[data-project-read-more]"),
+    );
+
     FLDom.contactLinks = Array.from(
       document.querySelectorAll("[data-contact]"),
     );
   }
 
   /* =====================================================
-       04 — SAFE LOCAL STORAGE
-       ===================================================== */
+     04 — SAFE LOCAL STORAGE
+     ===================================================== */
 
   function FLReadStorage(key, fallback = null) {
     try {
       const value = window.localStorage.getItem(key);
 
-      if (value === null) {
-        return fallback;
-      }
-
-      return value;
+      return value === null ? fallback : value;
     } catch {
       return fallback;
     }
@@ -173,8 +165,8 @@
   }
 
   /* =====================================================
-       05 — TRANSLATION HELPERS
-       ===================================================== */
+     05 — TRANSLATION HELPER
+     ===================================================== */
 
   function FLGetTranslation(language, key) {
     const dictionary = window.FLTranslations?.[language];
@@ -183,19 +175,23 @@
       return null;
     }
 
-    /*
-           First support flat keys:
-           { "nav.about": "About" }
-        */
+    /* -------------------------------------------------
+       Flat dictionary support:
+
+       { "nav.about": "About" }
+       ------------------------------------------------- */
 
     if (Object.prototype.hasOwnProperty.call(dictionary, key)) {
-      return dictionary[key];
+      const value = dictionary[key];
+
+      return typeof value === "string" ? value : null;
     }
 
-    /*
-           Also support nested dictionaries:
-           { nav: { about: "About" } }
-        */
+    /* -------------------------------------------------
+       Nested dictionary support:
+
+       { nav: { about: "About" } }
+       ------------------------------------------------- */
 
     const value = key.split(".").reduce((current, segment) => {
       return current && typeof current === "object"
@@ -207,8 +203,8 @@
   }
 
   /* =====================================================
-       06 — LANGUAGE
-       ===================================================== */
+     06 — LANGUAGE
+     ===================================================== */
 
   function FLApplyLanguage(language, options = {}) {
     const { persist = true, dispatch = true } = options;
@@ -224,8 +220,8 @@
     FLDom.root.dataset.language = safeLanguage;
 
     /* -------------------------------------------------
-           TRANSLATED TEXT
-        ------------------------------------------------- */
+       TRANSLATED TEXT
+       ------------------------------------------------- */
 
     document.querySelectorAll("[data-i18n]").forEach((element) => {
       const key = element.dataset.i18n;
@@ -238,8 +234,8 @@
     });
 
     /* -------------------------------------------------
-           TRANSLATED PLACEHOLDERS
-        ------------------------------------------------- */
+       TRANSLATED PLACEHOLDERS
+       ------------------------------------------------- */
 
     document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
       const key = element.dataset.i18nPlaceholder;
@@ -252,8 +248,8 @@
     });
 
     /* -------------------------------------------------
-           LANGUAGE CONTROLS
-        ------------------------------------------------- */
+       LANGUAGE CONTROLS
+       ------------------------------------------------- */
 
     FLDom.languageButtons.forEach((button) => {
       const active = button.dataset.language === safeLanguage;
@@ -281,8 +277,8 @@
   }
 
   /* =====================================================
-       07 — FONT SIZE
-       ===================================================== */
+     07 — FONT SIZE
+     ===================================================== */
 
   function FLApplyFontSize(size, options = {}) {
     const { persist = true, dispatch = true } = options;
@@ -319,8 +315,8 @@
   }
 
   /* =====================================================
-       08 — REDUCED MOTION
-       ===================================================== */
+     08 — REDUCED MOTION
+     ===================================================== */
 
   function FLApplyReducedMotion(enabled, options = {}) {
     const { persist = true, dispatch = true } = options;
@@ -336,7 +332,7 @@
     }
 
     if (persist) {
-      FLWriteStorage(STORAGE_KEYS.reducedMotion, String(reduceMotion));
+      FLWriteStorage(STORAGE_KEYS.reducedMotion, reduceMotion);
     }
 
     if (dispatch) {
@@ -357,8 +353,8 @@
   }
 
   /* =====================================================
-       09 — LOAD SAVED PREFERENCES
-       ===================================================== */
+     09 — LOAD SAVED PREFERENCES
+     ===================================================== */
 
   function FLLoadPreferences() {
     const savedLanguage = FLReadStorage(
@@ -400,14 +396,13 @@
       dispatch: false,
     });
   }
-
   /* =====================================================
-       10 — SETTINGS PANEL
-       ===================================================== */
+   10 — SETTINGS PANEL
+   ===================================================== */
 
   function FLOpenSettings() {
-    if (!FLDom.settingsPanel) {
-      return;
+    if (!FLDom.settingsPanel || FLState.settingsOpen) {
+      return false;
     }
 
     FLCloseMobileNav();
@@ -423,13 +418,15 @@
     requestAnimationFrame(() => {
       FLDom.settingsClose?.focus?.();
     });
+
+    return true;
   }
 
   function FLCloseSettings(options = {}) {
     const { returnFocus = false } = options;
 
-    if (!FLDom.settingsPanel) {
-      return;
+    if (!FLDom.settingsPanel || !FLState.settingsOpen) {
+      return false;
     }
 
     FLState.settingsOpen = false;
@@ -443,25 +440,25 @@
     if (returnFocus) {
       FLDom.settingsToggle?.focus?.();
     }
+
+    return true;
   }
 
   function FLToggleSettings() {
-    if (FLState.settingsOpen) {
-      FLCloseSettings({
-        returnFocus: true,
-      });
-    } else {
-      FLOpenSettings();
-    }
+    return FLState.settingsOpen
+      ? FLCloseSettings({
+          returnFocus: true,
+        })
+      : FLOpenSettings();
   }
 
   /* =====================================================
-       11 — MOBILE NAVIGATION
-       ===================================================== */
+   11 — MOBILE NAVIGATION
+   ===================================================== */
 
   function FLOpenMobileNav() {
-    if (!FLDom.mobileNav) {
-      return;
+    if (!FLDom.mobileNav || FLState.mobileNavOpen) {
+      return false;
     }
 
     FLCloseSettings();
@@ -477,13 +474,15 @@
     FLDom.navToggle?.setAttribute("aria-expanded", "true");
 
     FLDom.body.classList.add("nav-open");
+
+    return true;
   }
 
   function FLCloseMobileNav(options = {}) {
     const { returnFocus = false } = options;
 
-    if (!FLDom.mobileNav) {
-      return;
+    if (!FLDom.mobileNav || !FLState.mobileNavOpen) {
+      return false;
     }
 
     FLState.mobileNavOpen = false;
@@ -501,23 +500,37 @@
     if (returnFocus) {
       FLDom.navToggle?.focus?.();
     }
+
+    return true;
   }
 
   function FLToggleMobileNav() {
-    if (FLState.mobileNavOpen) {
-      FLCloseMobileNav({
-        returnFocus: true,
-      });
-    } else {
-      FLOpenMobileNav();
-    }
+    return FLState.mobileNavOpen
+      ? FLCloseMobileNav({
+          returnFocus: true,
+        })
+      : FLOpenMobileNav();
   }
 
   /* =====================================================
-       12 — SCENE HELPERS
-       ===================================================== */
+   12 — CLOSE FLOATING UI
+   ===================================================== */
+
+  function FLCloseFloatingUI() {
+    FLCloseSettings();
+
+    FLCloseMobileNav();
+  }
+
+  /* =====================================================
+   13 — SCENE HELPERS
+   ===================================================== */
 
   function FLGetSceneElement(sceneName) {
+    if (!sceneName) {
+      return null;
+    }
+
     return document.querySelector(`[data-scene="${sceneName}"]`);
   }
 
@@ -546,8 +559,8 @@
   }
 
   /* =====================================================
-       13 — ACTIVE SCENE
-       ===================================================== */
+   14 — ACTIVE SCENE
+   ===================================================== */
 
   function FLSetActiveScene(sceneName, options = {}) {
     if (!SCENE_ORDER.includes(sceneName)) {
@@ -561,29 +574,33 @@
     FLState.currentScene = sceneName;
 
     /* -------------------------------------------------
-           SCENE STATUS
-        ------------------------------------------------- */
+     SCENE STATUS
+     ------------------------------------------------- */
 
     FLDom.scenes.forEach((scene) => {
       const active = scene.dataset.scene === sceneName;
 
       scene.dataset.sceneStatus = active ? "active" : "inactive";
 
-      scene.setAttribute("aria-current", active ? "true" : "false");
+      if (active) {
+        scene.setAttribute("aria-current", "true");
+      } else {
+        scene.removeAttribute("aria-current");
+      }
     });
 
     /* -------------------------------------------------
-           NAV CURRENT STATE
-        ------------------------------------------------- */
+     HEADER + MOBILE NAV CURRENT STATE
+     ------------------------------------------------- */
 
     FLDom.sceneTargets.forEach((control) => {
       const target = control.dataset.sceneTarget;
 
-      const isNavControl = Boolean(
+      const isNavigationControl = Boolean(
         control.closest(".site-nav, [data-mobile-nav]"),
       );
 
-      if (!isNavControl) {
+      if (!isNavigationControl) {
         return;
       }
 
@@ -595,8 +612,8 @@
     });
 
     /* -------------------------------------------------
-           EVENT
-        ------------------------------------------------- */
+     EVENT
+     ------------------------------------------------- */
 
     if (previousScene !== sceneName || forceDispatch) {
       window.dispatchEvent(
@@ -614,19 +631,15 @@
   }
 
   /* =====================================================
-       14 — HASH HELPERS
-       ===================================================== */
+   15 — HASH HELPERS
+   ===================================================== */
 
   function FLSceneToHash(sceneName) {
     const hashes = {
       welcome: "#welcome",
-
       about: "#about",
-
       services: "#what-i-do",
-
       projects: "#recent-projects",
-
       contact: "#contact",
     };
 
@@ -634,7 +647,9 @@
   }
 
   function FLHashToScene(hash = window.location.hash) {
-    const normalized = String(hash || "").toLowerCase();
+    const normalized = String(hash || "")
+      .trim()
+      .toLowerCase();
 
     const scenes = {
       "#welcome": "welcome",
@@ -656,12 +671,16 @@
   }
 
   function FLUpdateHash(sceneName, options = {}) {
+    if (!SCENE_ORDER.includes(sceneName)) {
+      return false;
+    }
+
     const { replace = false } = options;
 
     const hash = FLSceneToHash(sceneName);
 
     if (window.location.hash === hash) {
-      return;
+      return true;
     }
 
     try {
@@ -670,23 +689,23 @@
       } else {
         window.history.pushState(null, "", hash);
       }
+
+      return true;
     } catch {
-      /*
-               Hash navigation is optional.
-               No action needed if History API is blocked.
-            */
+      return false;
     }
   }
 
   /* =====================================================
-       15 — SCENE NAVIGATION
+   16 — SCENE NAVIGATION
 
-       Header navigation now asks animations.js for a
-       meaningful landing state rather than blindly going
-       to the first frame of a pinned animation.
+   animations.js owns animated scroll positioning.
 
-       animations.js will define the exact ready position.
-       ===================================================== */
+   main.js only communicates:
+   - where we want to go
+   - which landing state we want
+   - whether movement should be immediate
+   ===================================================== */
 
   function FLGoToScene(sceneName, options = {}) {
     if (!SCENE_ORDER.includes(sceneName)) {
@@ -703,19 +722,17 @@
       replaceHash = false,
     } = options;
 
-    FLCloseMobileNav();
+    FLCloseFloatingUI();
 
-    FLCloseSettings();
-
-    /*
-           The animation controller owns scroll positioning
-           whenever it is available.
-        */
+    /* -------------------------------------------------
+     ANIMATION CONTROLLER
+     ------------------------------------------------- */
 
     if (window.FLAnimations?.goToScene) {
       const handled = window.FLAnimations.goToScene(sceneName, {
         landing,
-        immediate,
+
+        immediate: immediate || FLIsReducedMotion(),
       });
 
       if (handled !== false) {
@@ -730,8 +747,8 @@
     }
 
     /* -------------------------------------------------
-           NON-GSAP FALLBACK
-        ------------------------------------------------- */
+     NATIVE FALLBACK
+     ------------------------------------------------- */
 
     const scene = FLGetSceneElement(sceneName);
 
@@ -757,10 +774,19 @@
   }
 
   /* =====================================================
-       16 — ADVANCE CURRENT SCENE
-       ===================================================== */
+   17 — ADVANCE CURRENT SCENE
+   ===================================================== */
 
   function FLAdvanceScene(sceneName = FLState.currentScene) {
+    if (!SCENE_ORDER.includes(sceneName)) {
+      return false;
+    }
+
+    /* -------------------------------------------------
+     animations.js handles staged scenes such as
+     Welcome before moving to the next scene.
+     ------------------------------------------------- */
+
     if (window.FLAnimations?.advanceScene) {
       const handled = window.FLAnimations.advanceScene(sceneName);
 
@@ -768,6 +794,10 @@
         return true;
       }
     }
+
+    /* -------------------------------------------------
+     FALLBACK
+     ------------------------------------------------- */
 
     const nextScene = FLGetNextSceneName(sceneName);
 
@@ -779,40 +809,38 @@
       landing: "ready",
     });
   }
-
   /* =====================================================
-       17 — NAVIGATION CONTROL CLICKS
-       ===================================================== */
+   18 — NAVIGATION CONTROL CLICKS
+   ===================================================== */
 
   function FLHandleSceneTargetClick(event) {
     const control = event.currentTarget;
 
     const target = control.dataset.sceneTarget;
 
-    if (!target) {
+    if (!target || !SCENE_ORDER.includes(target)) {
       return;
     }
 
     event.preventDefault();
 
-    /*
-           Top navigation should always land at the scene's
-           readable / interactive resting state.
-
-           Restarting at Welcome returns to its intro.
-        */
+    event.stopPropagation();
 
     const landing = target === "welcome" ? "intro" : "ready";
 
     FLGoToScene(target, {
       landing,
+
       updateHash: true,
     });
   }
 
   /* =====================================================
-       18 — CONTINUE BUTTONS
-       ===================================================== */
+   19 — SECTION CONTINUE BUTTONS
+
+   Welcome uses its dedicated data-welcome-continue
+   animation hook, so these are for the remaining scenes.
+   ===================================================== */
 
   function FLHandleSceneContinue(event) {
     event.preventDefault();
@@ -831,34 +859,42 @@
   }
 
   /* =====================================================
-       19 — CLICK-ANYWHERE ADVANCE
-
-       Clicking open/background space advances the exact
-       same animation used by the Continue control.
-
-       Interactive UI is deliberately excluded.
-       ===================================================== */
+   20 — INTERACTIVE TARGET CHECK
+   ===================================================== */
 
   const FLInteractiveSelector = [
     "a",
+
     "button",
+
     "input",
+
     "select",
+
     "textarea",
+
     "summary",
+
     "details",
+
     "label",
 
     "[role='button']",
+
     "[contenteditable='true']",
 
     "[data-settings-panel]",
+
     "[data-mobile-nav]",
 
     ".discipline",
+
     ".project-panel",
+
     ".project-progress__marker",
+
     ".project-controls",
+
     ".contact-link",
 
     "[data-no-scene-advance]",
@@ -872,15 +908,22 @@
     return Boolean(target.closest(FLInteractiveSelector));
   }
 
+  /* =====================================================
+   21 — CLICK-ANYWHERE SCENE ADVANCE
+
+   Empty scene space can still act as an alternate
+   progression method.
+
+   Interactive content is excluded so opening cards,
+   clicking links or using controls never advances
+   the scene accidentally.
+   ===================================================== */
+
   function FLInitialiseSceneClickAdvance() {
     FLDom.scenes.forEach((scene) => {
-      /*
-                       Contact is intentionally the end of the
-                       journey, so background clicking does not
-                       advance anywhere from there.
-                    */
+      const sceneName = scene.dataset.scene;
 
-      if (scene.dataset.scene === "contact") {
+      if (sceneName === "contact") {
         scene.dataset.clickAdvance = "false";
 
         return;
@@ -889,7 +932,11 @@
       scene.dataset.clickAdvance = "true";
 
       scene.addEventListener("click", (event) => {
-        if (event.defaultPrevented || event.button !== 0) {
+        if (event.defaultPrevented) {
+          return;
+        }
+
+        if (event.button !== 0) {
           return;
         }
 
@@ -901,10 +948,9 @@
           return;
         }
 
-        /*
-                               Allow text selection without
-                               accidentally advancing.
-                            */
+        /* -----------------------------------------
+             Ignore clicks made while selecting text.
+             ----------------------------------------- */
 
         const selection = window.getSelection?.()?.toString()?.trim();
 
@@ -912,165 +958,110 @@
           return;
         }
 
-        FLAdvanceScene(scene.dataset.scene);
+        FLAdvanceScene(sceneName);
       });
     });
   }
 
   /* =====================================================
-       20 — TOUCH / FLICK SUPPORT
+   22 — HISTORY NAVIGATION
 
-       Native scrolling remains the primary mobile gesture.
+   pushState does not fire hashchange itself, but browser
+   Back / Forward can produce both popstate and hashchange.
 
-       This only acts as a fallback when a deliberate quick
-       upward flick did NOT already move the page enough to
-       progress naturally.
+   A tiny lock prevents duplicate scene navigation.
+   ===================================================== */
 
-       That prevents a normal swipe from advancing twice.
-       ===================================================== */
-
-  function FLHandleTouchStart(event) {
-    if (event.touches.length !== 1) {
-      FLState.touch.tracking = false;
-
+  function FLHandleHistoryNavigation() {
+    if (FLState.historyNavigationPending) {
       return;
     }
 
-    if (FLIsInteractiveTarget(event.target)) {
-      FLState.touch.tracking = false;
+    const target = FLHashToScene();
 
+    if (!target) {
       return;
     }
 
-    const scene = event.target.closest("[data-scene]");
+    FLState.historyNavigationPending = true;
 
-    if (!scene || scene.dataset.sceneStatus !== "active") {
-      FLState.touch.tracking = false;
+    FLGoToScene(target, {
+      landing: target === "welcome" ? "intro" : "ready",
 
-      return;
-    }
+      immediate: FLIsReducedMotion(),
 
-    const touch = event.touches[0];
-
-    FLState.touch = {
-      tracking: true,
-
-      scene: scene.dataset.scene,
-
-      startX: touch.clientX,
-
-      startY: touch.clientY,
-
-      startScrollY: window.scrollY,
-
-      startTime: performance.now(),
-    };
-  }
-
-  function FLHandleTouchEnd(event) {
-    if (!FLState.touch.tracking) {
-      return;
-    }
-
-    const state = {
-      ...FLState.touch,
-    };
-
-    FLState.touch.tracking = false;
-
-    const touch = event.changedTouches?.[0];
-
-    if (!touch) {
-      return;
-    }
-
-    const deltaX = touch.clientX - state.startX;
-
-    const deltaY = touch.clientY - state.startY;
-
-    const absX = Math.abs(deltaX);
-
-    const absY = Math.abs(deltaY);
-
-    const duration = performance.now() - state.startTime;
-
-    const nativeScrollDistance = Math.abs(window.scrollY - state.startScrollY);
-
-    /*
-           Requirements for a deliberate quick flick.
-        */
-
-    const fastEnough = duration <= 360;
-
-    const farEnough = absY >= 85;
-
-    const mostlyVertical = absY > absX * 1.4;
-
-    const upward = deltaY < 0;
-
-    /*
-           If the browser already moved the scroll position
-           significantly, ScrollTrigger is already handling
-           the gesture beautifully.
-
-           Do not add a second movement.
-        */
-
-    const browserAlreadyHandledIt = nativeScrollDistance > 28;
-
-    if (
-      fastEnough &&
-      farEnough &&
-      mostlyVertical &&
-      upward &&
-      !browserAlreadyHandledIt
-    ) {
-      FLAdvanceScene(state.scene);
-    }
-  }
-
-  function FLInitialiseTouchGestures() {
-    document.addEventListener("touchstart", FLHandleTouchStart, {
-      passive: true,
+      updateHash: false,
     });
 
-    document.addEventListener("touchend", FLHandleTouchEnd, {
-      passive: true,
+    window.requestAnimationFrame(() => {
+      FLState.historyNavigationPending = false;
     });
-
-    document.addEventListener(
-      "touchcancel",
-      () => {
-        FLState.touch.tracking = false;
-      },
-      {
-        passive: true,
-      },
-    );
   }
+
+  function FLInitialiseHistoryEvents() {
+    window.addEventListener("popstate", FLHandleHistoryNavigation);
+
+    window.addEventListener("hashchange", FLHandleHistoryNavigation);
+  }
+
   /* =====================================================
-       21 — DISCIPLINE HELPERS
-       ===================================================== */
+   23 — INITIAL SCENE STATE
+   ===================================================== */
+
+  function FLInitialiseSceneState() {
+    const hashScene = FLHashToScene();
+
+    const initialScene = hashScene || "welcome";
+
+    FLSetActiveScene(initialScene, {
+      forceDispatch: false,
+    });
+
+    /* -------------------------------------------------
+     Normalise the URL without creating a history step.
+
+     If there is no recognised hash, Welcome becomes the
+     canonical initial URL.
+     ------------------------------------------------- */
+
+    if (!hashScene) {
+      FLUpdateHash("welcome", {
+        replace: true,
+      });
+    }
+  }
+
+  /* =====================================================
+   24 — DISCIPLINE HELPERS
+   ===================================================== */
 
   function FLGetDiscipline(disciplineId) {
+    if (!disciplineId) {
+      return null;
+    }
+
     return (
-      FLDom.disciplines.find((discipline) => {
-        return discipline.dataset.discipline === disciplineId;
-      }) || null
+      FLDom.disciplines.find(
+        (discipline) => discipline.dataset.discipline === disciplineId,
+      ) || null
     );
   }
 
   function FLGetDisciplineTrigger(disciplineId) {
+    if (!disciplineId) {
+      return null;
+    }
+
     return (
-      FLDom.disciplineTriggers.find((trigger) => {
-        return trigger.dataset.disciplineTrigger === disciplineId;
-      }) || null
+      FLDom.disciplineTriggers.find(
+        (trigger) => trigger.dataset.disciplineTrigger === disciplineId,
+      ) || null
     );
   }
 
   /* =====================================================
-       22 — OPEN DISCIPLINE
-       ===================================================== */
+   25 — OPEN DISCIPLINE
+   ===================================================== */
 
   function FLOpenDiscipline(disciplineId) {
     const discipline = FLGetDiscipline(disciplineId);
@@ -1082,14 +1073,16 @@
     const alreadyOpen = FLState.activeDiscipline === disciplineId;
 
     if (alreadyOpen) {
-      FLCloseActiveDiscipline();
-
-      return true;
+      return FLCloseActiveDiscipline();
     }
 
     FLState.activeDiscipline = disciplineId;
 
     FLDom.disciplinePlayground?.classList.add("has-active");
+
+    /* -------------------------------------------------
+     CARD STATE
+     ------------------------------------------------- */
 
     FLDom.disciplines.forEach((item) => {
       const active = item.dataset.discipline === disciplineId;
@@ -1103,11 +1096,19 @@
       }
     });
 
+    /* -------------------------------------------------
+     TRIGGER STATE
+     ------------------------------------------------- */
+
     FLDom.disciplineTriggers.forEach((trigger) => {
       const active = trigger.dataset.disciplineTrigger === disciplineId;
 
       trigger.setAttribute("aria-expanded", String(active));
     });
+
+    /* -------------------------------------------------
+     EVENT FOR animations.js
+     ------------------------------------------------- */
 
     window.dispatchEvent(
       new CustomEvent("flDisciplineChange", {
@@ -1121,8 +1122,8 @@
   }
 
   /* =====================================================
-       23 — CLOSE DISCIPLINE
-       ===================================================== */
+   26 — CLOSE ACTIVE DISCIPLINE
+   ===================================================== */
 
   function FLCloseActiveDiscipline() {
     if (!FLState.activeDiscipline) {
@@ -1136,9 +1137,9 @@
     FLDom.disciplines.forEach((discipline) => {
       discipline.classList.remove("is-active");
 
-      const details = discipline.querySelector("[data-discipline-details]");
-
-      details?.setAttribute("aria-hidden", "true");
+      discipline
+        .querySelector("[data-discipline-details]")
+        ?.setAttribute("aria-hidden", "true");
     });
 
     FLDom.disciplineTriggers.forEach((trigger) => {
@@ -1157,8 +1158,8 @@
   }
 
   /* =====================================================
-       24 — DISCIPLINE CLICKS
-       ===================================================== */
+   27 — DISCIPLINE TRIGGER
+   ===================================================== */
 
   function FLHandleDisciplineTrigger(event) {
     event.preventDefault();
@@ -1175,21 +1176,21 @@
   }
 
   /* =====================================================
-       25 — DISCIPLINE OUTSIDE CLICK
+   28 — DISCIPLINE OUTSIDE CLOSE
 
-       If a discipline is currently expanded, clicking the
-       empty playground area closes it first instead of also
-       progressing the whole scene.
-
-       The scene click listener from Part 1 sees the event
-       as prevented and therefore does not advance.
-       ===================================================== */
+   Clicking elsewhere inside What I Do closes an expanded
+   discipline before allowing any scene progression.
+   ===================================================== */
 
   function FLInitialiseDisciplineOutsideClose() {
     document.addEventListener(
       "click",
       (event) => {
         if (!FLState.activeDiscipline) {
+          return;
+        }
+
+        if (!(event.target instanceof Element)) {
           return;
         }
 
@@ -1205,9 +1206,9 @@
           return;
         }
 
-        /*
-                   Let explicit controls continue working.
-                */
+        /* ---------------------------------------------
+         Explicit navigation controls remain usable.
+         --------------------------------------------- */
 
         if (
           event.target.closest(
@@ -1219,6 +1220,8 @@
 
         event.preventDefault();
 
+        event.stopPropagation();
+
         FLCloseActiveDiscipline();
       },
       true,
@@ -1226,8 +1229,29 @@
   }
 
   /* =====================================================
-       26 — PROJECT HELPERS
-       ===================================================== */
+   29 — INITIAL DISCIPLINE STATE
+   ===================================================== */
+
+  function FLInitialiseDisciplineState() {
+    FLState.activeDiscipline = null;
+
+    FLDom.disciplinePlayground?.classList.remove("has-active");
+
+    FLDom.disciplines.forEach((discipline) => {
+      discipline.classList.remove("is-active");
+
+      discipline
+        .querySelector("[data-discipline-details]")
+        ?.setAttribute("aria-hidden", "true");
+    });
+
+    FLDom.disciplineTriggers.forEach((trigger) => {
+      trigger.setAttribute("aria-expanded", "false");
+    });
+  }
+  /* =====================================================
+   30 — PROJECT HELPERS
+   ===================================================== */
 
   function FLGetProjectOrder() {
     return Array.isArray(window.FLProjectOrder) ? window.FLProjectOrder : [];
@@ -1241,77 +1265,23 @@
     return FLGetProjectOrder().indexOf(projectId);
   }
 
-  /* =====================================================
-       27 — PROJECT DISPLAY
-       ===================================================== */
+  function FLGetActiveProjectId() {
+    const project = window.getActiveFLProject?.();
 
-  function FLUpdateProjectDisplay(projectId) {
-    const projectOrder = FLGetProjectOrder();
-
-    const index = FLGetProjectIndex(projectId);
-
-    if (index < 0) {
-      return false;
-    }
-
-    /* -------------------------------------------------
-           PANELS
-        ------------------------------------------------- */
-
-    FLDom.projectPanels.forEach((panel) => {
-      const active = panel.dataset.projectPanel === projectId;
-
-      panel.classList.toggle("is-active", active);
-
-      panel.setAttribute("aria-hidden", String(!active));
-    });
-
-    /* -------------------------------------------------
-           TIMELINE MARKERS
-        ------------------------------------------------- */
-
-    FLDom.projectMarkers.forEach((marker) => {
-      const active = marker.dataset.projectJump === projectId;
-
-      marker.classList.toggle("is-active", active);
-
-      marker.setAttribute("aria-pressed", String(active));
-    });
-
-    /* -------------------------------------------------
-           CURRENT NUMBER
-        ------------------------------------------------- */
-
-    if (FLDom.projectCurrent) {
-      FLDom.projectCurrent.textContent = String(index + 1).padStart(2, "0");
-    }
-
-    /* -------------------------------------------------
-           PREVIOUS / NEXT AVAILABILITY
-        ------------------------------------------------- */
-
-    if (FLDom.projectPrevious) {
-      FLDom.projectPrevious.disabled = index <= 0;
-    }
-
-    if (FLDom.projectNext) {
-      FLDom.projectNext.disabled = index >= projectOrder.length - 1;
-    }
-
-    FLUpdateProjectProgress(projectId);
-
-    return true;
+    return project?.id || null;
   }
 
   /* =====================================================
-       28 — FALLBACK PROJECT PROGRESS
+   31 — PROJECT PROGRESS
 
-       animations.js replaces this with continuous progress
-       during scroll.
+   projects.js owns:
+   - active panel
+   - active timeline marker
+   - current counter
+   - previous/next disabled state
 
-       This discrete version remains useful for reduced
-       motion and non-GSAP fallback behaviour.
-       ===================================================== */
+   main.js only maintains the responsive timeline fill.
+   ===================================================== */
 
   function FLUpdateProjectProgress(projectId) {
     const order = FLGetProjectOrder();
@@ -1319,7 +1289,7 @@
     const index = FLGetProjectIndex(projectId);
 
     if (!FLDom.projectProgressFill || index < 0) {
-      return;
+      return false;
     }
 
     const denominator = Math.max(order.length - 1, 1);
@@ -1337,23 +1307,34 @@
 
       FLDom.projectProgressFill.style.width = "100%";
     }
+
+    return true;
   }
 
   /* =====================================================
-       29 — CHANGE PROJECT
+   32 — CHANGE PROJECT
 
-       animations.js gets first opportunity so project
-       clicks can move through the exact same scroll timeline
-       used by manual scrolling.
+   animations.js gets first opportunity because it owns
+   the project transition / scroll timeline.
 
-       Important:
-       this function does NOT call itself through FLSite.
-       ===================================================== */
+   If animations.js is unavailable, projects.js becomes
+   the direct fallback.
+   ===================================================== */
 
   function FLChangeProject(projectId) {
-    if (!projectId || !window.getFLProject?.(projectId)) {
+    if (!projectId) {
       return false;
     }
+
+    const project = window.getFLProject?.(projectId);
+
+    if (!project) {
+      return false;
+    }
+
+    /* -------------------------------------------------
+     ANIMATED ROUTE
+     ------------------------------------------------- */
 
     if (window.FLAnimations?.changeProject) {
       const handled = window.FLAnimations.changeProject(projectId);
@@ -1364,30 +1345,32 @@
     }
 
     /* -------------------------------------------------
-           FALLBACK
-        ------------------------------------------------- */
+     FALLBACK ROUTE
+     ------------------------------------------------- */
 
-    const changed = window.setActiveFLProject?.(projectId);
+    if (typeof window.setActiveFLProject === "function") {
+      const result = window.setActiveFLProject(projectId);
 
-    FLUpdateProjectDisplay(projectId);
+      return result !== false;
+    }
 
-    return changed !== false;
+    return false;
   }
 
   /* =====================================================
-       30 — NEXT PROJECT
-       ===================================================== */
+   33 — NEXT PROJECT
+   ===================================================== */
 
   function FLShowNextProject() {
-    const current = window.getActiveFLProject?.();
+    const currentId = FLGetActiveProjectId();
 
-    if (!current) {
+    if (!currentId) {
       return false;
     }
 
-    const currentIndex = FLGetProjectIndex(current.id);
-
     const order = FLGetProjectOrder();
+
+    const currentIndex = FLGetProjectIndex(currentId);
 
     if (currentIndex < 0 || currentIndex >= order.length - 1) {
       return false;
@@ -1397,19 +1380,19 @@
   }
 
   /* =====================================================
-       31 — PREVIOUS PROJECT
-       ===================================================== */
+   34 — PREVIOUS PROJECT
+   ===================================================== */
 
   function FLShowPreviousProject() {
-    const current = window.getActiveFLProject?.();
+    const currentId = FLGetActiveProjectId();
 
-    if (!current) {
+    if (!currentId) {
       return false;
     }
 
-    const currentIndex = FLGetProjectIndex(current.id);
-
     const order = FLGetProjectOrder();
+
+    const currentIndex = FLGetProjectIndex(currentId);
 
     if (currentIndex <= 0) {
       return false;
@@ -1417,6 +1400,10 @@
 
     return FLChangeProject(order[currentIndex - 1]);
   }
+
+  /* =====================================================
+   35 — PROJECT DIRECTION
+   ===================================================== */
 
   function FLNavigateProjectDirection(direction) {
     if (direction === "next") {
@@ -1431,8 +1418,8 @@
   }
 
   /* =====================================================
-       32 — PROJECT CONTROL EVENTS
-       ===================================================== */
+   36 — PROJECT MARKER CLICK
+   ===================================================== */
 
   function FLHandleProjectMarker(event) {
     event.preventDefault();
@@ -1448,6 +1435,10 @@
     FLChangeProject(projectId);
   }
 
+  /* =====================================================
+   37 — PROJECT PREVIOUS CONTROL
+   ===================================================== */
+
   function FLHandleProjectPrevious(event) {
     event.preventDefault();
 
@@ -1455,6 +1446,10 @@
 
     FLShowPreviousProject();
   }
+
+  /* =====================================================
+   38 — PROJECT NEXT CONTROL
+   ===================================================== */
 
   function FLHandleProjectNext(event) {
     event.preventDefault();
@@ -1465,52 +1460,141 @@
   }
 
   /* =====================================================
-       33 — EXTERNAL PROJECT STATE EVENT
+   39 — PROJECT STATE EVENT
 
-       projects.js owns the active project data.
+   projects.js dispatches flProjectChange whenever the
+   canonical active project changes.
 
-       Whenever that data changes, update the interface.
-       ===================================================== */
+   We deliberately do not retoggle panels or markers here.
+   ===================================================== */
 
   function FLHandleProjectChange(event) {
-    const projectId = event.detail?.projectId || event.detail?.project?.id;
+    const projectId =
+      event.detail?.projectId ||
+      event.detail?.project?.id ||
+      FLGetActiveProjectId();
 
     if (!projectId) {
       return;
     }
 
-    FLUpdateProjectDisplay(projectId);
+    FLUpdateProjectProgress(projectId);
   }
 
   /* =====================================================
-       34 — CONTACT PLACEHOLDERS
-       ===================================================== */
+   40 — INITIAL PROJECT STATE
+   ===================================================== */
+
+  function FLInitialiseProjectState() {
+    const order = FLGetProjectOrder();
+
+    if (!order.length) {
+      return false;
+    }
+
+    const currentId = FLGetActiveProjectId();
+
+    if (currentId) {
+      FLUpdateProjectProgress(currentId);
+
+      return true;
+    }
+
+    const firstProject = order[0];
+
+    if (typeof window.setActiveFLProject === "function") {
+      window.setActiveFLProject(firstProject);
+    }
+
+    FLUpdateProjectProgress(firstProject);
+
+    return true;
+  }
+
+  /* =====================================================
+   41 — PROJECT PROGRESS RESIZE SYNC
+
+   The rail changes orientation at 720px, so recalculate
+   width / height whenever the responsive breakpoint moves.
+   ===================================================== */
+
+  function FLSyncProjectProgress() {
+    const projectId = FLGetActiveProjectId();
+
+    if (!projectId) {
+      return;
+    }
+
+    FLUpdateProjectProgress(projectId);
+  }
+
+  /* =====================================================
+   42 — PLACEHOLDER LINKS
+
+   Project and contact destinations may temporarily use "#".
+   Those links should remain visibly present without jumping
+   the portfolio back to the top of the page.
+   ===================================================== */
+
+  function FLMakePlaceholderLinkInert(link) {
+    if (!link) {
+      return false;
+    }
+
+    const href = link.getAttribute("href");
+
+    if (href !== "#" && href) {
+      link.removeAttribute("aria-disabled");
+
+      return false;
+    }
+
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+
+      event.stopPropagation();
+    });
+
+    link.setAttribute("aria-disabled", "true");
+
+    return true;
+  }
+
+  /* -------------------------------------------------
+   PROJECT READ-MORE PLACEHOLDERS
+
+   Lega currently uses this state until its live project
+   destination is ready. The same protection works for any
+   future project that temporarily has no destination.
+   ------------------------------------------------- */
+
+  function FLInitialiseProjectPlaceholders() {
+    FLDom.projectReadMore.forEach((link) => {
+      FLMakePlaceholderLinkInert(link);
+    });
+  }
+
+  /* -------------------------------------------------
+   CONTACT PLACEHOLDERS
+   ------------------------------------------------- */
 
   function FLInitialiseContactPlaceholders() {
     FLDom.contactLinks.forEach((link) => {
-      const href = link.getAttribute("href");
-
-      if (href === "#" || !href) {
-        link.addEventListener("click", (event) => {
-          event.preventDefault();
-
-          event.stopPropagation();
-        });
-      }
+      FLMakePlaceholderLinkInert(link);
     });
   }
 
   /* =====================================================
-       35 — HEADER SCROLL STATE
-       ===================================================== */
+   43 — HEADER SCROLL STATE
+   ===================================================== */
 
   function FLUpdateHeaderState() {
     FLDom.header?.classList.toggle("is-scrolled", window.scrollY > 12);
   }
 
   /* =====================================================
-       36 — ESCAPE KEY
-       ===================================================== */
+   44 — ESCAPE KEY ROUTING
+   ===================================================== */
 
   function FLHandleEscape() {
     if (FLState.settingsOpen) {
@@ -1539,8 +1623,8 @@
   }
 
   /* =====================================================
-       37 — KEYBOARD NAVIGATION
-       ===================================================== */
+   45 — KEYBOARD NAVIGATION
+   ===================================================== */
 
   function FLHandleKeyboard(event) {
     const target = event.target;
@@ -1554,8 +1638,8 @@
     }
 
     /* -------------------------------------------------
-           ESCAPE
-        ------------------------------------------------- */
+     ESCAPE
+     ------------------------------------------------- */
 
     if (event.key === "Escape") {
       if (FLHandleEscape()) {
@@ -1565,18 +1649,18 @@
       return;
     }
 
-    /*
-           If animation controller isn't available, leave
-           native PageUp / PageDown behaviour untouched.
-        */
+    /* -------------------------------------------------
+     Let the browser keep standard keyboard scrolling
+     if the animation controller is unavailable.
+     ------------------------------------------------- */
 
     if (!window.FLAnimations) {
       return;
     }
 
     /* -------------------------------------------------
-           PAGE DOWN
-        ------------------------------------------------- */
+     PAGE DOWN / ALT + DOWN
+     ------------------------------------------------- */
 
     if (
       event.key === "PageDown" ||
@@ -1590,8 +1674,8 @@
     }
 
     /* -------------------------------------------------
-           PAGE UP
-        ------------------------------------------------- */
+     PAGE UP / ALT + UP
+     ------------------------------------------------- */
 
     if (event.key === "PageUp" || (event.key === "ArrowUp" && event.altKey)) {
       const previous = FLGetPreviousSceneName(FLState.currentScene);
@@ -1607,12 +1691,15 @@
       });
     }
   }
-
   /* =====================================================
-       38 — SETTINGS / HEADER EVENTS
-       ===================================================== */
+   46 — HEADER EVENTS
+   ===================================================== */
 
   function FLInitialiseHeaderEvents() {
+    /* -------------------------------------------------
+     SETTINGS
+     ------------------------------------------------- */
+
     FLDom.settingsToggle?.addEventListener("click", (event) => {
       event.preventDefault();
 
@@ -1624,10 +1711,16 @@
     FLDom.settingsClose?.addEventListener("click", (event) => {
       event.preventDefault();
 
+      event.stopPropagation();
+
       FLCloseSettings({
         returnFocus: true,
       });
     });
+
+    /* -------------------------------------------------
+     MOBILE NAV
+     ------------------------------------------------- */
 
     FLDom.navToggle?.addEventListener("click", (event) => {
       event.preventDefault();
@@ -1638,10 +1731,14 @@
     });
 
     /* -------------------------------------------------
-           CLOSE FLOATING UI WHEN CLICKING OUTSIDE
-        ------------------------------------------------- */
+     CLICK OUTSIDE FLOATING UI
+     ------------------------------------------------- */
 
     document.addEventListener("click", (event) => {
+      if (!(event.target instanceof Element)) {
+        return;
+      }
+
       if (
         FLState.settingsOpen &&
         !FLDom.settingsPanel?.contains(event.target) &&
@@ -1660,8 +1757,8 @@
     });
 
     /* -------------------------------------------------
-           HEADER APPEARANCE
-        ------------------------------------------------- */
+     HEADER SCROLL APPEARANCE
+     ------------------------------------------------- */
 
     window.addEventListener("scroll", FLUpdateHeaderState, {
       passive: true,
@@ -1671,8 +1768,8 @@
   }
 
   /* =====================================================
-       39 — LANGUAGE / ACCESSIBILITY EVENTS
-       ===================================================== */
+   47 — LANGUAGE + ACCESSIBILITY EVENTS
+   ===================================================== */
 
   function FLInitialisePreferenceEvents() {
     FLDom.languageButtons.forEach((button) => {
@@ -1693,11 +1790,24 @@
   }
 
   /* =====================================================
-       40 — SCENE EVENT BINDINGS
-       ===================================================== */
+   48 — SCENE EVENT BINDINGS
+
+   Important:
+
+   Next buttons also contain data-scene-target for semantic
+   destination information.
+
+   They must only use the Continue handler, otherwise one
+   click would trigger both direct navigation and scene
+   advancement.
+   ===================================================== */
 
   function FLInitialiseSceneEvents() {
     FLDom.sceneTargets.forEach((control) => {
+      if (control.hasAttribute("data-scene-continue")) {
+        return;
+      }
+
       control.addEventListener("click", FLHandleSceneTargetClick);
     });
 
@@ -1706,13 +1816,11 @@
     });
 
     FLInitialiseSceneClickAdvance();
-
-    FLInitialiseTouchGestures();
   }
 
   /* =====================================================
-       41 — DISCIPLINE EVENT BINDINGS
-       ===================================================== */
+   49 — DISCIPLINE EVENT BINDINGS
+   ===================================================== */
 
   function FLInitialiseDisciplineEvents() {
     FLDom.disciplineTriggers.forEach((trigger) => {
@@ -1723,8 +1831,8 @@
   }
 
   /* =====================================================
-       42 — PROJECT EVENT BINDINGS
-       ===================================================== */
+   50 — PROJECT EVENT BINDINGS
+   ===================================================== */
 
   function FLInitialiseProjectEvents() {
     FLDom.projectMarkers.forEach((marker) => {
@@ -1739,102 +1847,109 @@
   }
 
   /* =====================================================
-       43 — HISTORY / HASH NAVIGATION
-       ===================================================== */
+   51 — SCENE CHANGE CLEANUP
+   ===================================================== */
 
-  function FLHandleHistoryNavigation() {
-    const target = FLHashToScene();
+  function FLHandleSceneChange(event) {
+    const sceneName = event.detail?.scene;
 
-    if (!target) {
+    if (!sceneName) {
       return;
     }
 
-    FLGoToScene(target, {
-      landing: target === "welcome" ? "intro" : "ready",
+    /* -------------------------------------------------
+     Expanded What I Do cards should not remain open
+     after leaving the section.
+     ------------------------------------------------- */
 
-      immediate: FLIsReducedMotion(),
-
-      updateHash: false,
-    });
-  }
-
-  function FLInitialiseHistoryEvents() {
-    window.addEventListener("popstate", FLHandleHistoryNavigation);
-
-    window.addEventListener("hashchange", FLHandleHistoryNavigation);
-  }
-
-  /* =====================================================
-       44 — INITIAL PROJECT STATE
-       ===================================================== */
-
-  function FLInitialiseProjectState() {
-    const activeProject = window.getActiveFLProject?.();
-
-    if (activeProject?.id) {
-      FLUpdateProjectDisplay(activeProject.id);
-
-      return;
+    if (sceneName !== "services" && FLState.activeDiscipline) {
+      FLCloseActiveDiscipline();
     }
 
-    const firstProject = FLGetProjectOrder()[0];
+    /* -------------------------------------------------
+     Floating header UI should never persist between
+     major scenes.
+     ------------------------------------------------- */
 
-    if (!firstProject) {
-      return;
+    FLCloseFloatingUI();
+  }
+
+  function FLInitialiseGlobalSiteEvents() {
+    window.addEventListener("flSceneChange", FLHandleSceneChange);
+  }
+
+  /* =====================================================
+   52 — RESPONSIVE PROJECT PROGRESS SYNC
+
+   The project rail changes:
+
+   desktop = vertical
+   mobile  = horizontal
+
+   Recalculate whenever viewport dimensions change.
+   ===================================================== */
+
+  let FLResizeFrame = null;
+
+  function FLHandleViewportResize() {
+    if (FLResizeFrame) {
+      window.cancelAnimationFrame(FLResizeFrame);
     }
 
-    window.setActiveFLProject?.(firstProject);
+    FLResizeFrame = window.requestAnimationFrame(() => {
+      FLResizeFrame = null;
 
-    FLUpdateProjectDisplay(firstProject);
+      FLSyncProjectProgress();
+    });
   }
 
-  /* =====================================================
-       45 — INITIAL DISCIPLINE STATE
-       ===================================================== */
-
-  function FLInitialiseDisciplineState() {
-    FLState.activeDiscipline = null;
-
-    FLDom.disciplinePlayground?.classList.remove("has-active");
-
-    FLDom.disciplines.forEach((discipline) => {
-      discipline.classList.remove("is-active");
-
-      discipline
-        .querySelector("[data-discipline-details]")
-        ?.setAttribute("aria-hidden", "true");
-    });
-
-    FLDom.disciplineTriggers.forEach((trigger) => {
-      trigger.setAttribute("aria-expanded", "false");
+  function FLInitialiseResizeEvents() {
+    window.addEventListener("resize", FLHandleViewportResize, {
+      passive: true,
     });
   }
 
   /* =====================================================
-       46 — INITIAL SCENE STATE
-       ===================================================== */
+   53 — NORMALISE FLOATING UI
+   ===================================================== */
 
-  function FLInitialiseSceneState() {
-    const hashScene = FLHashToScene();
+  function FLInitialiseFloatingUIState() {
+    FLState.settingsOpen = false;
 
-    const initialScene = hashScene || "welcome";
+    FLState.mobileNavOpen = false;
 
-    FLSetActiveScene(initialScene, {
-      forceDispatch: false,
-    });
+    if (FLDom.settingsPanel) {
+      FLDom.settingsPanel.hidden = true;
+
+      FLDom.settingsPanel.classList.remove("is-open");
+    }
+
+    FLDom.settingsToggle?.setAttribute("aria-expanded", "false");
+
+    if (FLDom.mobileNav) {
+      FLDom.mobileNav.hidden = true;
+
+      FLDom.mobileNav.classList.remove("is-open");
+    }
+
+    FLDom.navToggle?.classList.remove("is-open");
+
+    FLDom.navToggle?.setAttribute("aria-expanded", "false");
+
+    FLDom.body.classList.remove("nav-open");
   }
 
   /* =====================================================
-       47 — PUBLIC SITE API
+   54 — PUBLIC SITE API
 
-       animations.js uses this object to coordinate with
-       main.js without duplicating application state.
-       ===================================================== */
+   animations.js communicates through this object instead
+   of duplicating application state.
+   ===================================================== */
 
   window.FLSite = {
     /* -------------------------------------------------
-           LANGUAGE
-        ------------------------------------------------- */
+     LANGUAGE
+     ------------------------------------------------- */
 
     getLanguage() {
       return FLState.language;
@@ -1845,8 +1960,32 @@
     },
 
     /* -------------------------------------------------
-           SCENES
-        ------------------------------------------------- */
+     FONT SIZE
+     ------------------------------------------------- */
+
+    getFontSize() {
+      return FLState.fontSize;
+    },
+
+    applyFontSize(size, options = {}) {
+      return FLApplyFontSize(size, options);
+    },
+
+    /* -------------------------------------------------
+     REDUCED MOTION
+     ------------------------------------------------- */
+
+    isReducedMotion() {
+      return FLIsReducedMotion();
+    },
+
+    applyReducedMotion(enabled, options = {}) {
+      return FLApplyReducedMotion(enabled, options);
+    },
+
+    /* -------------------------------------------------
+     SCENES
+     ------------------------------------------------- */
 
     getCurrentScene() {
       return FLState.currentScene;
@@ -1873,8 +2012,12 @@
     },
 
     /* -------------------------------------------------
-           DISCIPLINES
-        ------------------------------------------------- */
+     DISCIPLINES
+     ------------------------------------------------- */
+
+    getActiveDiscipline() {
+      return FLState.activeDiscipline;
+    },
 
     openDiscipline(disciplineId) {
       return FLOpenDiscipline(disciplineId);
@@ -1885,8 +2028,8 @@
     },
 
     /* -------------------------------------------------
-           PROJECTS
-        ------------------------------------------------- */
+     PROJECTS
+     ------------------------------------------------- */
 
     changeProject(projectId) {
       return FLChangeProject(projectId);
@@ -1904,29 +2047,36 @@
       return FLNavigateProjectDirection(direction);
     },
 
-    updateProjectDisplay(projectId) {
-      return FLUpdateProjectDisplay(projectId);
-    },
-
     updateProjectProgress(projectId) {
       return FLUpdateProjectProgress(projectId);
     },
 
     /* -------------------------------------------------
-           ACCESSIBILITY
-        ------------------------------------------------- */
+     UI
+     ------------------------------------------------- */
 
-    isReducedMotion() {
-      return FLIsReducedMotion();
+    closeFloatingUI() {
+      FLCloseFloatingUI();
     },
   };
-
   /* =====================================================
-       48 — INITIALISE SITE
-       ===================================================== */
+   55 — INITIALISE SITE
+   ===================================================== */
 
   function FLInitialiseSite() {
+    if (FLState.initialised) {
+      return;
+    }
+
+    FLState.initialised = true;
+
+    /* -------------------------------------------------
+     CACHE + BASE STATE
+     ------------------------------------------------- */
+
     FLCacheDOM();
+
+    FLInitialiseFloatingUIState();
 
     FLLoadPreferences();
 
@@ -1935,6 +2085,10 @@
     FLInitialiseDisciplineState();
 
     FLInitialiseProjectState();
+
+    /* -------------------------------------------------
+     UI EVENTS
+     ------------------------------------------------- */
 
     FLInitialiseHeaderEvents();
 
@@ -1946,16 +2100,37 @@
 
     FLInitialiseProjectEvents();
 
+    /*
+     * Keep unfinished project destinations inert until
+     * their final URLs are supplied.
+     */
+
+    FLInitialiseProjectPlaceholders();
+
     FLInitialiseContactPlaceholders();
 
     FLInitialiseHistoryEvents();
 
+    FLInitialiseGlobalSiteEvents();
+
+    FLInitialiseResizeEvents();
+
     document.addEventListener("keydown", FLHandleKeyboard);
 
-    /*
-           Notify animations.js and any future modules that
-           the application controller is fully available.
-        */
+    /* -------------------------------------------------
+     FINAL SYNCHRONISATION
+     ------------------------------------------------- */
+
+    FLSyncProjectProgress();
+
+    FLUpdateHeaderState();
+
+    /* -------------------------------------------------
+     SITE READY EVENT
+
+     animations.js can now safely build ScrollTriggers
+     knowing that application state and UI controls exist.
+     ------------------------------------------------- */
 
     window.dispatchEvent(
       new CustomEvent("flSiteReady", {
@@ -1964,6 +2139,8 @@
 
           language: FLState.language,
 
+          fontSize: FLState.fontSize,
+
           reducedMotion: FLState.reducedMotion,
         },
       }),
@@ -1971,8 +2148,8 @@
   }
 
   /* =====================================================
-       49 — RUN
-       ===================================================== */
+   56 — RUN
+   ===================================================== */
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", FLInitialiseSite, {

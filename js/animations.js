@@ -1,10 +1,10 @@
 /* =========================================================
    F.LIYANTO PORTFOLIO
-   SCROLL + SCENE ANIMATION SYSTEM
+   ANIMATION + SCENE SYSTEM
    ========================================================= */
 
 /* =========================================================
-   01 — GSAP PLUGINS
+   01 — GSAP SETUP
    ========================================================= */
 
 if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
@@ -13,37 +13,35 @@ if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
   if (typeof MotionPathPlugin !== "undefined") {
     gsap.registerPlugin(MotionPathPlugin);
   }
+
+  ScrollTrigger.config({
+    limitCallbacks: true,
+    ignoreMobileResize: true,
+  });
 }
 
 /* =========================================================
-   02 — ANIMATION STATE
+   02 — GLOBAL ANIMATION STATE
    ========================================================= */
 
 const FLAnimationState = {
   ready: false,
-
-  reducedMotion: false,
-
-  isRebuilding: false,
+  rebuilding: false,
+  eventsInitialised: false,
+  cursorInitialised: false,
 
   currentScene: "welcome",
+  viewportMode: null,
+  reducedMotion: false,
 
+  context: null,
+  resizeTimer: null,
   scrollTween: null,
 
   autoPlay: {
     active: false,
     scene: null,
   },
-
-  resizeTimer: null,
-
-  viewportMode: null,
-
-  context: null,
-
-  eventsInitialised: false,
-
-  cursorInitialised: false,
 
   welcome: {
     timeline: null,
@@ -66,7 +64,6 @@ const FLAnimationState = {
     timeline: null,
     scrollTrigger: null,
     currentProjectIndex: 0,
-    isChangingProject: false,
   },
 
   contact: {
@@ -115,12 +112,24 @@ function FLGetSceneState(sceneName) {
   return FLAnimationState[sceneName] || null;
 }
 
+function FLGetViewportMode() {
+  if (window.matchMedia("(max-width: 720px)").matches) {
+    return "mobile";
+  }
+
+  if (window.matchMedia("(max-width: 960px)").matches) {
+    return "tablet";
+  }
+
+  return "desktop";
+}
+
 /* =========================================================
    04 — ACTIVE SCENE
    ========================================================= */
 
 function FLSetSceneActive(sceneName) {
-  if (!sceneName || FLAnimationState.currentScene === sceneName) {
+  if (!sceneName) {
     return;
   }
 
@@ -130,13 +139,10 @@ function FLSetSceneActive(sceneName) {
 }
 
 /* =========================================================
-   05 — KILL AUTOMATED SCROLL
-
-   Any real interaction from the visitor immediately
-   cancels autoplay and returns control to manual scrolling.
+   05 — SCROLL TWEEN CONTROL
    ========================================================= */
 
-function FLKillScrollTween() {
+function FLStopScrollTween() {
   if (FLAnimationState.scrollTween) {
     FLAnimationState.scrollTween.kill();
 
@@ -149,99 +155,37 @@ function FLKillScrollTween() {
 }
 
 /* =========================================================
-   06 — FORCE SCROLLTRIGGER TO FOLLOW AUTOPLAY
+   06 — SMOOTH PROGRAMMATIC SCROLL
 
-   Manual scrolling keeps normal numeric scrub smoothing.
+   GSAP owns all automatic scene movement.
 
-   Automated scene playback instead follows our GSAP scroll
-   tween exactly. This removes the old "double smoothing"
-   feeling where the page moved first and animations lagged
-   behind it.
-   ========================================================= */
+   CSS smooth scrolling is temporarily disabled during these
+   movements so the browser and GSAP never fight each other.
 
-function FLForceTriggerSync(trigger) {
-  if (!trigger || !FLHasScrollTrigger()) {
-    return;
-  }
-
-  ScrollTrigger.update();
-
-  const scrubTween = trigger.getTween?.();
-
-  if (scrubTween) {
-    scrubTween.progress(1);
-  }
-
-  if (trigger.animation) {
-    trigger.animation.progress(trigger.progress);
-  }
-}
-
-/* =========================================================
-   07 — FORCE ALL SCENE TRIGGERS
-
-   Cross-scene autoplay can pass through several pinned
-   timelines in one motion.
-
-   Synchronising all of them keeps the hand-off between
-   scenes seamless.
-   ========================================================= */
-
-function FLForceAllSceneTriggerSync() {
-  ["welcome", "about", "services", "projects", "contact"].forEach(
-    (sceneName) => {
-      FLForceTriggerSync(FLAnimationState[sceneName]?.scrollTrigger);
-    },
-  );
-}
-
-/* =========================================================
-   08 — SCROLL TO Y
-
-   One scroll engine is used for:
-   - header navigation
-   - scene autoplay
-   - project navigation
-   - restart
-
-   Autoplay can request syncAllTriggers so every timeline
-   follows the scroll position frame-for-frame.
+   This is especially important for longer choreographed
+   transitions such as Welcome and About.
    ========================================================= */
 
 function FLScrollToY(targetY, options = {}) {
-  if (!FLHasGSAP()) {
-    window.scrollTo({
-      top: targetY,
-
-      behavior: options.immediate ? "auto" : "smooth",
-    });
-
-    return null;
-  }
-
   const {
-    duration = 0.78,
-
+    duration = 0.9,
+    ease = "power3.inOut",
     immediate = false,
-
-    syncTrigger = null,
-
-    syncAllTriggers = false,
-
-    ease = "power2.inOut",
-
     onComplete = null,
   } = options;
 
-  FLKillScrollTween();
+  const safeTarget = Math.max(0, targetY);
 
-  if (immediate || FLIsReducedMotion()) {
-    window.scrollTo(0, targetY);
+  FLStopScrollTween();
 
-    if (syncAllTriggers) {
-      FLForceAllSceneTriggerSync();
-    } else if (syncTrigger) {
-      FLForceTriggerSync(syncTrigger);
+  if (!FLHasGSAP() || immediate || FLIsReducedMotion()) {
+    window.scrollTo({
+      top: safeTarget,
+      behavior: "auto",
+    });
+
+    if (FLHasScrollTrigger()) {
+      ScrollTrigger.update();
     }
 
     onComplete?.();
@@ -249,46 +193,51 @@ function FLScrollToY(targetY, options = {}) {
     return null;
   }
 
+  const root = document.documentElement;
+
+  const previousScrollBehavior = root.style.scrollBehavior;
+
+  root.style.scrollBehavior = "auto";
+
   const proxy = {
     y: window.scrollY,
   };
 
-  FLAnimationState.scrollTween = gsap.to(proxy, {
-    y: targetY,
+  const restoreScrollBehaviour = () => {
+    root.style.scrollBehavior = previousScrollBehavior;
+  };
+
+  const tween = gsap.to(proxy, {
+    y: safeTarget,
 
     duration,
-
     ease,
 
     overwrite: true,
 
     onUpdate() {
       window.scrollTo(0, proxy.y);
-
-      if (syncAllTriggers) {
-        FLForceAllSceneTriggerSync();
-      } else if (syncTrigger) {
-        FLForceTriggerSync(syncTrigger);
-      }
     },
 
     onComplete() {
+      restoreScrollBehaviour();
+
       FLAnimationState.scrollTween = null;
 
       FLAnimationState.autoPlay.active = false;
 
       FLAnimationState.autoPlay.scene = null;
 
-      if (syncAllTriggers) {
-        FLForceAllSceneTriggerSync();
-      } else if (syncTrigger) {
-        FLForceTriggerSync(syncTrigger);
+      if (FLHasScrollTrigger()) {
+        ScrollTrigger.update();
       }
 
       onComplete?.();
     },
 
     onInterrupt() {
+      restoreScrollBehaviour();
+
       FLAnimationState.scrollTween = null;
 
       FLAnimationState.autoPlay.active = false;
@@ -297,106 +246,69 @@ function FLScrollToY(targetY, options = {}) {
     },
   });
 
-  return FLAnimationState.scrollTween;
+  FLAnimationState.scrollTween = tween;
+
+  return tween;
 }
 
 /* =========================================================
-   09 — SCROLLTRIGGER PROGRESS TO Y
-   ========================================================= */
-
-function FLScrollTriggerToProgress(trigger, progress, options = {}) {
-  if (!trigger) {
-    return false;
-  }
-
-  const safeProgress = FLClamp(progress);
-
-  const target = trigger.start + (trigger.end - trigger.start) * safeProgress;
-
-  FLScrollToY(target, {
-    ...options,
-
-    syncTrigger: options.syncTrigger ?? trigger,
-  });
-
-  return true;
-}
-
-/* =========================================================
-   10 — LABEL PROGRESS
+   07 — TIMELINE LABEL HELPERS
    ========================================================= */
 
 function FLGetLabelProgress(sceneName, label) {
-  const timeline = FLAnimationState[sceneName]?.timeline;
+  const timeline = FLGetSceneState(sceneName)?.timeline;
 
-  if (!timeline || !label || timeline.labels[label] === undefined) {
+  if (!timeline || timeline.labels[label] === undefined) {
     return null;
   }
 
   const duration = timeline.duration();
 
-  if (duration <= 0) {
+  if (!duration) {
     return 0;
   }
 
   return FLClamp(timeline.labels[label] / duration);
 }
 
-/* =========================================================
-   11 — FALLBACK LANDING PROGRESS
-   ========================================================= */
-
 function FLGetFallbackLandingProgress(sceneName, landing) {
   if (landing === "intro") {
-    return 0.03;
+    return 0.02;
   }
 
   const defaults = {
-    welcome: 0.08,
-
-    about: 0.45,
-
-    services: 0.56,
-
-    projects: 0.12,
-
-    contact: 0.68,
+    welcome: 0.04,
+    about: 0.42,
+    services: 0.72,
+    projects: 0.24,
+    contact: 0.64,
   };
 
-  return defaults[sceneName] ?? 0.1;
+  return defaults[sceneName] ?? 0.08;
 }
 
-/* =========================================================
-   12 — RESOLVE LANDING PROGRESS
-   ========================================================= */
-
 function FLResolveLandingProgress(sceneName, landing) {
-  const labelProgress = FLGetLabelProgress(sceneName, landing);
+  const labelledProgress = FLGetLabelProgress(sceneName, landing);
 
-  if (labelProgress !== null) {
-    return labelProgress;
+  if (labelledProgress !== null) {
+    return labelledProgress;
   }
 
   return FLGetFallbackLandingProgress(sceneName, landing);
 }
 
 /* =========================================================
-   13 — GET SCENE LANDING Y
-
-   Centralised so normal navigation and autoplay calculate
-   positions in exactly the same way.
+   08 — SCENE LANDING POSITION
    ========================================================= */
 
-function FLGetSceneLandingY(sceneName, landing) {
+function FLGetSceneLandingY(sceneName, landing = "ready") {
   const scene = FLGetScene(sceneName);
 
   if (!scene) {
     return null;
   }
 
-  const state = FLGetSceneState(sceneName);
-
-  const trigger = state?.scrollTrigger;
+  const trigger = FLGetSceneState(sceneName)?.scrollTrigger;
 
   if (trigger) {
     const progress = FLResolveLandingProgress(sceneName, landing);
@@ -410,13 +322,7 @@ function FLGetSceneLandingY(sceneName, landing) {
 }
 
 /* =========================================================
-   14 — GO TO SCENE
-
-   Used by header navigation.
-
-   Header navigation still goes straight to a useful
-   readable "ready" state instead of making visitors watch
-   every animation again.
+   09 — GO DIRECTLY TO A SCENE
    ========================================================= */
 
 function FLGoToScene(sceneName, options = {}) {
@@ -430,22 +336,21 @@ function FLGoToScene(sceneName, options = {}) {
     landing = sceneName === "welcome" ? "intro" : "ready",
 
     immediate = false,
+
+    duration = 0.95,
   } = options;
 
-  const target = FLGetSceneLandingY(sceneName, landing);
+  const targetY = FLGetSceneLandingY(sceneName, landing);
 
-  if (target === null) {
+  if (targetY === null) {
     return false;
   }
 
-  FLScrollToY(target, {
-    duration: 0.9,
-
+  FLScrollToY(targetY, {
+    duration,
     immediate,
 
-    syncAllTriggers: true,
-
-    ease: "power2.inOut",
+    ease: "power3.inOut",
 
     onComplete() {
       FLSetSceneActive(sceneName);
@@ -456,32 +361,22 @@ function FLGoToScene(sceneName, options = {}) {
 }
 
 /* =========================================================
-   15 — ONE-CLICK SCENE AUTOPLAY
+   10 — AUTOMATIC SCENE PLAYBACK
 
-   THIS IS THE NEW INTERACTION MODEL.
+   Continue does not jump between finished states.
 
-   One click:
-   - plays all remaining animation beats
-   - preserves their existing order
-   - uses the scroll-controlled master timeline
-   - gently enters the next scene
-   - stops at that scene's useful resting state
+   It scrolls through the same GSAP timeline used by manual
+   scrolling, allowing the visitor to actually watch the
+   animation happen.
 
-   No more clicking every animation checkpoint.
+   Individual scenes can request longer timings when their
+   choreography deserves more breathing room.
    ========================================================= */
 
 function FLPlaySceneToNext(sceneName, nextScene, options = {}) {
   if (!sceneName || !nextScene) {
     return false;
   }
-
-  /*
-       Ignore repeated clicks while a scene is already
-       automatically playing.
-
-       Manual wheel/touch/pointer interaction still cancels
-       it through FLInitialiseScrollInterruption().
-    */
 
   if (FLAnimationState.autoPlay.active) {
     return false;
@@ -490,150 +385,68 @@ function FLPlaySceneToNext(sceneName, nextScene, options = {}) {
   if (FLIsReducedMotion()) {
     return FLGoToScene(nextScene, {
       landing: options.nextLanding ?? "ready",
+
+      duration: 0.5,
     });
   }
 
-  const target = FLGetSceneLandingY(nextScene, options.nextLanding ?? "ready");
+  const targetY = FLGetSceneLandingY(nextScene, options.nextLanding ?? "ready");
 
-  if (target === null) {
+  if (targetY === null) {
     return false;
   }
 
-  const currentY = window.scrollY;
+  const distance = Math.abs(targetY - window.scrollY);
 
-  const distance = Math.abs(target - currentY);
+  const viewportDistance = distance / Math.max(window.innerHeight, 1);
 
-  /*
-       Duration scales gently with distance.
+  const minimumDuration = options.minimumDuration ?? 1.8;
 
-       The clamps stop a tiny movement feeling sluggish and
-       stop long scene sequences from becoming painfully
-       slow.
-
-       Scene-specific minimum durations below give each
-       sequence room to breathe.
-    */
-
-  const distanceDuration = (distance / Math.max(window.innerHeight, 1)) * 1.15;
-
-  const minimumDuration = options.minimumDuration ?? 4;
-
-  const maximumDuration = options.maximumDuration ?? 6;
+  const maximumDuration = options.maximumDuration ?? 3.2;
 
   const duration = FLClamp(
-    Math.max(distanceDuration, minimumDuration),
+    0.9 + viewportDistance * 0.72,
+
     minimumDuration,
+
     maximumDuration,
   );
 
-  FLAnimationState.autoPlay.active = true;
-
-  FLAnimationState.autoPlay.scene = sceneName;
-
-  FLScrollToY(target, {
+  const tween = FLScrollToY(targetY, {
     duration,
 
-    syncAllTriggers: true,
-
-    /*
-               Very soft acceleration/deceleration.
-
-               power1.inOut avoids the old harsh jump while
-               still allowing every internal animation beat
-               to remain readable.
-            */
-
-    ease: "power1.inOut",
+    ease: options.ease ?? "power2.inOut",
 
     onComplete() {
       FLSetSceneActive(nextScene);
     },
   });
 
+  if (!tween) {
+    return true;
+  }
+
+  FLAnimationState.autoPlay.active = true;
+
+  FLAnimationState.autoPlay.scene = sceneName;
+
   return true;
 }
 
 /* =========================================================
-   16 — MANUAL INPUT CANCELS AUTOPLAY
+   11 — MANUAL INPUT CANCELS AUTOPLAY
    ========================================================= */
 
-function FLInitialiseScrollInterruption() {
-  const cancel = () => {
-    if (FLAnimationState.scrollTween) {
-      FLKillScrollTween();
-    }
-  };
+function FLCancelAutoPlayFromUserInput() {
+  if (!FLAnimationState.autoPlay.active) {
+    return;
+  }
 
-  window.addEventListener("wheel", cancel, {
-    passive: true,
-  });
-
-  window.addEventListener("touchstart", cancel, {
-    passive: true,
-  });
-
-  window.addEventListener("pointerdown", cancel, {
-    passive: true,
-  });
+  FLStopScrollTween();
 }
 
 /* =========================================================
-   17 — LEGACY STOP HELPER
-
-   Kept because some internal interactions can still target
-   timeline labels directly.
-
-   Scene-wide Continue no longer uses this helper.
-   ========================================================= */
-
-function FLAdvanceThroughStops(sceneName, stops, options = {}) {
-  const state = FLGetSceneState(sceneName);
-
-  const trigger = state?.scrollTrigger;
-
-  if (!trigger) {
-    if (options.nextScene) {
-      return FLGoToScene(options.nextScene, {
-        landing: options.nextLanding ?? "ready",
-      });
-    }
-
-    return false;
-  }
-
-  const current = trigger.progress;
-
-  const resolved = stops
-    .map((stop) => {
-      if (typeof stop === "number") {
-        return FLClamp(stop);
-      }
-
-      return FLResolveLandingProgress(sceneName, stop);
-    })
-    .filter((value) => value > current + 0.035);
-
-  if (resolved.length) {
-    return FLScrollTriggerToProgress(trigger, resolved[0], {
-      duration: options.duration ?? 0.75,
-
-      syncAllTriggers: true,
-
-      ease: "power2.inOut",
-    });
-  }
-
-  if (options.nextScene) {
-    return FLGoToScene(options.nextScene, {
-      landing: options.nextLanding ?? "ready",
-    });
-  }
-
-  return false;
-}
-
-/* =========================================================
-   18 — WELCOME PROGRESS STATE
+   12 — WELCOME PROGRESS INDICATOR
    ========================================================= */
 
 function FLUpdateWelcomeProgress(progress) {
@@ -643,25 +456,35 @@ function FLUpdateWelcomeProgress(progress) {
 
   let step = 0;
 
-  if (safeProgress >= 0.72) {
+  if (safeProgress >= 0.84) {
     step = 3;
-  } else if (safeProgress >= 0.46) {
+  } else if (safeProgress >= 0.61) {
     step = 2;
-  } else if (safeProgress >= 0.2) {
+  } else if (safeProgress >= 0.23) {
     step = 1;
   }
 
+  if (step === FLAnimationState.welcome.step) {
+    return;
+  }
+
   FLAnimationState.welcome.step = step;
+
+  const steps = document.querySelectorAll("[data-welcome-progress] > span");
+
+  steps.forEach((item, index) => {
+    item.classList.toggle("is-active", index === step);
+  });
 }
 
 /* =========================================================
-   19 — WELCOME PREPARATION
+   13 — WELCOME PREPARATION
    ========================================================= */
 
 function FLPrepareWelcomeScene() {
   const scene = FLGetScene("welcome");
 
-  if (!scene) {
+  if (!scene || !FLHasGSAP()) {
     return;
   }
 
@@ -679,7 +502,7 @@ function FLPrepareWelcomeScene() {
     scene.querySelector(".scene-progress"),
 
     ...scene.querySelectorAll(".shape"),
-  ];
+  ].filter(Boolean);
 
   gsap.set(elements, {
     clearProps: "transform,opacity,visibility",
@@ -687,7 +510,11 @@ function FLPrepareWelcomeScene() {
 }
 
 /* =========================================================
-   20 — REDUCED-MOTION WELCOME
+   14 — REDUCED MOTION WELCOME
+
+   Reduced-motion visitors receive one clean static opening
+   composition instead of multiple states occupying the same
+   space at once.
    ========================================================= */
 
 function FLBuildReducedWelcome() {
@@ -695,15 +522,31 @@ function FLBuildReducedWelcome() {
 
   const scene = FLGetScene("welcome");
 
-  if (!scene) {
+  if (!scene || !FLHasGSAP()) {
     return;
   }
 
-  gsap.set(scene.querySelectorAll(".welcome-specialism"), {
+  const eyebrow = scene.querySelector(".welcome__eyebrow");
+
+  const titleSmall = scene.querySelector(".welcome__title-small");
+
+  const name = scene.querySelector("[data-welcome-name]");
+
+  const specialisms = scene.querySelectorAll(".welcome-specialism");
+
+  const statement = scene.querySelector(".welcome__statement-text");
+
+  const progress = scene.querySelector(".scene-progress");
+
+  gsap.set([eyebrow, titleSmall, name, progress].filter(Boolean), {
     autoAlpha: 1,
   });
 
-  gsap.set(scene.querySelector(".welcome__statement-text"), {
+  gsap.set(specialisms, {
+    autoAlpha: 0,
+  });
+
+  gsap.set(statement, {
     autoAlpha: 0,
   });
 
@@ -713,7 +556,27 @@ function FLBuildReducedWelcome() {
 }
 
 /* =========================================================
-   21 — WELCOME MASTER TIMELINE
+   15 — WELCOME MASTER TIMELINE
+
+   Choreography:
+
+   Hello & Welcome
+   ↓
+   Portfolio of F.Liyanto
+   ↓
+   intro disappears completely
+   ↓
+   UI Design / Interaction Design / Front-End
+   ↓
+   visual breathing room
+   ↓
+   "I like making digital things feel alive."
+   ↓
+   About
+
+   The background shapes remain visible throughout the main
+   Welcome choreography so all states feel like one scene
+   rather than separate presentation slides.
    ========================================================= */
 
 function FLBuildWelcomeScene() {
@@ -737,7 +600,13 @@ function FLBuildWelcomeScene() {
 
   const name = scene.querySelector("[data-welcome-name]");
 
-  const specialisms = scene.querySelectorAll(".welcome-specialism");
+  const ui = scene.querySelector(".welcome-specialism--ui");
+
+  const interaction = scene.querySelector(".welcome-specialism--interaction");
+
+  const frontend = scene.querySelector(".welcome-specialism--frontend");
+
+  const specialisms = [ui, interaction, frontend].filter(Boolean);
 
   const statement = scene.querySelector(".welcome__statement-text");
 
@@ -752,28 +621,46 @@ function FLBuildWelcomeScene() {
   const shapeFour = scene.querySelector("[data-shape='welcome-four']");
 
   /* =====================================================
-       INITIAL STATE
-    ===================================================== */
+     INITIAL STATE
+     ===================================================== */
 
-  gsap.set([eyebrow, titleSmall, name, progress], {
+  gsap.set([eyebrow, titleSmall, name, progress].filter(Boolean), {
     autoAlpha: 1,
   });
 
-  gsap.set(specialisms, {
-    y: 24,
-    scale: 0.92,
+  /* Each discipline has its own entry direction so the
+     composition assembles rather than simply popping in. */
+
+  gsap.set(ui, {
+    x: 70,
+    y: -12,
+    scale: 0.94,
+    autoAlpha: 0,
+  });
+
+  gsap.set(interaction, {
+    x: 0,
+    y: 38,
+    scale: 0.94,
+    autoAlpha: 0,
+  });
+
+  gsap.set(frontend, {
+    x: -70,
+    y: 18,
+    scale: 0.94,
     autoAlpha: 0,
   });
 
   gsap.set(statement, {
-    y: 28,
+    y: 34,
     scale: 0.97,
     autoAlpha: 0,
   });
 
   /* =====================================================
-       TIMELINE
-    ===================================================== */
+     MASTER TIMELINE
+     ===================================================== */
 
   const timeline = gsap.timeline({
     defaults: {
@@ -785,13 +672,19 @@ function FLBuildWelcomeScene() {
 
       start: "top top",
 
-      end: () => `+=${window.innerHeight * 3.15}`,
+      /*
+       * Slightly longer scroll distance keeps the exact
+       * choreography intact while giving the opening more
+       * breathing room during manual scrolling.
+       */
+
+      end: () => `+=${window.innerHeight * 3.75}`,
 
       pin: true,
 
       pinSpacing: true,
 
-      scrub: 0.32,
+      scrub: 0.28,
 
       anticipatePin: 1,
 
@@ -816,285 +709,384 @@ function FLBuildWelcomeScene() {
   });
 
   /* =====================================================
-       INTRO
-    ===================================================== */
+     STATE 01 — OPENING HOLD
+     ===================================================== */
 
   timeline.addLabel("intro", 0);
 
   timeline.to(
     {},
     {
-      duration: 0.45,
-    },
-  );
-
-  /* =====================================================
-       PORTFOLIO TITLE TRANSITION
-    ===================================================== */
-
-  timeline.to(
-    [eyebrow, titleSmall],
-    {
-      y: -20,
-
-      autoAlpha: 0,
-
-      duration: 0.55,
-
-      ease: "power2.inOut",
-    },
-    0.42,
-  );
-
-  timeline.to(
-    name,
-    {
-      scale: 1.1,
-
-      y: -8,
-
-      transformOrigin: "left center",
-
-      duration: 0.55,
-
-      ease: "power2.inOut",
-    },
-    0.42,
-  );
-
-  /* =====================================================
-       SPECIALISMS APPEAR
-
-       UI Design → Interaction Design → Front-End
-
-       During autoplay these now play automatically in order.
-    ===================================================== */
-
-  timeline.addLabel("specialisms", 1.08);
-
-  timeline.to(
-    specialisms,
-    {
-      y: 0,
-
-      scale: 1,
-
-      autoAlpha: 1,
-
-      stagger: 0.12,
-
       duration: 0.58,
-
-      ease: "back.out(1.12)",
-    },
-    0.88,
-  );
-
-  timeline.to(
-    name,
-    {
-      scale: 0.86,
-
-      y: 14,
-
-      autoAlpha: 0.36,
-
-      duration: 0.6,
-
-      ease: "power2.inOut",
-    },
-    1.08,
-  );
-
-  timeline.to(
-    shapeOne,
-    {
-      xPercent: -28,
-      yPercent: 18,
-      rotation: 32,
-      scale: 1.06,
-
-      duration: 0.9,
-
-      ease: "power2.inOut",
-    },
-    0.85,
-  );
-
-  timeline.to(
-    shapeTwo,
-    {
-      xPercent: 35,
-      yPercent: -28,
-      scale: 1.15,
-
-      duration: 0.9,
-
-      ease: "power2.inOut",
-    },
-    0.85,
-  );
-
-  timeline.to(
-    shapeThree,
-    {
-      xPercent: 24,
-      yPercent: 32,
-      rotation: -20,
-
-      duration: 0.9,
-
-      ease: "power2.inOut",
-    },
-    0.85,
-  );
-
-  timeline.to(
-    shapeFour,
-    {
-      xPercent: -20,
-      rotation: 34,
-
-      duration: 0.9,
-
-      ease: "power2.inOut",
-    },
-    0.85,
-  );
-
-  /* =====================================================
-       READY / SHORT HOLD
-    ===================================================== */
-
-  timeline.addLabel("ready", 1.7);
-
-  timeline.to(
-    {},
-    {
-      duration: 0.42,
     },
   );
 
-  /* =====================================================
-       SPECIALISMS FADE
-    ===================================================== */
+  /* -----------------------------------------------------
+     Hello / Portfolio of fades first
+     ----------------------------------------------------- */
 
   timeline.to(
-    specialisms,
-    {
-      y: -16,
-
-      scale: 0.96,
-
-      autoAlpha: 0,
-
-      stagger: 0.05,
-
-      duration: 0.46,
-
-      ease: "power2.inOut",
-    },
-    1.82,
-  );
-
-  timeline.to(
-    name,
-    {
-      y: -12,
-
-      autoAlpha: 0,
-
-      duration: 0.46,
-
-      ease: "power2.inOut",
-    },
-    1.88,
-  );
-
-  /* =====================================================
-       STATEMENT
-    ===================================================== */
-
-  timeline.addLabel("statement", 2.1);
-
-  timeline.to(
-    statement,
-    {
-      y: 0,
-
-      scale: 1,
-
-      autoAlpha: 1,
-
-      duration: 0.66,
-
-      ease: "power3.out",
-    },
-    2.06,
-  );
-
-  timeline.to(
-    {},
-    {
-      duration: 0.56,
-    },
-  );
-
-  /* =====================================================
-       WELCOME EXIT
-
-       Slow, soft fade into About.
-    ===================================================== */
-
-  timeline.addLabel("exit", 3.15);
-
-  timeline.to(
-    statement,
+    [eyebrow, titleSmall].filter(Boolean),
     {
       y: -22,
+
+      autoAlpha: 0,
+
+      duration: 0.72,
+
+      ease: "power2.inOut",
+    },
+    0.52,
+  );
+
+  /* -----------------------------------------------------
+     F.Liyanto exits COMPLETELY.
+
+     Nothing from the name remains behind the specialisms.
+     ----------------------------------------------------- */
+
+  timeline.to(
+    name,
+    {
+      y: -18,
 
       scale: 0.985,
 
       autoAlpha: 0,
 
-      duration: 0.6,
+      transformOrigin: "left center",
+
+      duration: 0.82,
 
       ease: "power2.inOut",
     },
-    2.88,
+    0.6,
+  );
+
+  /* =====================================================
+     BACKGROUND SHAPE MOTION
+
+     Shapes never disappear during the specialism state.
+     They simply drift gently behind the typography.
+     ===================================================== */
+
+  timeline.to(
+    shapeOne,
+    {
+      xPercent: -12,
+
+      yPercent: 8,
+
+      rotation: 24,
+
+      scale: 1.03,
+
+      duration: 2.3,
+
+      ease: "sine.inOut",
+    },
+    0.68,
+  );
+
+  timeline.to(
+    shapeTwo,
+    {
+      xPercent: 15,
+
+      yPercent: -12,
+
+      scale: 1.07,
+
+      duration: 2.3,
+
+      ease: "sine.inOut",
+    },
+    0.68,
+  );
+
+  timeline.to(
+    shapeThree,
+    {
+      xPercent: 12,
+
+      yPercent: 14,
+
+      rotation: -9,
+
+      scale: 1.04,
+
+      duration: 2.3,
+
+      ease: "sine.inOut",
+    },
+    0.68,
+  );
+
+  timeline.to(
+    shapeFour,
+    {
+      xPercent: -10,
+
+      yPercent: -5,
+
+      rotation: 27,
+
+      duration: 2.3,
+
+      ease: "sine.inOut",
+    },
+    0.68,
+  );
+
+  /* =====================================================
+     BREATHING SPACE
+
+     The intro is fully gone before anything new arrives.
+     ===================================================== */
+
+  timeline.to(
+    {},
+    {
+      duration: 0.22,
+    },
+  );
+
+  /* =====================================================
+     STATE 02 — SPECIALISMS
+     ===================================================== */
+
+  timeline.addLabel("specialisms", 1.55);
+
+  /* -----------------------------------------------------
+     UI DESIGN
+     ----------------------------------------------------- */
+
+  timeline.to(
+    ui,
+    {
+      x: 0,
+      y: 0,
+
+      scale: 1,
+
+      autoAlpha: 1,
+
+      duration: 0.78,
+
+      ease: "power3.out",
+    },
+    1.42,
+  );
+
+  /* -----------------------------------------------------
+     INTERACTION DESIGN
+
+     Main visual anchor enters second.
+     ----------------------------------------------------- */
+
+  timeline.to(
+    interaction,
+    {
+      x: 0,
+      y: 0,
+
+      scale: 1,
+
+      autoAlpha: 1,
+
+      duration: 0.84,
+
+      ease: "power3.out",
+    },
+    1.6,
+  );
+
+  /* -----------------------------------------------------
+     FRONT-END
+     ----------------------------------------------------- */
+
+  timeline.to(
+    frontend,
+    {
+      x: 0,
+      y: 0,
+
+      scale: 1,
+
+      autoAlpha: 1,
+
+      duration: 0.78,
+
+      ease: "power3.out",
+    },
+    1.8,
+  );
+
+  /* -----------------------------------------------------
+     SPECIALISM HOLD
+
+     Give the visitor enough time to actually read the
+     composition before we begin taking it away.
+     ----------------------------------------------------- */
+
+  timeline.addLabel("specialismsReady", 2.48);
+
+  timeline.to(
+    {},
+    {
+      duration: 0.82,
+    },
+  );
+
+  /* =====================================================
+     SPECIALISMS EXIT
+     ===================================================== */
+
+  timeline.to(
+    ui,
+    {
+      x: 34,
+      y: -16,
+
+      scale: 0.975,
+
+      autoAlpha: 0,
+
+      duration: 0.66,
+
+      ease: "power2.inOut",
+    },
+    3.18,
+  );
+
+  timeline.to(
+    interaction,
+    {
+      y: -20,
+
+      scale: 0.975,
+
+      autoAlpha: 0,
+
+      duration: 0.72,
+
+      ease: "power2.inOut",
+    },
+    3.24,
+  );
+
+  timeline.to(
+    frontend,
+    {
+      x: -34,
+      y: -10,
+
+      scale: 0.975,
+
+      autoAlpha: 0,
+
+      duration: 0.66,
+
+      ease: "power2.inOut",
+    },
+    3.3,
+  );
+
+  /* =====================================================
+     STATE 03 — PERSONAL STATEMENT
+     ===================================================== */
+
+  timeline.addLabel("statement", 3.78);
+
+  timeline.to(
+    statement,
+    {
+      y: 0,
+
+      scale: 1,
+
+      autoAlpha: 1,
+
+      duration: 0.88,
+
+      ease: "power3.out",
+    },
+    3.7,
+  );
+
+  /* -----------------------------------------------------
+     Statement resting state
+     ----------------------------------------------------- */
+
+  timeline.addLabel("ready", 4.36);
+
+  timeline.to(
+    {},
+    {
+      duration: 0.92,
+    },
+  );
+
+  /* =====================================================
+     STATE 04 — WELCOME EXIT
+     ===================================================== */
+
+  timeline.addLabel("exit", 5.18);
+
+  timeline.to(
+    statement,
+    {
+      y: -26,
+
+      scale: 0.985,
+
+      autoAlpha: 0,
+
+      duration: 0.74,
+
+      ease: "power2.inOut",
+    },
+    5.08,
   );
 
   timeline.to(
     progress,
     {
-      y: 12,
+      y: 10,
 
       autoAlpha: 0,
 
-      duration: 0.4,
+      duration: 0.48,
 
       ease: "power2.inOut",
     },
-    3,
+    5.2,
   );
+
+  /* -----------------------------------------------------
+     The shapes only leave at the final transition into About.
+
+     They stay present through:
+     intro → specialisms → statement.
+     ----------------------------------------------------- */
 
   timeline.to(
-    [shapeOne, shapeTwo, shapeThree, shapeFour],
+    [shapeOne, shapeTwo, shapeThree, shapeFour].filter(Boolean),
     {
-      scale: 1.12,
+      scale: 1.08,
 
       autoAlpha: 0,
 
-      stagger: 0.04,
+      stagger: 0.035,
 
-      duration: 0.55,
+      duration: 0.7,
 
       ease: "power2.inOut",
     },
-    3.02,
+    5.22,
   );
 
-  timeline.addLabel("complete", 3.72);
+  timeline.addLabel("complete", 5.98);
 
   FLAnimationState.welcome.timeline = timeline;
 
@@ -1102,32 +1094,38 @@ function FLBuildWelcomeScene() {
 }
 
 /* =========================================================
-   22 — WELCOME CLICK
+   16 — WELCOME CONTINUE
 
-   ONE CLICK now plays:
-   portfolio → specialisms → statement → About
+   One click now deliberately takes its time:
 
-   Scroll remains fully manual if the visitor prefers it.
+   intro
+   → specialisms
+   → statement
+   → About
+
+   It should feel like watching one designed animation,
+   rather than rapidly clicking through presentation slides.
    ========================================================= */
 
 function FLAdvanceWelcome() {
   return FLPlaySceneToNext("welcome", "about", {
     nextLanding: "ready",
 
-    minimumDuration: 5.2,
+    minimumDuration: 6.5,
 
-    maximumDuration: 6.5,
+    maximumDuration: 7.6,
+
+    ease: "sine.inOut",
   });
 }
-
 /* =========================================================
-   23 — ABOUT PREPARATION
+   17 — ABOUT PREPARATION
    ========================================================= */
 
 function FLPrepareAboutScene() {
   const scene = FLGetScene("about");
 
-  if (!scene) {
+  if (!scene || !FLHasGSAP()) {
     return;
   }
 
@@ -1149,7 +1147,7 @@ function FLPrepareAboutScene() {
     scene.querySelector("[data-travel-path]"),
 
     ...scene.querySelectorAll(".shape"),
-  ];
+  ].filter(Boolean);
 
   gsap.set(elements, {
     clearProps: "transform,opacity,visibility,strokeDashoffset,strokeDasharray",
@@ -1157,11 +1155,37 @@ function FLPrepareAboutScene() {
 }
 
 /* =========================================================
-   24 — REDUCED-MOTION ABOUT
+   18 — REDUCED MOTION ABOUT
    ========================================================= */
 
 function FLBuildReducedAbout() {
   FLPrepareAboutScene();
+
+  const scene = FLGetScene("about");
+
+  if (!scene || !FLHasGSAP()) {
+    return;
+  }
+
+  const plane = scene.querySelector("[data-travel-plane]");
+
+  const path = scene.querySelector("[data-travel-path]");
+
+  const destination = scene.querySelector("[data-travel-destination]");
+
+  gsap.set(destination, {
+    autoAlpha: 1,
+  });
+
+  gsap.set(plane, {
+    autoAlpha: 0,
+  });
+
+  if (path) {
+    gsap.set(path, {
+      strokeDashoffset: 0,
+    });
+  }
 
   FLAnimationState.about.timeline = null;
 
@@ -1169,7 +1193,25 @@ function FLBuildReducedAbout() {
 }
 
 /* =========================================================
-   25 — ABOUT MASTER TIMELINE
+   19 — ABOUT MASTER TIMELINE
+
+   About intentionally moves more slowly than before.
+
+   Sequence:
+
+   Introduction
+   ↓
+   Surabaya / Melbourne travel card
+   ↓
+   Plane appears
+   ↓
+   Plane travels once from Surabaya to Melbourne
+   ↓
+   Arrival settles
+   ↓
+   What I Do
+
+   Manual scrolling still controls the same choreography.
    ========================================================= */
 
 function FLBuildAboutScene() {
@@ -1199,11 +1241,15 @@ function FLBuildAboutScene() {
 
   const destination = scene.querySelector("[data-travel-destination]");
 
+  const originDot = origin?.querySelector(".travel-location__dot");
+
   const destinationDot = destination?.querySelector(".travel-location__dot");
 
   const plane = scene.querySelector("[data-travel-plane]");
 
   const path = scene.querySelector("[data-travel-path]");
+
+  const nextButton = scene.querySelector(".scene-next");
 
   const shapeOne = scene.querySelector("[data-shape='about-one']");
 
@@ -1212,47 +1258,76 @@ function FLBuildAboutScene() {
   const shapeThree = scene.querySelector("[data-shape='about-three']");
 
   /* =====================================================
-       INITIAL STATE
-    ===================================================== */
+     INITIAL STATE
+     ===================================================== */
 
-  gsap.set([eyebrow, title], {
-    autoAlpha: 1,
+  gsap.set(eyebrow, {
+    y: 18,
+
+    autoAlpha: 0,
+  });
+
+  gsap.set(title, {
+    y: 26,
+
+    autoAlpha: 0,
   });
 
   gsap.set(paragraphs, {
-    y: 14,
-    autoAlpha: 0.72,
+    y: 20,
+
+    autoAlpha: 0,
   });
 
   gsap.set(travelStory, {
-    y: 34,
+    y: 38,
+
     scale: 0.975,
-    autoAlpha: 0.28,
+
+    autoAlpha: 0,
+  });
+
+  gsap.set(origin, {
+    autoAlpha: 1,
   });
 
   gsap.set(destination, {
     autoAlpha: 0.34,
   });
 
+  gsap.set(originDot, {
+    scale: 0.72,
+  });
+
   gsap.set(destinationDot, {
-    scale: 0.7,
+    scale: 0.62,
   });
 
   gsap.set(plane, {
+    scale: 0.92,
+
+    autoAlpha: 0,
+  });
+
+  gsap.set(nextButton, {
+    y: 12,
+
     autoAlpha: 0,
   });
 
   if (path) {
-    gsap.set(path, {
-      strokeDasharray: 120,
+    const pathLength = path.getTotalLength?.() || 120;
 
-      strokeDashoffset: 120,
+    gsap.set(path, {
+      strokeDasharray: pathLength,
+
+      strokeDashoffset: pathLength,
     });
   }
 
   /* =====================================================
-       TIMELINE
-    ===================================================== */
+     MASTER TIMELINE
+     ===================================================== */
 
   const timeline = gsap.timeline({
     defaults: {
@@ -1264,13 +1339,18 @@ function FLBuildAboutScene() {
 
       start: "top top",
 
-      end: () => `+=${window.innerHeight * 2.45}`,
+      /*
+       * More scroll distance gives the flight enough visual
+       * time when either scrolling or clicking Continue.
+       */
+
+      end: () => `+=${window.innerHeight * 2.75}`,
 
       pin: true,
 
       pinSpacing: true,
 
-      scrub: 0.3,
+      scrub: 0.24,
 
       anticipatePin: 1,
 
@@ -1295,10 +1375,38 @@ function FLBuildAboutScene() {
   });
 
   /* =====================================================
-       INTRO
-    ===================================================== */
+     ABOUT INTRODUCTION
+     ===================================================== */
 
   timeline.addLabel("intro", 0);
+
+  timeline.to(
+    eyebrow,
+    {
+      y: 0,
+
+      autoAlpha: 1,
+
+      duration: 0.48,
+
+      ease: "power3.out",
+    },
+    0.08,
+  );
+
+  timeline.to(
+    title,
+    {
+      y: 0,
+
+      autoAlpha: 1,
+
+      duration: 0.62,
+
+      ease: "power3.out",
+    },
+    0.16,
+  );
 
   timeline.to(
     paragraphs,
@@ -1307,47 +1415,56 @@ function FLBuildAboutScene() {
 
       autoAlpha: 1,
 
-      stagger: 0.08,
+      stagger: 0.1,
 
       duration: 0.52,
 
       ease: "power2.out",
     },
-    0.08,
+    0.34,
   );
+
+  /* -----------------------------------------------------
+     Background movement stays deliberately subtle.
+     ----------------------------------------------------- */
 
   timeline.to(
     shapeOne,
     {
-      xPercent: -15,
-      yPercent: 12,
-      rotation: 14,
+      xPercent: -9,
 
-      duration: 0.75,
+      yPercent: 7,
 
-      ease: "power2.inOut",
+      rotation: 6,
+
+      duration: 1.15,
+
+      ease: "sine.inOut",
     },
-    0.05,
+    0.1,
   );
 
   timeline.to(
     shapeTwo,
     {
-      xPercent: 18,
-      rotation: -8,
+      xPercent: 10,
 
-      duration: 0.75,
+      yPercent: -5,
 
-      ease: "power2.inOut",
+      rotation: -5,
+
+      duration: 1.15,
+
+      ease: "sine.inOut",
     },
-    0.05,
+    0.1,
   );
 
   /* =====================================================
-       TRAVEL CARD
-    ===================================================== */
+     TRAVEL STORY APPEARS
+     ===================================================== */
 
-  timeline.addLabel("travel", 0.68);
+  timeline.addLabel("travel", 0.82);
 
   timeline.to(
     travelStory,
@@ -1358,45 +1475,49 @@ function FLBuildAboutScene() {
 
       autoAlpha: 1,
 
-      duration: 0.62,
+      duration: 0.72,
 
       ease: "power3.out",
     },
-    0.54,
+    0.7,
   );
 
   timeline.to(
-    origin?.querySelector(".travel-location__dot"),
+    originDot,
     {
-      scale: 1.08,
+      scale: 1,
 
-      duration: 0.32,
+      duration: 0.4,
 
-      ease: "back.out(1.8)",
+      ease: "back.out(1.6)",
     },
-    0.72,
+    0.94,
   );
 
-  /* =====================================================
-       READY
+  /*
+   * Navigation to About lands here.
+   *
+   * The visitor can read the section before the flight begins.
+   */
 
-       Header About navigation lands here.
-    ===================================================== */
-
-  timeline.addLabel("ready", 1.06);
+  timeline.addLabel("ready", 1.42);
 
   timeline.to(
     {},
     {
-      duration: 0.28,
+      duration: 0.4,
     },
   );
 
   /* =====================================================
-       FLIGHT
-    ===================================================== */
+     SURABAYA → MELBOURNE FLIGHT
+     ===================================================== */
 
-  timeline.addLabel("flight", 1.34);
+  timeline.addLabel("flight", 1.82);
+
+  /* -----------------------------------------------------
+     Draw the route gradually.
+     ----------------------------------------------------- */
 
   if (path) {
     timeline.to(
@@ -1404,23 +1525,37 @@ function FLBuildAboutScene() {
       {
         strokeDashoffset: 0,
 
-        duration: 1.05,
+        duration: 1.55,
 
-        ease: "power1.inOut",
+        ease: "sine.inOut",
       },
-      1.27,
+      1.72,
     );
   }
+
+  /* -----------------------------------------------------
+     Plane appears gently at Surabaya.
+     ----------------------------------------------------- */
 
   timeline.to(
     plane,
     {
+      scale: 1,
+
       autoAlpha: 1,
 
-      duration: 0.18,
+      duration: 0.38,
+
+      ease: "power2.out",
     },
-    1.27,
+    1.72,
   );
+
+  /* -----------------------------------------------------
+     Primary plane journey
+
+     This is intentionally much slower than the old flight.
+     ----------------------------------------------------- */
 
   if (plane && path && FLHasMotionPath()) {
     timeline.to(
@@ -1436,44 +1571,42 @@ function FLBuildAboutScene() {
           autoRotate: true,
         },
 
-        duration: 1.08,
+        duration: 1.75,
 
-        ease: "power1.inOut",
+        ease: "sine.inOut",
       },
-      1.32,
+      1.82,
     );
   } else {
     timeline.to(
       plane,
       {
-        x: () => Math.max(180, travelStory?.clientWidth * 0.42),
+        x: () => Math.max(180, (travelStory?.clientWidth || 500) * 0.48),
 
         y: -8,
 
-        duration: 1.08,
+        duration: 1.75,
 
-        ease: "power1.inOut",
+        ease: "sine.inOut",
       },
-      1.32,
+      1.82,
     );
   }
 
-  /* =====================================================
-       ARRIVAL
-    ===================================================== */
-
-  timeline.addLabel("arrival", 2.35);
+  /* -----------------------------------------------------
+     Surabaya softly recedes while Melbourne becomes active.
+     ----------------------------------------------------- */
 
   timeline.to(
     origin,
     {
-      autoAlpha: 0.48,
+      autoAlpha: 0.58,
 
-      duration: 0.38,
+      duration: 0.72,
 
       ease: "power2.inOut",
     },
-    2.18,
+    2.64,
   );
 
   timeline.to(
@@ -1481,74 +1614,100 @@ function FLBuildAboutScene() {
     {
       autoAlpha: 1,
 
-      duration: 0.46,
+      duration: 0.72,
 
       ease: "power2.out",
     },
-    2.2,
+    2.72,
   );
+
+  /* =====================================================
+     MELBOURNE ARRIVAL
+     ===================================================== */
+
+  timeline.addLabel("arrival", 3.52);
 
   timeline.to(
     destinationDot,
     {
       scale: 1.12,
 
-      duration: 0.32,
+      duration: 0.42,
 
-      ease: "back.out(1.8)",
+      ease: "back.out(1.7)",
     },
-    2.24,
-  );
-
-  timeline.to(
-    plane,
-    {
-      scale: 0.85,
-
-      autoAlpha: 0,
-
-      duration: 0.34,
-
-      ease: "power2.in",
-    },
-    2.42,
+    3.42,
   );
 
   timeline.to(
     shapeThree,
     {
-      xPercent: 22,
-      yPercent: -12,
-      scale: 1.12,
+      xPercent: 14,
 
-      duration: 0.54,
+      yPercent: -10,
+
+      scale: 1.08,
+
+      duration: 0.7,
 
       ease: "power2.out",
     },
-    2.28,
+    3.38,
   );
 
-  /* =====================================================
-       ARRIVAL HOLD
-    ===================================================== */
+  /* -----------------------------------------------------
+     Plane settles rather than vanishing immediately.
+     ----------------------------------------------------- */
 
-  timeline.addLabel("arrivalReady", 2.72);
+  timeline.to(
+    plane,
+    {
+      scale: 0.9,
+
+      autoAlpha: 0,
+
+      duration: 0.48,
+
+      ease: "power2.in",
+    },
+    3.55,
+  );
+
+  timeline.to(
+    nextButton,
+    {
+      y: 0,
+
+      autoAlpha: 1,
+
+      duration: 0.42,
+
+      ease: "power2.out",
+    },
+    3.58,
+  );
+
+  timeline.addLabel("arrivalReady", 3.98);
+
+  /* -----------------------------------------------------
+     Arrival hold
+     ----------------------------------------------------- */
 
   timeline.to(
     {},
     {
-      duration: 0.42,
+      duration: 0.62,
     },
   );
 
   /* =====================================================
-       EXIT
-    ===================================================== */
+     ABOUT EXIT
+     ===================================================== */
 
-  timeline.addLabel("exit", 3.14);
+  timeline.addLabel("exit", 4.58);
 
   timeline.to(
-    [eyebrow, title, paragraphs],
+    [eyebrow, title, ...paragraphs].filter(Boolean),
     {
       y: -16,
 
@@ -1556,11 +1715,11 @@ function FLBuildAboutScene() {
 
       stagger: 0.025,
 
-      duration: 0.46,
+      duration: 0.52,
 
       ease: "power2.inOut",
     },
-    3.08,
+    4.5,
   );
 
   timeline.to(
@@ -1572,14 +1731,28 @@ function FLBuildAboutScene() {
 
       autoAlpha: 0,
 
-      duration: 0.52,
+      duration: 0.58,
 
       ease: "power2.inOut",
     },
-    3.12,
+    4.54,
   );
 
-  timeline.addLabel("complete", 3.75);
+  timeline.to(
+    nextButton,
+    {
+      y: -10,
+
+      autoAlpha: 0,
+
+      duration: 0.4,
+
+      ease: "power2.inOut",
+    },
+    4.58,
+  );
+
+  timeline.addLabel("complete", 5.22);
 
   FLAnimationState.about.timeline = timeline;
 
@@ -1587,31 +1760,37 @@ function FLBuildAboutScene() {
 }
 
 /* =========================================================
-   26 — ABOUT CLICK
+   20 — ABOUT CONTINUE
 
-   ONE CLICK now plays:
-   About → flight → Melbourne → What I Do
+   The plane journey is now intentionally visible when the
+   visitor clicks Continue.
 
-   No extra click needed at the plane or arrival.
+   About
+   → flight
+   → Melbourne arrival
+   → What I Do
    ========================================================= */
 
 function FLAdvanceAbout() {
   return FLPlaySceneToNext("about", "services", {
     nextLanding: "ready",
 
-    minimumDuration: 4.8,
+    minimumDuration: 5.2,
 
-    maximumDuration: 6,
+    maximumDuration: 6.4,
+
+    ease: "sine.inOut",
   });
 }
+
 /* =========================================================
-   27 — SERVICES PREPARATION
+   21 — SERVICES PREPARATION
    ========================================================= */
 
 function FLPrepareServicesScene() {
   const scene = FLGetScene("services");
 
-  if (!scene) {
+  if (!scene || !FLHasGSAP()) {
     return;
   }
 
@@ -1624,14 +1803,14 @@ function FLPrepareServicesScene() {
 
     scene.querySelector(".scene-indicator"),
 
-    scene.querySelector("[data-scene-continue]"),
+    scene.querySelector(".scene-next--projects"),
 
     ...scene.querySelectorAll(".discipline"),
 
     ...scene.querySelectorAll(".discipline__trigger"),
 
     ...scene.querySelectorAll(".shape"),
-  ];
+  ].filter(Boolean);
 
   gsap.set(elements, {
     clearProps: "transform,opacity,visibility,clipPath,filter",
@@ -1639,7 +1818,7 @@ function FLPrepareServicesScene() {
 }
 
 /* =========================================================
-   28 — REDUCED-MOTION SERVICES
+   22 — REDUCED MOTION SERVICES
    ========================================================= */
 
 function FLBuildReducedServices() {
@@ -1651,25 +1830,12 @@ function FLBuildReducedServices() {
 }
 
 /* =========================================================
-   29 — SERVICES MASTER TIMELINE
+   23 — SERVICES MASTER TIMELINE
 
-   One continuous sequence:
+   What I Do is intentionally calmer than the opening.
 
-   Intro
-   ↓
-   UI Design
-   ↓
-   Interaction Design
-   ↓
-   Front-End
-   ↓
-   Web Design
-   ↓
-   Interactive resting state
-   ↓
-   Recent Projects
-
-   Manual scrolling still scrubs the exact same sequence.
+   The four cards enter as a coordinated group and settle
+   into their interactive state.
    ========================================================= */
 
 function FLBuildServicesScene() {
@@ -1695,65 +1861,71 @@ function FLBuildServicesScene() {
 
   const instruction = scene.querySelector(".services__instruction");
 
-  const ui = scene.querySelector(".discipline--ui");
+  const disciplines = [
+    scene.querySelector(".discipline--ui"),
 
-  const interaction = scene.querySelector(".discipline--interaction");
+    scene.querySelector(".discipline--interaction"),
 
-  const frontend = scene.querySelector(".discipline--frontend");
+    scene.querySelector(".discipline--frontend"),
 
-  const web = scene.querySelector(".discipline--web");
-
-  const disciplines = [ui, interaction, frontend, web];
+    scene.querySelector(".discipline--web"),
+  ].filter(Boolean);
 
   const triggers = scene.querySelectorAll(".discipline__trigger");
 
-  const nextButton = scene.querySelector("[data-scene-continue]");
+  const nextButton = scene.querySelector(".scene-next--projects");
 
   const shapeOne = scene.querySelector("[data-shape='services-one']");
 
   const shapeTwo = scene.querySelector("[data-shape='services-two']");
 
   /* =====================================================
-       INITIAL STATE
+     INITIAL STATE
+     ===================================================== */
 
-       Heading is readable immediately.
-
-       Shapes already occupy their final layout, but reveal
-       progressively as the timeline moves.
-       ===================================================== */
-
-  gsap.set([eyebrow, title, instruction, indicator, nextButton], {
+  gsap.set(indicator, {
     autoAlpha: 1,
   });
 
-  disciplines.forEach((discipline, index) => {
-    if (!discipline) {
-      return;
-    }
+  gsap.set(eyebrow, {
+    y: 12,
 
-    const initialClipPaths = [
-      "inset(0 100% 0 0 round 40px)",
+    autoAlpha: 0,
+  });
 
-      "circle(0% at 50% 50%)",
+  gsap.set(title, {
+    y: 20,
 
-      "inset(100% 0 0 0 round 40px)",
+    autoAlpha: 0,
+  });
 
-      "inset(0 0 0 100% round 70px)",
-    ];
+  gsap.set(instruction, {
+    y: 10,
 
-    gsap.set(discipline, {
-      clipPath: initialClipPaths[index],
-    });
+    autoAlpha: 0,
+  });
+
+  gsap.set(disciplines, {
+    y: 34,
+
+    scale: 0.975,
+
+    autoAlpha: 0,
   });
 
   gsap.set(triggers, {
-    y: 18,
+    autoAlpha: 1,
+  });
+
+  gsap.set(nextButton, {
+    y: 10,
+
     autoAlpha: 0,
   });
 
   /* =====================================================
-       TIMELINE
-       ===================================================== */
+     MASTER TIMELINE
+     ===================================================== */
 
   const timeline = gsap.timeline({
     defaults: {
@@ -1765,13 +1937,13 @@ function FLBuildServicesScene() {
 
       start: "top top",
 
-      end: () => `+=${window.innerHeight * 2.65}`,
+      end: () => `+=${window.innerHeight * 1.9}`,
 
       pin: true,
 
       pinSpacing: true,
 
-      scrub: 0.3,
+      scrub: 0.22,
 
       anticipatePin: 1,
 
@@ -1800,238 +1972,99 @@ function FLBuildServicesScene() {
   });
 
   /* =====================================================
-       INTRO HOLD
-       ===================================================== */
+     INTRODUCTION
+     ===================================================== */
 
   timeline.addLabel("intro", 0);
 
   timeline.to(
-    {},
+    eyebrow,
     {
-      duration: 0.36,
+      y: 0,
+
+      autoAlpha: 1,
+
+      duration: 0.38,
+
+      ease: "power3.out",
     },
+    0.05,
   );
-
-  /* =====================================================
-       TITLE SETTLES UPWARD
-
-       The heading becomes supporting information while the
-       actual discipline playground becomes the focus.
-       ===================================================== */
-
-  timeline.addLabel("compress", 0.36);
 
   timeline.to(
     title,
     {
-      scale: FLIsMobile() ? 0.96 : 0.88,
+      y: 0,
 
-      y: FLIsMobile() ? -3 : -8,
+      autoAlpha: 1,
 
-      transformOrigin: "left top",
+      duration: 0.52,
 
-      duration: 0.62,
-
-      ease: "power2.inOut",
+      ease: "power3.out",
     },
-    0.36,
-  );
-
-  timeline.to(
-    eyebrow,
-    {
-      y: -3,
-
-      autoAlpha: 0.86,
-
-      duration: 0.48,
-
-      ease: "power2.inOut",
-    },
-    0.4,
+    0.12,
   );
 
   timeline.to(
     instruction,
     {
-      y: -3,
+      y: 0,
 
-      autoAlpha: 0.82,
+      autoAlpha: 1,
 
-      duration: 0.48,
+      duration: 0.38,
 
-      ease: "power2.inOut",
+      ease: "power2.out",
     },
-    0.43,
+    0.28,
   );
 
   /* =====================================================
-       UI DESIGN
-       ===================================================== */
+     DISCIPLINE REVEAL
+     ===================================================== */
 
-  timeline.addLabel("ui", 0.72);
+  timeline.addLabel("disciplines", 0.58);
 
   timeline.to(
-    ui,
+    disciplines,
     {
-      clipPath: "inset(0% 0% 0% 0% round 0px)",
+      y: 0,
+
+      scale: 1,
+
+      autoAlpha: 1,
+
+      stagger: {
+        each: 0.1,
+
+        from: "start",
+      },
 
       duration: 0.58,
 
-      ease: "power3.inOut",
+      ease: "power3.out",
     },
-    0.66,
-  );
-
-  timeline.to(
-    ui?.querySelector(".discipline__trigger"),
-    {
-      y: 0,
-
-      autoAlpha: 1,
-
-      duration: 0.44,
-
-      ease: "power2.out",
-    },
-    0.82,
-  );
-
-  timeline.to(
-    {},
-    {
-      duration: 0.18,
-    },
+    0.5,
   );
 
   /* =====================================================
-       INTERACTION DESIGN
-       ===================================================== */
-
-  timeline.addLabel("interaction", 1.08);
-
-  timeline.to(
-    interaction,
-    {
-      clipPath: "circle(78% at 50% 50%)",
-
-      duration: 0.6,
-
-      ease: "power3.inOut",
-    },
-    1.02,
-  );
-
-  timeline.to(
-    interaction?.querySelector(".discipline__trigger"),
-    {
-      y: 0,
-
-      autoAlpha: 1,
-
-      duration: 0.44,
-
-      ease: "power2.out",
-    },
-    1.18,
-  );
-
-  timeline.to(
-    {},
-    {
-      duration: 0.18,
-    },
-  );
-
-  /* =====================================================
-       FRONT-END
-       ===================================================== */
-
-  timeline.addLabel("frontend", 1.45);
-
-  timeline.to(
-    frontend,
-    {
-      clipPath: "inset(0% 0% 0% 0% round 0px)",
-
-      duration: 0.6,
-
-      ease: "power3.inOut",
-    },
-    1.39,
-  );
-
-  timeline.to(
-    frontend?.querySelector(".discipline__trigger"),
-    {
-      y: 0,
-
-      autoAlpha: 1,
-
-      duration: 0.44,
-
-      ease: "power2.out",
-    },
-    1.55,
-  );
-
-  timeline.to(
-    {},
-    {
-      duration: 0.18,
-    },
-  );
-
-  /* =====================================================
-       WEB DESIGN
-       ===================================================== */
-
-  timeline.addLabel("web", 1.82);
-
-  timeline.to(
-    web,
-    {
-      clipPath: "inset(0% 0% 0% 0% round 0px)",
-
-      duration: 0.6,
-
-      ease: "power3.inOut",
-    },
-    1.76,
-  );
-
-  timeline.to(
-    web?.querySelector(".discipline__trigger"),
-    {
-      y: 0,
-
-      autoAlpha: 1,
-
-      duration: 0.44,
-
-      ease: "power2.out",
-    },
-    1.92,
-  );
-
-  /* =====================================================
-       BACKGROUND SHAPES
-
-       Slow movement underneath the discipline reveal keeps
-       the section alive without overpowering the content.
-       ===================================================== */
+     SOFT BACKGROUND MOTION
+     ===================================================== */
 
   timeline.to(
     shapeOne,
     {
-      xPercent: 48,
-      yPercent: 65,
-      rotation: 42,
-      scale: 1.08,
+      xPercent: 18,
 
-      duration: 1.7,
+      yPercent: 14,
 
-      ease: "power1.inOut",
+      rotation: 12,
+
+      scale: 1.05,
+
+      duration: 1.15,
+
+      ease: "sine.inOut",
     },
     0.44,
   );
@@ -2039,43 +2072,53 @@ function FLBuildServicesScene() {
   timeline.to(
     shapeTwo,
     {
-      xPercent: -44,
-      yPercent: -48,
-      rotation: -34,
-      scale: 1.05,
+      xPercent: -16,
 
-      duration: 1.7,
+      yPercent: -12,
 
-      ease: "power1.inOut",
+      rotation: -10,
+
+      scale: 1.04,
+
+      duration: 1.15,
+
+      ease: "sine.inOut",
     },
     0.44,
   );
 
   /* =====================================================
-       READY / INTERACTIVE HOLD
+     INTERACTIVE RESTING STATE
+     ===================================================== */
 
-       Header navigation lands here.
+  timeline.addLabel("ready", 1.38);
 
-       All four disciplines are visible and can be opened.
-       ===================================================== */
+  timeline.to(
+    nextButton,
+    {
+      y: 0,
 
-  timeline.addLabel("ready", 2.42);
+      autoAlpha: 1,
+
+      duration: 0.4,
+
+      ease: "power2.out",
+    },
+    1.24,
+  );
 
   timeline.to(
     {},
     {
-      duration: 0.72,
+      duration: 0.55,
     },
   );
 
   /* =====================================================
-       EXIT
+     SERVICES EXIT
+     ===================================================== */
 
-       Exit intentionally begins slowly so autoplay does not
-       feel like it suddenly yanks the visitor away.
-       ===================================================== */
-
-  timeline.addLabel("exit", 3.14);
+  timeline.addLabel("exit", 1.9);
 
   timeline.to(
     instruction,
@@ -2084,159 +2127,80 @@ function FLBuildServicesScene() {
 
       autoAlpha: 0,
 
-      duration: 0.4,
-
-      ease: "power2.inOut",
-    },
-    3.14,
-  );
-
-  timeline.to(
-    title,
-    {
-      y: -16,
-
-      scale: FLIsMobile() ? 0.92 : 0.82,
-
-      autoAlpha: 0,
-
-      duration: 0.58,
-
-      ease: "power2.inOut",
-    },
-    3.2,
-  );
-
-  timeline.to(
-    eyebrow,
-    {
-      y: -10,
-
-      autoAlpha: 0,
-
-      duration: 0.46,
-
-      ease: "power2.inOut",
-    },
-    3.22,
-  );
-
-  timeline.to(
-    triggers,
-    {
-      y: -10,
-
-      autoAlpha: 0,
-
-      stagger: 0.04,
-
-      duration: 0.45,
-
-      ease: "power2.inOut",
-    },
-    3.23,
-  );
-
-  /*
-       Clip paths close inward rather than scaling the cards.
-
-       That prevents clashes with the separate discipline
-       expansion interaction.
-    */
-
-  timeline.to(
-    ui,
-    {
-      clipPath: "inset(12% 45% 12% 45% round 999px)",
-
-      duration: 0.58,
-
-      ease: "power2.inOut",
-    },
-    3.32,
-  );
-
-  timeline.to(
-    interaction,
-    {
-      clipPath: "circle(5% at 50% 50%)",
-
-      duration: 0.58,
-
-      ease: "power2.inOut",
-    },
-    3.35,
-  );
-
-  timeline.to(
-    frontend,
-    {
-      clipPath: "inset(12% 45% 12% 45% round 999px)",
-
-      duration: 0.58,
-
-      ease: "power2.inOut",
-    },
-    3.38,
-  );
-
-  timeline.to(
-    web,
-    {
-      clipPath: "inset(12% 45% 12% 45% round 999px)",
-
-      duration: 0.58,
-
-      ease: "power2.inOut",
-    },
-    3.41,
-  );
-
-  timeline.to(
-    shapeOne,
-    {
-      xPercent: 115,
-      scale: 0.7,
-      autoAlpha: 0,
-
-      duration: 0.62,
-
-      ease: "power2.inOut",
-    },
-    3.38,
-  );
-
-  timeline.to(
-    shapeTwo,
-    {
-      xPercent: -115,
-      scale: 0.7,
-      autoAlpha: 0,
-
-      duration: 0.62,
-
-      ease: "power2.inOut",
-    },
-    3.38,
-  );
-
-  timeline.to(
-    [indicator, nextButton],
-    {
-      autoAlpha: 0,
-
       duration: 0.34,
 
       ease: "power2.inOut",
     },
-    3.68,
+    1.9,
   );
 
-  timeline.addLabel("complete", 4.08);
+  timeline.to(
+    disciplines,
+    {
+      y: -18,
 
-  /* =====================================================
-       STORE REFERENCES
-       ===================================================== */
+      scale: 0.985,
+
+      autoAlpha: 0,
+
+      stagger: {
+        each: 0.045,
+
+        from: "end",
+      },
+
+      duration: 0.44,
+
+      ease: "power2.inOut",
+    },
+    1.94,
+  );
+
+  timeline.to(
+    [title, eyebrow].filter(Boolean),
+    {
+      y: -12,
+
+      autoAlpha: 0,
+
+      stagger: 0.035,
+
+      duration: 0.4,
+
+      ease: "power2.inOut",
+    },
+    2.02,
+  );
+
+  timeline.to(
+    nextButton,
+    {
+      y: -8,
+
+      autoAlpha: 0,
+
+      duration: 0.3,
+
+      ease: "power2.inOut",
+    },
+    2.04,
+  );
+
+  timeline.to(
+    [shapeOne, shapeTwo].filter(Boolean),
+    {
+      scale: 1.08,
+
+      autoAlpha: 0,
+
+      duration: 0.44,
+
+      ease: "power2.inOut",
+    },
+    2,
+  );
+
+  timeline.addLabel("complete", 2.5);
 
   FLAnimationState.services.timeline = timeline;
 
@@ -2244,44 +2208,33 @@ function FLBuildServicesScene() {
 }
 
 /* =========================================================
-   30 — SERVICES CLICK
-
-   ONE CLICK plays:
-
-   What I Do
-   → UI Design
-   → Interaction Design
-   → Front-End
-   → Web Design
-   → Recent Projects
-
-   Individual discipline buttons remain separately usable.
+   24 — SERVICES CONTINUE
    ========================================================= */
 
 function FLAdvanceServices() {
-  /*
-       Close an expanded discipline before starting the
-       scene-wide autoplay.
-    */
-
   window.FLSite?.closeActiveDiscipline?.();
 
   return FLPlaySceneToNext("services", "projects", {
     nextLanding: "ready",
 
-    minimumDuration: 5.2,
+    minimumDuration: 2.8,
 
-    maximumDuration: 6.5,
+    maximumDuration: 3.8,
+
+    ease: "sine.inOut",
   });
 }
 
 /* =========================================================
-   31 — DISCIPLINE SUPPORT ANIMATION
+   25 — DISCIPLINE INTERACTION ANIMATION
 
-   CSS owns the actual card expansion.
+   IMPORTANT:
 
-   This only quietens the surrounding heading and shapes
-   while a visitor explores one discipline.
+   CSS owns the expanded-card geometry.
+
+   GSAP must NOT leave scale / translate transforms fighting
+   the active-card CSS, otherwise the expanded card can jump
+   downward or lose its vertical centring.
    ========================================================= */
 
 function FLHandleDisciplineChange(event) {
@@ -2297,63 +2250,64 @@ function FLHandleDisciplineChange(event) {
 
   const disciplineId = event.detail?.discipline;
 
+  const activeDiscipline = disciplineId
+    ? scene.querySelector(`[data-discipline="${disciplineId}"]`)
+    : null;
+
+  const disciplines = [...scene.querySelectorAll(".discipline")];
+
   const title = scene.querySelector(".services__title");
 
   const eyebrow = scene.querySelector(".services__eyebrow");
 
   const instruction = scene.querySelector(".services__instruction");
 
-  const shapeOne = scene.querySelector("[data-shape='services-one']");
-
-  const shapeTwo = scene.querySelector("[data-shape='services-two']");
-
   /* =====================================================
-       DISCIPLINE OPEN
-       ===================================================== */
+     DISCIPLINE OPENED
+     ===================================================== */
 
-  if (disciplineId) {
-    gsap.to(title, {
-      autoAlpha: 0.2,
+  if (activeDiscipline) {
+    /*
+     * Kill hover movement before switching geometry.
+     */
 
-      y: -3,
+    disciplines.forEach((discipline) => {
+      gsap.killTweensOf(discipline);
+    });
 
-      duration: 0.32,
+    /*
+     * Active cards use top: 50% in CSS.
+     *
+     * yPercent -50 keeps the card centred vertically while
+     * still allowing GSAP to coexist with that CSS geometry.
+     */
+
+    gsap.set(activeDiscipline, {
+      x: 0,
+
+      y: 0,
+
+      xPercent: 0,
+
+      yPercent: -50,
+
+      scale: 1,
+
+      autoAlpha: 1,
+    });
+
+    /*
+     * The surrounding heading becomes quieter, but remains
+     * visible enough that the visitor still understands the
+     * section context.
+     */
+
+    gsap.to([title, eyebrow, instruction].filter(Boolean), {
+      autoAlpha: 0.28,
+
+      duration: 0.35,
 
       ease: "power2.out",
-
-      overwrite: "auto",
-    });
-
-    gsap.to([eyebrow, instruction], {
-      autoAlpha: 0.18,
-
-      duration: 0.3,
-
-      ease: "power2.out",
-
-      overwrite: "auto",
-    });
-
-    gsap.to(shapeOne, {
-      scale: 1.24,
-
-      rotation: "+=14",
-
-      duration: 0.55,
-
-      ease: "power3.out",
-
-      overwrite: "auto",
-    });
-
-    gsap.to(shapeTwo, {
-      scale: 0.84,
-
-      rotation: "-=12",
-
-      duration: 0.55,
-
-      ease: "power3.out",
 
       overwrite: "auto",
     });
@@ -2362,39 +2316,113 @@ function FLHandleDisciplineChange(event) {
   }
 
   /* =====================================================
-       DISCIPLINE CLOSE
+     DISCIPLINE CLOSED
+     ===================================================== */
 
-       After closing, the ScrollTrigger timeline immediately
-       regains ownership of the visual state.
-       ===================================================== */
+  disciplines.forEach((discipline) => {
+    gsap.killTweensOf(discipline);
+  });
 
-  gsap.to([title, eyebrow, instruction], {
-    autoAlpha: 1,
+  /*
+   * Return cards to their normal 2×2 resting geometry.
+   */
+
+  gsap.set(disciplines, {
+    x: 0,
 
     y: 0,
+
+    xPercent: 0,
+
+    yPercent: 0,
+
+    scale: 1,
+
+    autoAlpha: 1,
+  });
+
+  gsap.to([title, eyebrow, instruction].filter(Boolean), {
+    autoAlpha: 1,
 
     duration: 0.34,
 
     ease: "power2.out",
 
     overwrite: "auto",
-
-    onComplete() {
-      FLForceTriggerSync(FLAnimationState.services.scrollTrigger);
-    },
   });
 }
 
 /* =========================================================
-   32 — DISCIPLINE EVENTS
+   26 — DISCIPLINE HOVER MOTION
+   ========================================================= */
+
+function FLInitialiseDisciplineHover() {
+  if (FLIsMobile() || !FLHasGSAP()) {
+    return;
+  }
+
+  document.querySelectorAll(".discipline").forEach((discipline) => {
+    const trigger = discipline.querySelector(".discipline__trigger");
+
+    if (!trigger) {
+      return;
+    }
+
+    trigger.addEventListener("mouseenter", () => {
+      if (
+        discipline.classList.contains("is-expanded") ||
+        discipline.classList.contains("is-active")
+      ) {
+        return;
+      }
+
+      gsap.to(discipline, {
+        y: -5,
+
+        scale: 1.008,
+
+        duration: 0.3,
+
+        ease: "power2.out",
+
+        overwrite: "auto",
+      });
+    });
+
+    trigger.addEventListener("mouseleave", () => {
+      if (
+        discipline.classList.contains("is-expanded") ||
+        discipline.classList.contains("is-active")
+      ) {
+        return;
+      }
+
+      gsap.to(discipline, {
+        y: 0,
+
+        scale: 1,
+
+        duration: 0.34,
+
+        ease: "power2.out",
+
+        overwrite: "auto",
+      });
+    });
+  });
+}
+
+/* =========================================================
+   27 — DISCIPLINE EVENTS
    ========================================================= */
 
 function FLInitialiseDisciplineAnimationEvents() {
   window.addEventListener("flDisciplineChange", FLHandleDisciplineChange);
-}
 
+  FLInitialiseDisciplineHover();
+}
 /* =========================================================
-   33 — PROJECT CONSTANTS
+   28 — PROJECT CONSTANTS
    ========================================================= */
 
 const FLProjectIds = ["nada-nusantara", "pulse-diary", "lega"];
@@ -2408,21 +2436,23 @@ const FLProjectLandingLabels = {
 };
 
 /* =========================================================
-   34 — PROJECT HELPERS
+   29 — PROJECT HELPERS
    ========================================================= */
 
 function FLGetProjectIdByIndex(index) {
-  return window.FLProjectOrder?.[index] || FLProjectIds[index] || null;
+  return FLProjectIds[index] || null;
 }
 
 function FLGetProjectIndex(projectId) {
-  const order = window.FLProjectOrder || FLProjectIds;
+  return FLProjectIds.indexOf(projectId);
+}
 
-  return order.indexOf(projectId);
+function FLGetProjectPanel(projectId) {
+  return document.querySelector(`[data-project-panel="${projectId}"]`);
 }
 
 /* =========================================================
-   35 — PROJECT RAIL PROGRESS
+   30 — PROJECT RAIL PROGRESS
    ========================================================= */
 
 function FLSetProjectRailProgress(progress) {
@@ -2434,9 +2464,7 @@ function FLSetProjectRailProgress(progress) {
 
   const safeProgress = FLClamp(progress);
 
-  const visualProgress = 0.08 + safeProgress * 0.92;
-
-  const percentage = `${visualProgress * 100}%`;
+  const percentage = `${safeProgress * 100}%`;
 
   if (FLIsMobile()) {
     fill.style.width = percentage;
@@ -2450,21 +2478,27 @@ function FLSetProjectRailProgress(progress) {
 }
 
 /* =========================================================
-   36 — GET PROJECT INDEX FROM TIMELINE PROGRESS
+   31 — PROJECT INDEX FROM SCROLL
+
+   Three project states:
+
+   0 = Nada Nusantara
+   1 = Pulse Diary
+   2 = Lega
    ========================================================= */
 
 function FLGetProjectIndexFromProgress(progress) {
   const safeProgress = FLClamp(progress);
 
-  const nada = FLResolveLandingProgress("projects", "nadaReady");
+  const nadaProgress = FLResolveLandingProgress("projects", "nadaReady");
 
-  const pulse = FLResolveLandingProgress("projects", "pulseReady");
+  const pulseProgress = FLResolveLandingProgress("projects", "pulseReady");
 
-  const lega = FLResolveLandingProgress("projects", "legaReady");
+  const legaProgress = FLResolveLandingProgress("projects", "legaReady");
 
-  const nadaPulseMidpoint = (nada + pulse) / 2;
+  const nadaPulseMidpoint = (nadaProgress + pulseProgress) / 2;
 
-  const pulseLegaMidpoint = (pulse + lega) / 2;
+  const pulseLegaMidpoint = (pulseProgress + legaProgress) / 2;
 
   if (safeProgress < nadaPulseMidpoint) {
     return 0;
@@ -2478,7 +2512,21 @@ function FLGetProjectIndexFromProgress(progress) {
 }
 
 /* =========================================================
-   37 — SYNCHRONISE ACTIVE PROJECT
+   32 — NORMALISED PROJECT RAIL POSITION
+   ========================================================= */
+
+function FLGetProjectRailPosition(index) {
+  if (FLProjectIds.length <= 1) {
+    return 1;
+  }
+
+  const safeIndex = Math.max(0, Math.min(index, FLProjectIds.length - 1));
+
+  return safeIndex / (FLProjectIds.length - 1);
+}
+
+/* =========================================================
+   33 — SYNCHRONISE PROJECT STATE
    ========================================================= */
 
 function FLSynchroniseProjectState(index) {
@@ -2490,15 +2538,13 @@ function FLSynchroniseProjectState(index) {
     return;
   }
 
-  if (FLAnimationState.projects.currentProjectIndex === safeIndex) {
-    return;
-  }
+  const activeProject = window.getActiveFLProject?.();
 
   FLAnimationState.projects.currentProjectIndex = safeIndex;
 
-  const current = window.getActiveFLProject?.();
+  FLSetProjectRailProgress(FLGetProjectRailPosition(safeIndex));
 
-  if (current?.id === projectId) {
+  if (activeProject?.id === projectId) {
     return;
   }
 
@@ -2506,17 +2552,19 @@ function FLSynchroniseProjectState(index) {
 }
 
 /* =========================================================
-   38 — PROJECT SCENE PREPARATION
+   34 — PROJECT SCENE PREPARATION
    ========================================================= */
 
 function FLPrepareProjectsScene() {
   const scene = FLGetScene("projects");
 
-  if (!scene) {
+  if (!scene || !FLHasGSAP()) {
     return;
   }
 
   const elements = [
+    scene.querySelector(".scene-indicator"),
+
     scene.querySelector(".projects__heading"),
 
     scene.querySelector(".projects__eyebrow"),
@@ -2531,12 +2579,10 @@ function FLPrepareProjectsScene() {
 
     scene.querySelector(".projects__interaction-hint"),
 
-    scene.querySelector(".scene-indicator"),
-
     scene.querySelector(".scene-next--contact"),
 
     ...scene.querySelectorAll(".shape"),
-  ];
+  ].filter(Boolean);
 
   gsap.set(elements, {
     clearProps: "transform,opacity,visibility",
@@ -2551,27 +2597,25 @@ function FLPrepareProjectsScene() {
 }
 
 /* =========================================================
-   39 — PREPARE DESKTOP PROJECT PANELS
+   35 — DESKTOP PROJECT PANEL SETUP
+
+   Nada, Pulse and Lega all occupy the same coordinate
+   system so changing project never moves the surrounding
+   portfolio layout.
    ========================================================= */
 
 function FLPrepareDesktopProjectPanels() {
   const scene = FLGetScene("projects");
 
-  if (!scene) {
+  if (!scene || !FLHasGSAP()) {
     return;
   }
 
-  const nada = scene.querySelector("[data-project-panel='nada-nusantara']");
+  const panels = FLProjectIds.map((projectId) =>
+    scene.querySelector(`[data-project-panel="${projectId}"]`),
+  ).filter(Boolean);
 
-  const pulse = scene.querySelector("[data-project-panel='pulse-diary']");
-
-  const lega = scene.querySelector("[data-project-panel='lega']");
-
-  [nada, pulse, lega].forEach((panel) => {
-    if (!panel) {
-      return;
-    }
-
+  panels.forEach((panel) => {
     gsap.set(panel, {
       position: "absolute",
 
@@ -2579,35 +2623,47 @@ function FLPrepareDesktopProjectPanels() {
 
       display: "flex",
 
+      pointerEvents: "none",
+
       transition: "none",
 
-      pointerEvents: "none",
+      transformOrigin: "center center",
     });
   });
 
+  const nada = FLGetProjectPanel("nada-nusantara");
+
+  const pulse = FLGetProjectPanel("pulse-diary");
+
+  const lega = FLGetProjectPanel("lega");
+
   gsap.set(nada, {
-    yPercent: 6,
+    y: 18,
+
     scale: 0.985,
-    autoAlpha: 0.18,
+
+    autoAlpha: 0,
   });
 
   gsap.set(pulse, {
-    yPercent: 18,
-    scale: 0.95,
-    rotation: 1,
+    y: 28,
+
+    scale: 0.975,
+
     autoAlpha: 0,
   });
 
   gsap.set(lega, {
-    yPercent: 18,
-    scale: 0.95,
-    rotation: -1,
+    y: 28,
+
+    scale: 0.975,
+
     autoAlpha: 0,
   });
 }
 
 /* =========================================================
-   40 — REDUCED-MOTION PROJECTS
+   36 — REDUCED MOTION PROJECTS
    ========================================================= */
 
 function FLBuildReducedProjects() {
@@ -2625,16 +2681,23 @@ function FLBuildReducedProjects() {
 }
 
 /* =========================================================
-   41 — MOBILE PROJECT SCENE
+   37 — MOBILE PROJECT SCENE
 
-   Mobile uses discrete project changes while the page
-   scroll still controls progress through the scene.
+   Mobile follows the same project order:
+
+   Nada
+   → Pulse
+   → Lega
+   → Contact
+
+   The panels still change discretely on smaller screens,
+   while scroll position controls which project is active.
    ========================================================= */
 
 function FLBuildMobileProjectsScene() {
   const scene = FLGetScene("projects");
 
-  if (!scene || !FLHasScrollTrigger()) {
+  if (!scene || !FLHasGSAP() || !FLHasScrollTrigger()) {
     return;
   }
 
@@ -2678,15 +2741,13 @@ function FLBuildMobileProjectsScene() {
     onUpdate(self) {
       let index = 0;
 
-      if (self.progress >= 0.68) {
+      if (self.progress >= 0.7) {
         index = 2;
-      } else if (self.progress >= 0.35) {
+      } else if (self.progress >= 0.36) {
         index = 1;
       }
 
       FLSynchroniseProjectState(index);
-
-      FLSetProjectRailProgress(self.progress);
     },
   });
 
@@ -2696,10 +2757,12 @@ function FLBuildMobileProjectsScene() {
 }
 
 /* =========================================================
-   42 — DESKTOP PROJECT MASTER TIMELINE
+   38 — PROJECT MASTER TIMELINE
 
-   One continuous journey:
+   ONE CONTINUOUS MANUAL-SCROLL JOURNEY:
 
+   Recent Projects arrives
+   ↓
    Nada Nusantara
    ↓
    Pulse Diary
@@ -2707,6 +2770,14 @@ function FLBuildMobileProjectsScene() {
    Lega
    ↓
    Contact
+
+   Click / Continue routing:
+
+   Nada → Pulse
+   Pulse → Lega
+   Lega → Contact
+
+   No project is skipped.
    ========================================================= */
 
 function FLBuildProjectsScene() {
@@ -2737,8 +2808,8 @@ function FLBuildProjectsScene() {
   window.setActiveFLProject?.("nada-nusantara");
 
   /* =====================================================
-       REFERENCES
-    ===================================================== */
+     REFERENCES
+     ===================================================== */
 
   const indicator = scene.querySelector(".scene-indicator");
 
@@ -2756,53 +2827,152 @@ function FLBuildProjectsScene() {
 
   const nextButton = scene.querySelector(".scene-next--contact");
 
-  const nada = scene.querySelector("[data-project-panel='nada-nusantara']");
+  const nada = FLGetProjectPanel("nada-nusantara");
 
-  const pulse = scene.querySelector("[data-project-panel='pulse-diary']");
+  const pulse = FLGetProjectPanel("pulse-diary");
 
-  const lega = scene.querySelector("[data-project-panel='lega']");
+  const lega = FLGetProjectPanel("lega");
 
   const nadaVisual = nada?.querySelector(".project-visual--rhythm");
 
   const pulseVisual = pulse?.querySelector(".project-visual--pulse");
 
-  const legaVisual = lega?.querySelector(".project-visual--sliders");
+  const pulseRings = pulse?.querySelectorAll(".pulse-ring");
+
+  const pulseMarkers = pulse?.querySelectorAll(".pulse-marker");
+
+  const legaVisual = lega?.querySelector(".project-visual--lega");
+
+  const legaRings = lega?.querySelectorAll(".lega-visual__ring");
+
+  const legaCore = lega?.querySelector(".lega-visual__core");
+
+  const legaSliders = lega?.querySelectorAll(".lega-visual__slider");
 
   const shapeOne = scene.querySelector("[data-shape='projects-one']");
 
   const shapeTwo = scene.querySelector("[data-shape='projects-two']");
 
   /* =====================================================
-       INITIAL STATE
-    ===================================================== */
+     INITIAL STATE
+     ===================================================== */
 
-  gsap.set([indicator, eyebrow, title], {
+  gsap.set(indicator, {
     autoAlpha: 1,
+  });
+
+  gsap.set(eyebrow, {
+    y: 12,
+
+    autoAlpha: 0,
+  });
+
+  gsap.set(title, {
+    y: 18,
+
+    autoAlpha: 0,
   });
 
   gsap.set(stage, {
     y: 28,
-    scale: 0.98,
-    autoAlpha: 0.2,
+
+    scale: 0.985,
+
+    autoAlpha: 0,
+  });
+
+  gsap.set(projectProgress, {
+    autoAlpha: 0,
   });
 
   gsap.set(controls, {
     y: 10,
+
     autoAlpha: 0,
   });
 
   gsap.set(hint, {
+    y: 8,
+
     autoAlpha: 0,
   });
 
+  /*
+   * Contact Continue stays hidden until Lega, because
+   * Lega is now the final project in the sequence.
+   */
+
   gsap.set(nextButton, {
     y: 10,
+
+    autoAlpha: 0,
+  });
+
+  /* -----------------------------------------------------
+     NADA VISUAL
+     ----------------------------------------------------- */
+
+  gsap.set(nadaVisual, {
+    x: 28,
+
+    scaleX: 0.95,
+  });
+
+  /* -----------------------------------------------------
+     PULSE VISUAL
+     ----------------------------------------------------- */
+
+  gsap.set(pulseVisual, {
+    scale: 0.92,
+  });
+
+  gsap.set(pulseRings, {
+    scale: 0.84,
+
+    transformOrigin: "center center",
+  });
+
+  gsap.set(pulseMarkers, {
+    scale: 0.65,
+
+    autoAlpha: 0,
+  });
+
+  /* -----------------------------------------------------
+     LEGA VISUAL
+     ----------------------------------------------------- */
+
+  gsap.set(legaVisual, {
+    x: 24,
+
+    scale: 0.94,
+
+    transformOrigin: "center center",
+  });
+
+  gsap.set(legaRings, {
+    scale: 0.82,
+
+    autoAlpha: 0.35,
+
+    transformOrigin: "center center",
+  });
+
+  gsap.set(legaCore, {
+    scale: 0.78,
+
+    autoAlpha: 0,
+  });
+
+  gsap.set(legaSliders, {
+    x: 20,
+
     autoAlpha: 0,
   });
 
   /* =====================================================
-       TIMELINE
-    ===================================================== */
+     MASTER TIMELINE
+     ===================================================== */
 
   const timeline = gsap.timeline({
     defaults: {
@@ -2814,13 +2984,18 @@ function FLBuildProjectsScene() {
 
       start: "top top",
 
-      end: () => `+=${window.innerHeight * 3.35}`,
+      /*
+       * The extra project receives its own full visual
+       * moment without speeding up Nada or Pulse.
+       */
+
+      end: () => `+=${window.innerHeight * 3.45}`,
 
       pin: true,
 
       pinSpacing: true,
 
-      scrub: 0.3,
+      scrub: 0.22,
 
       anticipatePin: 1,
 
@@ -2846,62 +3021,43 @@ function FLBuildProjectsScene() {
         const index = FLGetProjectIndexFromProgress(self.progress);
 
         FLSynchroniseProjectState(index);
-
-        FLSetProjectRailProgress(self.progress);
       },
     },
   });
 
   /* =====================================================
-       INTRO
-    ===================================================== */
+     PROJECT SCENE ARRIVAL
+     ===================================================== */
 
   timeline.addLabel("intro", 0);
 
   timeline.to(
-    {},
+    eyebrow,
     {
-      duration: 0.3,
-    },
-  );
+      y: 0,
 
-  /* =====================================================
-       HEADING COMPRESSES
-    ===================================================== */
+      autoAlpha: 1,
+
+      duration: 0.36,
+
+      ease: "power3.out",
+    },
+    0.05,
+  );
 
   timeline.to(
     title,
     {
-      scale: FLIsTablet() ? 0.92 : 0.84,
+      y: 0,
 
-      y: FLIsTablet() ? -3 : -8,
+      autoAlpha: 1,
 
-      transformOrigin: "left top",
+      duration: 0.5,
 
-      duration: 0.6,
-
-      ease: "power2.inOut",
+      ease: "power3.out",
     },
-    0.28,
+    0.1,
   );
-
-  timeline.to(
-    eyebrow,
-    {
-      y: -3,
-
-      autoAlpha: 0.85,
-
-      duration: 0.46,
-
-      ease: "power2.inOut",
-    },
-    0.32,
-  );
-
-  /* =====================================================
-       PROJECT STAGE ARRIVES
-    ===================================================== */
 
   timeline.to(
     stage,
@@ -2912,11 +3068,23 @@ function FLBuildProjectsScene() {
 
       autoAlpha: 1,
 
-      duration: 0.68,
+      duration: 0.6,
 
       ease: "power3.out",
     },
-    0.38,
+    0.22,
+  );
+
+  timeline.to(
+    projectProgress,
+    {
+      autoAlpha: 1,
+
+      duration: 0.42,
+
+      ease: "power2.out",
+    },
+    0.3,
   );
 
   timeline.to(
@@ -2926,41 +3094,59 @@ function FLBuildProjectsScene() {
 
       autoAlpha: 1,
 
-      duration: 0.42,
+      duration: 0.4,
 
       ease: "power2.out",
     },
-    0.62,
+    0.38,
   );
 
   timeline.to(
     hint,
     {
+      y: 0,
+
       autoAlpha: 1,
 
-      duration: 0.34,
+      duration: 0.36,
+
+      ease: "power2.out",
     },
-    0.7,
+    0.42,
   );
 
   /* =====================================================
-       NADA NUSANTARA
-    ===================================================== */
+     PROJECT 01 — NADA NUSANTARA
+     ===================================================== */
 
   timeline.to(
     nada,
     {
-      yPercent: 0,
+      y: 0,
 
       scale: 1,
 
       autoAlpha: 1,
 
-      duration: 0.64,
+      duration: 0.58,
 
       ease: "power3.out",
     },
-    0.42,
+    0.26,
+  );
+
+  timeline.to(
+    nadaVisual,
+    {
+      x: 0,
+
+      scaleX: 1,
+
+      duration: 0.62,
+
+      ease: "power3.out",
+    },
+    0.34,
   );
 
   timeline.set(
@@ -2968,138 +3154,90 @@ function FLBuildProjectsScene() {
     {
       pointerEvents: "auto",
     },
-    0.9,
-  );
-
-  timeline.to(
-    nadaVisual,
-    {
-      xPercent: 0,
-
-      scale: 1,
-
-      duration: 0.65,
-
-      ease: "power2.out",
-    },
-    0.46,
+    0.62,
   );
 
   timeline.to(
     shapeOne,
     {
-      xPercent: -16,
-      yPercent: 18,
-      rotation: 22,
+      xPercent: -12,
 
-      duration: 0.85,
+      yPercent: 12,
 
-      ease: "power2.inOut",
+      rotation: 12,
+
+      duration: 0.9,
+
+      ease: "sine.inOut",
     },
-    0.34,
+    0.18,
   );
 
   timeline.to(
     shapeTwo,
     {
-      xPercent: 20,
-      yPercent: -16,
-      rotation: -18,
+      xPercent: 14,
 
-      duration: 0.85,
+      yPercent: -10,
 
-      ease: "power2.inOut",
+      rotation: -10,
+
+      duration: 0.9,
+
+      ease: "sine.inOut",
     },
-    0.34,
+    0.18,
   );
 
-  /* =====================================================
-       NADA READY
+  timeline.addLabel("ready", 0.86);
 
-       Header Recent Projects navigation lands here.
-    ===================================================== */
+  timeline.addLabel("nadaReady", 0.86);
 
-  timeline.addLabel("ready", 1.12);
-
-  timeline.addLabel("nadaReady", 1.12);
+  /* -----------------------------------------------------
+     NADA HOLD
+     ----------------------------------------------------- */
 
   timeline.to(
     {},
     {
-      duration: 0.66,
+      duration: 0.64,
     },
   );
 
   /* =====================================================
-       NADA → PULSE
+     NADA → PULSE
+     ===================================================== */
 
-       Nada leaves sideways like a waveform moving onward.
-    ===================================================== */
-
-  timeline.addLabel("toPulse", 1.78);
-
-  timeline.to(
-    nadaVisual,
-    {
-      xPercent: 18,
-
-      scaleY: 1.16,
-
-      rotation: 4,
-
-      duration: 0.62,
-
-      ease: "power2.inOut",
-    },
-    1.7,
-  );
+  timeline.addLabel("toPulse", 1.5);
 
   timeline.to(
     nada,
     {
-      yPercent: -8,
+      y: -14,
 
-      scale: 0.975,
+      scale: 0.985,
 
       autoAlpha: 0,
 
-      duration: 0.72,
+      duration: 0.56,
 
       ease: "power2.inOut",
     },
-    1.76,
+    1.46,
   );
 
   timeline.to(
-    pulse,
+    nadaVisual,
     {
-      yPercent: 0,
+      x: 32,
 
-      scale: 1,
+      scaleX: 1.08,
 
-      rotation: 0,
+      duration: 0.52,
 
-      autoAlpha: 1,
-
-      duration: 0.76,
-
-      ease: "power3.inOut",
+      ease: "power2.inOut",
     },
-    1.82,
-  );
-
-  timeline.to(
-    pulseVisual,
-    {
-      scale: 1,
-
-      rotation: 0,
-
-      duration: 0.72,
-
-      ease: "power3.out",
-    },
-    1.84,
+    1.44,
   );
 
   timeline.set(
@@ -3107,7 +3245,65 @@ function FLBuildProjectsScene() {
     {
       pointerEvents: "none",
     },
-    2.12,
+    1.86,
+  );
+
+  timeline.to(
+    pulse,
+    {
+      y: 0,
+
+      scale: 1,
+
+      autoAlpha: 1,
+
+      duration: 0.62,
+
+      ease: "power3.out",
+    },
+    1.6,
+  );
+
+  timeline.to(
+    pulseVisual,
+    {
+      scale: 1,
+
+      duration: 0.68,
+
+      ease: "power3.out",
+    },
+    1.62,
+  );
+
+  timeline.to(
+    pulseRings,
+    {
+      scale: 1,
+
+      stagger: 0.075,
+
+      duration: 0.52,
+
+      ease: "power2.out",
+    },
+    1.68,
+  );
+
+  timeline.to(
+    pulseMarkers,
+    {
+      scale: 1,
+
+      autoAlpha: 1,
+
+      stagger: 0.07,
+
+      duration: 0.38,
+
+      ease: "back.out(1.5)",
+    },
+    1.82,
   );
 
   timeline.set(
@@ -3115,96 +3311,172 @@ function FLBuildProjectsScene() {
     {
       pointerEvents: "auto",
     },
-    2.12,
+    2.02,
   );
 
   /* =====================================================
-       PULSE READY
-    ===================================================== */
+     PROJECT 02 — PULSE DIARY
+     ===================================================== */
 
-  timeline.addLabel("pulseReady", 2.58);
+  timeline.addLabel("pulseReady", 2.18);
+
+  timeline.to(
+    pulseRings,
+    {
+      scale: (index) => 1 + index * 0.018,
+
+      duration: 0.42,
+
+      ease: "sine.inOut",
+    },
+    2.08,
+  );
+
+  timeline.to(
+    pulseMarkers,
+    {
+      y: (index) => (index % 2 === 0 ? -3 : 3),
+
+      duration: 0.36,
+
+      ease: "sine.inOut",
+    },
+    2.12,
+  );
+
+  /* -----------------------------------------------------
+     PULSE HOLD
+     ----------------------------------------------------- */
 
   timeline.to(
     {},
     {
-      duration: 0.7,
+      duration: 0.68,
     },
   );
 
   /* =====================================================
-       PULSE → LEGA
-    ===================================================== */
+     PULSE → LEGA
+     ===================================================== */
 
-  timeline.addLabel("toLega", 3.28);
-
-  timeline.to(
-    pulseVisual,
-    {
-      scale: 1.32,
-
-      rotation: 5,
-
-      duration: 0.66,
-
-      ease: "power2.inOut",
-    },
-    3.18,
-  );
+  timeline.addLabel("toLega", 2.86);
 
   timeline.to(
     pulse,
     {
-      yPercent: -8,
+      y: -14,
 
-      scale: 1.02,
+      scale: 0.985,
 
       autoAlpha: 0,
 
-      duration: 0.74,
+      duration: 0.56,
 
       ease: "power2.inOut",
     },
-    3.24,
+    2.82,
   );
+
+  timeline.to(
+    pulseVisual,
+    {
+      scale: 1.06,
+
+      autoAlpha: 0.5,
+
+      duration: 0.5,
+
+      ease: "power2.inOut",
+    },
+    2.82,
+  );
+
+  timeline.set(
+    pulse,
+    {
+      pointerEvents: "none",
+    },
+    3.2,
+  );
+
+  /* -----------------------------------------------------
+     Lega enters once Pulse begins settling away.
+     ----------------------------------------------------- */
 
   timeline.to(
     lega,
     {
-      yPercent: 0,
+      y: 0,
 
       scale: 1,
 
-      rotation: 0,
-
       autoAlpha: 1,
 
-      duration: 0.78,
+      duration: 0.62,
 
-      ease: "power3.inOut",
+      ease: "power3.out",
     },
-    3.3,
+    2.96,
   );
 
   timeline.to(
     legaVisual,
     {
-      xPercent: 0,
+      x: 0,
 
       scale: 1,
 
-      duration: 0.72,
+      duration: 0.68,
 
       ease: "power3.out",
     },
-    3.34,
+    2.98,
   );
 
-  timeline.set(
-    pulse,
+  timeline.to(
+    legaRings,
     {
-      pointerEvents: "none",
+      scale: 1,
+
+      autoAlpha: 1,
+
+      stagger: 0.08,
+
+      duration: 0.54,
+
+      ease: "power2.out",
     },
-    3.64,
+    3.04,
+  );
+
+  timeline.to(
+    legaCore,
+    {
+      scale: 1,
+
+      autoAlpha: 1,
+
+      duration: 0.46,
+
+      ease: "back.out(1.45)",
+    },
+    3.12,
+  );
+
+  timeline.to(
+    legaSliders,
+    {
+      x: 0,
+
+      autoAlpha: 1,
+
+      stagger: 0.065,
+
+      duration: 0.4,
+
+      ease: "power2.out",
+    },
+    3.16,
   );
 
   timeline.set(
@@ -3212,14 +3484,43 @@ function FLBuildProjectsScene() {
     {
       pointerEvents: "auto",
     },
-    3.64,
+    3.34,
   );
 
   /* =====================================================
-       LEGA READY
-    ===================================================== */
+     PROJECT 03 — LEGA
+     ===================================================== */
 
-  timeline.addLabel("legaReady", 4.12);
+  timeline.addLabel("legaReady", 3.54);
+
+  timeline.to(
+    legaRings,
+    {
+      scale: (index) => 1 + index * 0.012,
+
+      duration: 0.44,
+
+      ease: "sine.inOut",
+    },
+    3.42,
+  );
+
+  timeline.to(
+    legaSliders,
+    {
+      y: (index) => (index % 2 === 0 ? -2 : 2),
+
+      duration: 0.4,
+
+      ease: "sine.inOut",
+    },
+    3.46,
+  );
+
+  /*
+   * Contact control appears only when the visitor reaches
+   * the final portfolio project.
+   */
 
   timeline.to(
     nextButton,
@@ -3228,157 +3529,143 @@ function FLBuildProjectsScene() {
 
       autoAlpha: 1,
 
-      duration: 0.4,
+      duration: 0.38,
 
       ease: "power2.out",
     },
-    4.02,
+    3.46,
   );
+
+  /* -----------------------------------------------------
+     LEGA HOLD
+     ----------------------------------------------------- */
 
   timeline.to(
     {},
     {
-      duration: 0.74,
+      duration: 0.68,
     },
   );
 
   /* =====================================================
-       EXIT TO CONTACT
-    ===================================================== */
+     LEGA → CONTACT
+     ===================================================== */
 
-  timeline.addLabel("exit", 4.86);
+  timeline.addLabel("exit", 4.22);
 
   timeline.to(
     lega,
     {
-      yPercent: -7,
-
-      scale: 0.98,
-
-      autoAlpha: 0,
-
-      duration: 0.64,
-
-      ease: "power2.inOut",
-    },
-    4.86,
-  );
-
-  timeline.to(
-    stage,
-    {
-      y: -10,
+      y: -14,
 
       scale: 0.985,
 
       autoAlpha: 0,
 
-      duration: 0.68,
+      duration: 0.5,
 
       ease: "power2.inOut",
     },
-    4.92,
+    4.18,
   );
 
   timeline.to(
-    title,
+    legaVisual,
     {
-      y: -18,
+      x: 20,
 
-      autoAlpha: 0,
+      scale: 1.035,
 
-      duration: 0.52,
+      autoAlpha: 0.55,
+
+      duration: 0.5,
 
       ease: "power2.inOut",
     },
-    4.94,
+    4.18,
+  );
+
+  timeline.set(
+    lega,
+    {
+      pointerEvents: "none",
+    },
+    4.54,
   );
 
   timeline.to(
-    eyebrow,
+    stage,
     {
-      y: -10,
+      y: -12,
+
+      scale: 0.99,
 
       autoAlpha: 0,
 
-      duration: 0.44,
+      duration: 0.54,
 
       ease: "power2.inOut",
     },
-    4.96,
+    4.22,
   );
 
   timeline.to(
-    [controls, hint],
+    [title, eyebrow].filter(Boolean),
     {
-      y: -10,
+      y: -14,
 
       autoAlpha: 0,
 
-      duration: 0.44,
-
-      ease: "power2.inOut",
-    },
-    4.98,
-  );
-
-  timeline.to(
-    projectProgress,
-    {
-      autoAlpha: 0,
+      stagger: 0.03,
 
       duration: 0.42,
 
       ease: "power2.inOut",
     },
-    5.02,
+    4.26,
   );
 
   timeline.to(
-    shapeOne,
+    [projectProgress, controls, hint, nextButton].filter(Boolean),
     {
-      xPercent: 65,
-      yPercent: -50,
-      scale: 1.16,
+      y: -8,
+
       autoAlpha: 0,
 
-      duration: 0.62,
+      duration: 0.4,
 
       ease: "power2.inOut",
     },
-    4.98,
+    4.28,
   );
 
   timeline.to(
-    shapeTwo,
+    [shapeOne, shapeTwo].filter(Boolean),
     {
-      xPercent: -65,
-      yPercent: 48,
-      scale: 1.16,
+      scale: 1.08,
+
       autoAlpha: 0,
 
-      duration: 0.62,
+      duration: 0.48,
 
       ease: "power2.inOut",
     },
-    4.98,
+    4.26,
   );
 
   timeline.to(
-    [indicator, nextButton],
+    indicator,
     {
       autoAlpha: 0,
 
       duration: 0.34,
+
+      ease: "power2.inOut",
     },
-    5.22,
+    4.4,
   );
 
-  timeline.addLabel("complete", 5.56);
-
-  /* =====================================================
-       STORE REFERENCES
-    ===================================================== */
+  timeline.addLabel("complete", 4.82);
 
   FLAnimationState.projects.timeline = timeline;
 
@@ -3386,13 +3673,18 @@ function FLBuildProjectsScene() {
 }
 
 /* =========================================================
-   43 — GET PROJECT SCROLL PROGRESS
+   39 — PROJECT SCROLL PROGRESS
    ========================================================= */
 
 function FLGetProjectProgress(projectId) {
+  /*
+   * Mobile does not use the full GSAP project timeline,
+   * so it uses explicit scroll stops.
+   */
+
   if (FLIsMobile() || !FLAnimationState.projects.timeline) {
     const mobileStops = {
-      "nada-nusantara": 0.12,
+      "nada-nusantara": 0.15,
 
       "pulse-diary": 0.5,
 
@@ -3412,10 +3704,22 @@ function FLGetProjectProgress(projectId) {
 }
 
 /* =========================================================
-   44 — SCROLL DIRECTLY TO PROJECT
+   40 — SCROLL DIRECTLY TO PROJECT
+
+   Used by:
+   - timeline markers
+   - Previous
+   - Next
+   - scene click progression
+
+   It does NOT leave the Projects scene.
    ========================================================= */
 
 function FLScrollToProject(projectId, options = {}) {
+  if (!FLProjectIds.includes(projectId)) {
+    return false;
+  }
+
   const trigger = FLAnimationState.projects.scrollTrigger;
 
   const progress = FLGetProjectProgress(projectId);
@@ -3424,75 +3728,149 @@ function FLScrollToProject(projectId, options = {}) {
     return false;
   }
 
+  const index = FLGetProjectIndex(projectId);
+
+  const railProgress = FLGetProjectRailPosition(index);
+
+  /* -----------------------------------------------------
+     Reduced-motion / no-trigger fallback
+     ----------------------------------------------------- */
+
   if (FLIsReducedMotion() || !trigger) {
+    if (index >= 0) {
+      FLAnimationState.projects.currentProjectIndex = index;
+    }
+
     window.setActiveFLProject?.(projectId);
+
+    FLSetProjectRailProgress(railProgress);
 
     return true;
   }
 
-  FLKillScrollTween();
+  /* -----------------------------------------------------
+     Animated project change
+     ----------------------------------------------------- */
 
-  return FLScrollTriggerToProgress(trigger, progress, {
-    duration: options.duration ?? 0.82,
+  const targetY =
+    trigger.start + (trigger.end - trigger.start) * FLClamp(progress);
+
+  const tween = FLScrollToY(targetY, {
+    duration: options.duration ?? 1.05,
 
     immediate: options.immediate ?? false,
 
-    syncAllTriggers: true,
+    ease: options.ease ?? "sine.inOut",
 
-    ease: "power2.inOut",
+    onComplete() {
+      if (index >= 0) {
+        FLAnimationState.projects.currentProjectIndex = index;
+      }
+
+      window.setActiveFLProject?.(projectId);
+
+      FLSetProjectRailProgress(railProgress);
+
+      FLSetSceneActive("projects");
+    },
   });
+
+  return tween !== false;
 }
 
 /* =========================================================
-   45 — PROJECT CHANGE API
-
-   Project timeline marker / Previous / Next buttons use
-   this function.
-
-   These remain manual even though background Continue now
-   plays the complete project sequence.
+   41 — PROJECT CHANGE API
    ========================================================= */
 
 function FLChangeProject(projectId) {
-  const validProject = window.getFLProject?.(projectId);
-
-  if (!validProject) {
+  if (!FLProjectIds.includes(projectId)) {
     return false;
   }
 
   return FLScrollToProject(projectId, {
-    duration: 0.82,
+    duration: 1.05,
+
+    ease: "sine.inOut",
   });
 }
 
 /* =========================================================
-   46 — PROJECT SCENE CLICK
+   42 — PROJECT CONTINUE
 
-   ONE CLICK now plays:
+   Project progression:
 
-   current project
-   → remaining projects
+   Nada
+   → Pulse
+
+   Pulse
+   → Lega
+
+   Lega
    → Contact
 
-   Example from Nada:
-   Nada → Pulse → Lega → Contact
-
-   If the visitor is already on Pulse:
-   Pulse → Lega → Contact
+   The final project-to-Contact timing remains the same as
+   the previous Pulse-to-Contact transition.
    ========================================================= */
 
 function FLAdvanceProjects() {
+  const activeProject = window.getActiveFLProject?.();
+
+  let currentIndex = FLGetProjectIndex(activeProject?.id);
+
+  /*
+   * Use animation state as a fallback in case projects.js
+   * has not yet returned an active project object.
+   */
+
+  if (currentIndex < 0) {
+    currentIndex = FLAnimationState.projects.currentProjectIndex;
+  }
+
+  currentIndex = Math.max(0, Math.min(currentIndex, FLProjectIds.length - 1));
+
+  /* =====================================================
+     NADA → PULSE
+     ===================================================== */
+
+  if (currentIndex === 0) {
+    return FLScrollToProject("pulse-diary", {
+      duration: 1.35,
+
+      ease: "sine.inOut",
+    });
+  }
+
+  /* =====================================================
+     PULSE → LEGA
+     ===================================================== */
+
+  if (currentIndex === 1) {
+    return FLScrollToProject("lega", {
+      duration: 1.35,
+
+      ease: "sine.inOut",
+    });
+  }
+
+  /* =====================================================
+     LEGA → CONTACT
+
+     Preserve the previous Projects → Contact pacing.
+     ===================================================== */
+
   return FLPlaySceneToNext("projects", "contact", {
     nextLanding: "ready",
 
-    minimumDuration: 5.8,
+    minimumDuration: 2.6,
 
-    maximumDuration: 7.2,
+    maximumDuration: 3.6,
+
+    ease: "sine.inOut",
   });
 }
 
 /* =========================================================
-   47 — PROJECT STATE EVENT
+   43 — PROJECT STATE EVENT
    ========================================================= */
 
 function FLHandleProjectStateChange(event) {
@@ -3504,97 +3882,30 @@ function FLHandleProjectStateChange(event) {
 
   const index = FLGetProjectIndex(projectId);
 
-  if (index >= 0) {
-    FLAnimationState.projects.currentProjectIndex = index;
+  if (index < 0) {
+    return;
   }
+
+  FLAnimationState.projects.currentProjectIndex = index;
+
+  FLSetProjectRailProgress(FLGetProjectRailPosition(index));
 }
 
 /* =========================================================
-   48 — PROJECT EVENTS
+   44 — PROJECT EVENTS
    ========================================================= */
 
 function FLInitialiseProjectAnimationEvents() {
   window.addEventListener("flProjectChange", FLHandleProjectStateChange);
 }
-
 /* =========================================================
-   49 — AUTOPLAY STATE CORRECTION
-
-   FLScrollToY() clears any previous automated movement
-   before creating a new tween.
-
-   Because of that, scene autoplay marks itself as active
-   AFTER the new tween has been created.
-
-   This replaces the earlier FLPlaySceneToNext definition.
-   ========================================================= */
-
-FLPlaySceneToNext = function (sceneName, nextScene, options = {}) {
-  if (!sceneName || !nextScene) {
-    return false;
-  }
-
-  if (FLAnimationState.autoPlay.active) {
-    return false;
-  }
-
-  if (FLIsReducedMotion()) {
-    return FLGoToScene(nextScene, {
-      landing: options.nextLanding ?? "ready",
-    });
-  }
-
-  const target = FLGetSceneLandingY(nextScene, options.nextLanding ?? "ready");
-
-  if (target === null) {
-    return false;
-  }
-
-  const currentY = window.scrollY;
-
-  const distance = Math.abs(target - currentY);
-
-  const distanceDuration = (distance / Math.max(window.innerHeight, 1)) * 1.15;
-
-  const minimumDuration = options.minimumDuration ?? 4;
-
-  const maximumDuration = options.maximumDuration ?? 6;
-
-  const duration = FLClamp(
-    Math.max(distanceDuration, minimumDuration),
-    minimumDuration,
-    maximumDuration,
-  );
-
-  const tween = FLScrollToY(target, {
-    duration,
-
-    syncAllTriggers: true,
-
-    ease: "power1.inOut",
-
-    onComplete() {
-      FLSetSceneActive(nextScene);
-    },
-  });
-
-  if (tween) {
-    FLAnimationState.autoPlay.active = true;
-
-    FLAnimationState.autoPlay.scene = sceneName;
-  }
-
-  return true;
-};
-
-/* =========================================================
-   50 — CONTACT PREPARATION
+   45 — CONTACT PREPARATION
    ========================================================= */
 
 function FLPrepareContactScene() {
   const scene = FLGetScene("contact");
 
-  if (!scene) {
+  if (!scene || !FLHasGSAP()) {
     return;
   }
 
@@ -3616,7 +3927,7 @@ function FLPrepareContactScene() {
     scene.querySelector(".contact__restart"),
 
     ...scene.querySelectorAll(".shape"),
-  ];
+  ].filter(Boolean);
 
   gsap.set(elements, {
     clearProps: "transform,opacity,visibility",
@@ -3624,7 +3935,7 @@ function FLPrepareContactScene() {
 }
 
 /* =========================================================
-   51 — REDUCED-MOTION CONTACT
+   46 — REDUCED MOTION CONTACT
    ========================================================= */
 
 function FLBuildReducedContact() {
@@ -3636,12 +3947,13 @@ function FLBuildReducedContact() {
 }
 
 /* =========================================================
-   52 — CONTACT MASTER TIMELINE
+   47 — CONTACT MASTER TIMELINE
 
-   Contact is deliberately calmer than the earlier scenes.
+   Contact stays comparatively calm.
 
-   This should feel like the experience has properly landed,
-   not like another section demanding more interaction.
+   The opening and project scenes already carry the larger
+   motion moments, so the ending focuses on a clean arrival
+   and clear contact information.
    ========================================================= */
 
 function FLBuildContactScene() {
@@ -3680,54 +3992,56 @@ function FLBuildContactScene() {
   const shapeThree = scene.querySelector("[data-shape='contact-three']");
 
   /* =====================================================
-       INITIAL STATE
-
-       Some content is faintly visible before the Contact
-       animation fully lands.
-
-       This prevents an empty flash between projects and the
-       ending scene.
-       ===================================================== */
+     INITIAL STATE
+     ===================================================== */
 
   gsap.set(indicator, {
     x: -10,
-    autoAlpha: 0.5,
+
+    autoAlpha: 0,
   });
 
   gsap.set(eyebrow, {
-    y: 10,
-    autoAlpha: 0.5,
+    y: 12,
+
+    autoAlpha: 0,
   });
 
   gsap.set(title, {
-    y: 30,
-    autoAlpha: 0.38,
+    y: 28,
+
+    autoAlpha: 0,
   });
 
   gsap.set(description, {
     y: 18,
-    autoAlpha: 0.2,
+
+    autoAlpha: 0,
   });
 
   gsap.set(links, {
-    x: -16,
+    x: -14,
+
     autoAlpha: 0,
   });
 
   gsap.set(brand, {
-    xPercent: 10,
-    scale: 0.94,
+    xPercent: 8,
+
+    scale: 0.96,
+
     autoAlpha: 0,
   });
 
   gsap.set(restart, {
     y: 10,
+
     autoAlpha: 0,
   });
 
   /* =====================================================
-       TIMELINE
-       ===================================================== */
+     MASTER TIMELINE
+     ===================================================== */
 
   const timeline = gsap.timeline({
     defaults: {
@@ -3739,13 +4053,13 @@ function FLBuildContactScene() {
 
       start: "top top",
 
-      end: () => `+=${window.innerHeight * 1.25}`,
+      end: () => `+=${window.innerHeight * 1.15}`,
 
       pin: true,
 
       pinSpacing: true,
 
-      scrub: 0.28,
+      scrub: 0.2,
 
       anticipatePin: 1,
 
@@ -3766,8 +4080,8 @@ function FLBuildContactScene() {
   });
 
   /* =====================================================
-       CONTACT ARRIVAL
-       ===================================================== */
+     CONTACT ARRIVAL
+     ===================================================== */
 
   timeline.addLabel("intro", 0);
 
@@ -3778,7 +4092,7 @@ function FLBuildContactScene() {
 
       autoAlpha: 1,
 
-      duration: 0.32,
+      duration: 0.34,
 
       ease: "power2.out",
     },
@@ -3792,11 +4106,11 @@ function FLBuildContactScene() {
 
       autoAlpha: 1,
 
-      duration: 0.36,
+      duration: 0.38,
 
       ease: "power2.out",
     },
-    0.05,
+    0.06,
   );
 
   timeline.to(
@@ -3806,11 +4120,11 @@ function FLBuildContactScene() {
 
       autoAlpha: 1,
 
-      duration: 0.62,
+      duration: 0.56,
 
       ease: "power3.out",
     },
-    0.08,
+    0.1,
   );
 
   timeline.to(
@@ -3820,16 +4134,16 @@ function FLBuildContactScene() {
 
       autoAlpha: 1,
 
-      duration: 0.46,
+      duration: 0.44,
 
       ease: "power2.out",
     },
-    0.3,
+    0.26,
   );
 
   /* =====================================================
-       LINKS
-       ===================================================== */
+     CONTACT LINKS
+     ===================================================== */
 
   timeline.to(
     links,
@@ -3838,18 +4152,18 @@ function FLBuildContactScene() {
 
       autoAlpha: 1,
 
-      stagger: 0.08,
+      stagger: 0.075,
 
       duration: 0.42,
 
       ease: "power2.out",
     },
-    0.48,
+    0.4,
   );
 
   /* =====================================================
-       GIANT F.L ENDING MARK
-       ===================================================== */
+     LARGE F.L MARK
+     ===================================================== */
 
   timeline.to(
     brand,
@@ -3860,53 +4174,65 @@ function FLBuildContactScene() {
 
       autoAlpha: 1,
 
-      duration: 0.76,
+      duration: 0.68,
 
       ease: "power3.out",
     },
-    0.3,
+    0.28,
   );
 
   /* =====================================================
-       DECORATIVE SHAPES
-       ===================================================== */
+     DECORATIVE SHAPES
+     ===================================================== */
 
   timeline.fromTo(
     shapeOne,
     {
-      xPercent: 30,
-      yPercent: -18,
-      rotation: -18,
-      scale: 0.84,
+      xPercent: 18,
+
+      yPercent: -12,
+
+      rotation: -10,
+
+      scale: 0.9,
     },
     {
       xPercent: 0,
+
       yPercent: 0,
+
       rotation: 0,
+
       scale: 1,
 
-      duration: 0.82,
+      duration: 0.78,
 
       ease: "power2.out",
     },
-    0.08,
+    0.1,
   );
 
   timeline.fromTo(
     shapeTwo,
     {
-      xPercent: 38,
-      yPercent: 54,
-      rotation: 30,
-      scale: 0.74,
+      xPercent: 22,
+
+      yPercent: 28,
+
+      rotation: 18,
+
+      scale: 0.86,
     },
     {
       xPercent: 0,
+
       yPercent: 0,
-      rotation: 12,
+
+      rotation: 8,
+
       scale: 1,
 
-      duration: 0.8,
+      duration: 0.78,
 
       ease: "power2.out",
     },
@@ -3916,18 +4242,24 @@ function FLBuildContactScene() {
   timeline.fromTo(
     shapeThree,
     {
-      xPercent: -38,
-      yPercent: 28,
-      rotation: 20,
-      scale: 0.78,
+      xPercent: -20,
+
+      yPercent: 18,
+
+      rotation: 14,
+
+      scale: 0.88,
     },
     {
       xPercent: 0,
+
       yPercent: 0,
-      rotation: -14,
+
+      rotation: -8,
+
       scale: 1,
 
-      duration: 0.82,
+      duration: 0.8,
 
       ease: "power2.out",
     },
@@ -3935,10 +4267,8 @@ function FLBuildContactScene() {
   );
 
   /* =====================================================
-       READY
-
-       Contact navigation lands here.
-       ===================================================== */
+     RESTING STATE
+     ===================================================== */
 
   timeline.addLabel("ready", 0.94);
 
@@ -3949,7 +4279,7 @@ function FLBuildContactScene() {
 
       autoAlpha: 1,
 
-      duration: 0.36,
+      duration: 0.38,
 
       ease: "power2.out",
     },
@@ -3959,11 +4289,11 @@ function FLBuildContactScene() {
   timeline.to(
     {},
     {
-      duration: 0.58,
+      duration: 0.5,
     },
   );
 
-  timeline.addLabel("complete", 1.52);
+  timeline.addLabel("complete", 1.46);
 
   FLAnimationState.contact.timeline = timeline;
 
@@ -3971,7 +4301,7 @@ function FLBuildContactScene() {
 }
 
 /* =========================================================
-   53 — SCENE ADVANCE ROUTER
+   48 — SCENE ADVANCE ROUTER
    ========================================================= */
 
 function FLAdvanceScene(sceneName) {
@@ -3997,7 +4327,58 @@ function FLAdvanceScene(sceneName) {
 }
 
 /* =========================================================
-   54 — CUSTOM CURSOR
+   49 — WELCOME CONTINUE BUTTON
+   ========================================================= */
+
+function FLInitialiseWelcomeContinue() {
+  const button = document.querySelector("[data-welcome-continue]");
+
+  if (!button) {
+    return;
+  }
+
+  button.addEventListener("click", () => {
+    FLAdvanceWelcome();
+  });
+}
+
+/* =========================================================
+   50 — MANUAL INPUT CANCELS AUTOMATIC PLAYBACK
+
+   The visitor always gets control back immediately.
+
+   Wheel, touch or keyboard scrolling interrupts any
+   automatic Continue animation.
+   ========================================================= */
+
+function FLInitialiseScrollInterruption() {
+  window.addEventListener("wheel", FLCancelAutoPlayFromUserInput, {
+    passive: true,
+  });
+
+  window.addEventListener("touchstart", FLCancelAutoPlayFromUserInput, {
+    passive: true,
+  });
+
+  window.addEventListener("keydown", (event) => {
+    const scrollKeys = [
+      "ArrowUp",
+      "ArrowDown",
+      "PageUp",
+      "PageDown",
+      "Home",
+      "End",
+      " ",
+    ];
+
+    if (scrollKeys.includes(event.key) && FLAnimationState.autoPlay.active) {
+      FLCancelAutoPlayFromUserInput();
+    }
+  });
+}
+
+/* =========================================================
+   51 — CUSTOM CURSOR
    ========================================================= */
 
 function FLInitialiseCustomCursor() {
@@ -4025,21 +4406,21 @@ function FLInitialiseCustomCursor() {
     return;
   }
 
-  /* =====================================================
-       CURSOR POSITION
-       ===================================================== */
-
   const moveX = gsap.quickTo(cursor, "x", {
-    duration: 0.14,
+    duration: 0.1,
 
     ease: "power3.out",
   });
 
   const moveY = gsap.quickTo(cursor, "y", {
-    duration: 0.14,
+    duration: 0.1,
 
     ease: "power3.out",
   });
+
+  /* -----------------------------------------------------
+     CURSOR POSITION
+     ----------------------------------------------------- */
 
   window.addEventListener(
     "pointermove",
@@ -4051,7 +4432,7 @@ function FLInitialiseCustomCursor() {
       gsap.to(cursor, {
         autoAlpha: 1,
 
-        duration: 0.12,
+        duration: 0.1,
 
         overwrite: "auto",
       });
@@ -4065,13 +4446,13 @@ function FLInitialiseCustomCursor() {
     gsap.to(cursor, {
       autoAlpha: 0,
 
-      duration: 0.16,
+      duration: 0.15,
     });
   });
 
-  /* =====================================================
-       INTERACTIVE CURSOR TARGETS
-       ===================================================== */
+  /* -----------------------------------------------------
+     INTERACTIVE TARGETS
+     ----------------------------------------------------- */
 
   const interactiveSelector = [
     ".discipline",
@@ -4081,6 +4462,8 @@ function FLInitialiseCustomCursor() {
     ".project-progress__marker",
 
     ".contact-link",
+
+    "[data-welcome-continue]",
 
     "[data-scene-continue]",
 
@@ -4102,20 +4485,34 @@ function FLInitialiseCustomCursor() {
       return;
     }
 
-    let text = "Click";
+    let cursorText = "Click";
 
     if (interactive.matches(".discipline")) {
-      text = interactive.classList.contains("is-active") ? "Close" : "Open";
+      cursorText =
+        interactive.classList.contains("is-active") ||
+        interactive.classList.contains("is-expanded")
+          ? "Close"
+          : "Open";
     } else if (interactive.matches(".project-read-more")) {
-      text = "View";
+      cursorText = "View";
+    } else if (interactive.matches(".project-progress__marker")) {
+      cursorText = "View";
+    } else if (
+      interactive.matches("[data-project-next]") ||
+      interactive.matches("[data-project-previous]")
+    ) {
+      cursorText = "View";
+    } else if (
+      interactive.matches("[data-welcome-continue]") ||
+      interactive.matches("[data-scene-continue]")
+    ) {
+      cursorText = "Next";
     } else if (interactive.matches("[data-scene-target]")) {
-      text = "Go";
-    } else if (interactive.matches("[data-scene-continue]")) {
-      text = "Play";
+      cursorText = "Go";
     }
 
     if (label) {
-      label.textContent = text;
+      label.textContent = cursorText;
     }
 
     gsap.to(cursor, {
@@ -4127,7 +4524,7 @@ function FLInitialiseCustomCursor() {
 
       borderColor: "rgba(32, 29, 26, 0.45)",
 
-      duration: 0.2,
+      duration: 0.18,
 
       ease: "power2.out",
 
@@ -4159,7 +4556,7 @@ function FLInitialiseCustomCursor() {
 
       borderColor: "rgba(32, 29, 26, 0.35)",
 
-      duration: 0.2,
+      duration: 0.18,
 
       ease: "power2.out",
 
@@ -4169,11 +4566,11 @@ function FLInitialiseCustomCursor() {
 }
 
 /* =========================================================
-   55 — CLEAR ANIMATION SYSTEM
+   52 — CLEAR ANIMATION SYSTEM
    ========================================================= */
 
 function FLClearAnimations() {
-  FLKillScrollTween();
+  FLStopScrollTween();
 
   if (FLAnimationState.context) {
     FLAnimationState.context.revert();
@@ -4197,23 +4594,7 @@ function FLClearAnimations() {
 }
 
 /* =========================================================
-   56 — VIEWPORT MODE
-   ========================================================= */
-
-function FLGetViewportMode() {
-  if (window.matchMedia("(max-width: 720px)").matches) {
-    return "mobile";
-  }
-
-  if (window.matchMedia("(max-width: 960px)").matches) {
-    return "tablet";
-  }
-
-  return "desktop";
-}
-
-/* =========================================================
-   57 — BUILD ALL SCENES
+   53 — BUILD ALL ANIMATIONS
    ========================================================= */
 
 function FLBuildAllAnimations() {
@@ -4247,10 +4628,15 @@ function FLBuildAllAnimations() {
 }
 
 /* =========================================================
-   58 — CAPTURE CURRENT POSITION
+   54 — CAPTURE CURRENT POSITION
 
-   Resize / font-size changes should preserve where the
-   visitor currently is instead of restarting the site.
+   Used when:
+   - font size changes
+   - viewport breakpoint changes
+   - motion preference changes
+
+   The current meaningful state is remembered before GSAP
+   rebuilds its ScrollTriggers.
    ========================================================= */
 
 function FLCaptureCurrentLanding() {
@@ -4260,8 +4646,11 @@ function FLCaptureCurrentLanding() {
     "welcome";
 
   /* -----------------------------------------------------
-       PROJECT
-    ----------------------------------------------------- */
+     PROJECTS
+
+     Because this uses FLProjectLandingLabels, the active
+     project can now be Nada, Pulse or Lega.
+     ----------------------------------------------------- */
 
   if (scene === "projects") {
     const project = window.getActiveFLProject?.();
@@ -4269,18 +4658,21 @@ function FLCaptureCurrentLanding() {
     return {
       scene,
 
-      landing: FLProjectLandingLabels[project?.id] || "ready",
+      landing: FLProjectLandingLabels[project?.id] || "nadaReady",
     };
   }
 
   /* -----------------------------------------------------
-       WELCOME
-    ----------------------------------------------------- */
+     WELCOME
+
+     Thresholds correspond to the longer Welcome timeline
+     introduced in Part 1.
+     ----------------------------------------------------- */
 
   if (scene === "welcome") {
     const progress = FLAnimationState.welcome.scrollTrigger?.progress ?? 0;
 
-    if (progress > 0.58) {
+    if (progress >= 0.6) {
       return {
         scene,
 
@@ -4288,7 +4680,7 @@ function FLCaptureCurrentLanding() {
       };
     }
 
-    if (progress > 0.2) {
+    if (progress >= 0.22) {
       return {
         scene,
 
@@ -4304,8 +4696,32 @@ function FLCaptureCurrentLanding() {
   }
 
   /* -----------------------------------------------------
-       EVERYTHING ELSE
-    ----------------------------------------------------- */
+     ABOUT
+
+     Preserve the completed flight where possible instead of
+     throwing someone back to the pre-flight state after a
+     responsive rebuild.
+     ----------------------------------------------------- */
+
+  if (scene === "about") {
+    const progress = FLAnimationState.about.scrollTrigger?.progress ?? 0;
+
+    const arrivalProgress = FLGetLabelProgress("about", "arrivalReady");
+
+    if (arrivalProgress !== null && progress >= arrivalProgress - 0.04) {
+      return {
+        scene,
+
+        landing: "arrivalReady",
+      };
+    }
+
+    return {
+      scene,
+
+      landing: "ready",
+    };
+  }
 
   return {
     scene,
@@ -4315,15 +4731,15 @@ function FLCaptureCurrentLanding() {
 }
 
 /* =========================================================
-   59 — REBUILD ANIMATIONS
+   55 — REBUILD ANIMATIONS
    ========================================================= */
 
 function FLRebuildAnimations(options = {}) {
-  if (FLAnimationState.isRebuilding) {
+  if (FLAnimationState.rebuilding) {
     return;
   }
 
-  FLAnimationState.isRebuilding = true;
+  FLAnimationState.rebuilding = true;
 
   const { preserveScene = true } = options;
 
@@ -4353,13 +4769,13 @@ function FLRebuildAnimations(options = {}) {
         });
       }
 
-      FLAnimationState.isRebuilding = false;
+      FLAnimationState.rebuilding = false;
     });
   });
 }
 
 /* =========================================================
-   60 — LIGHTWEIGHT LAYOUT REFRESH
+   56 — LIGHTWEIGHT LAYOUT REFRESH
    ========================================================= */
 
 function FLRefreshLayout() {
@@ -4373,7 +4789,7 @@ function FLRefreshLayout() {
 }
 
 /* =========================================================
-   61 — LANGUAGE CHANGE
+   57 — LANGUAGE CHANGE
    ========================================================= */
 
 function FLHandleLanguageChange() {
@@ -4381,7 +4797,7 @@ function FLHandleLanguageChange() {
 }
 
 /* =========================================================
-   62 — FONT SIZE CHANGE
+   58 — FONT SIZE CHANGE
    ========================================================= */
 
 function FLHandleFontSizeChange() {
@@ -4391,7 +4807,7 @@ function FLHandleFontSizeChange() {
 }
 
 /* =========================================================
-   63 — MOTION SETTING CHANGE
+   59 — MOTION PREFERENCE CHANGE
    ========================================================= */
 
 function FLHandleMotionPreferenceChange() {
@@ -4401,7 +4817,7 @@ function FLHandleMotionPreferenceChange() {
 }
 
 /* =========================================================
-   64 — RESIZE
+   60 — RESIZE
    ========================================================= */
 
 function FLHandleAnimationResize() {
@@ -4411,9 +4827,9 @@ function FLHandleAnimationResize() {
     const mode = FLGetViewportMode();
 
     /*
-                   Crossing a breakpoint changes the actual
-                   scene architecture, so rebuild.
-                */
+     * Crossing a responsive breakpoint requires a full
+     * rebuild because ScrollTrigger geometry changes.
+     */
 
     if (mode !== FLAnimationState.viewportMode) {
       FLRebuildAnimations({
@@ -4424,16 +4840,16 @@ function FLHandleAnimationResize() {
     }
 
     /*
-                   Same layout family:
-                   only recalculate ScrollTrigger geometry.
-                */
+     * Ordinary resizing inside the same breakpoint only
+     * needs fresh ScrollTrigger measurements.
+     */
 
     FLRefreshLayout();
   }, 180);
 }
 
 /* =========================================================
-   65 — SITE SCENE CHANGE
+   61 — SITE SCENE CHANGE
    ========================================================= */
 
 function FLHandleSceneChange(event) {
@@ -4447,7 +4863,7 @@ function FLHandleSceneChange(event) {
 }
 
 /* =========================================================
-   66 — ANIMATION EVENTS
+   62 — ANIMATION EVENTS
    ========================================================= */
 
 function FLInitialiseAnimationEvents() {
@@ -4458,6 +4874,8 @@ function FLInitialiseAnimationEvents() {
   FLAnimationState.eventsInitialised = true;
 
   FLInitialiseScrollInterruption();
+
+  FLInitialiseWelcomeContinue();
 
   FLInitialiseDisciplineAnimationEvents();
 
@@ -4502,29 +4920,33 @@ function FLInitialiseAnimationEvents() {
     },
   );
 
-  /* =====================================================
-       FONT LOADING
-       ===================================================== */
-
   document.fonts?.ready
     ?.then(() => {
       FLRefreshLayout();
     })
-    .catch(() => {
-      /*
-                   Font readiness is non-critical.
-                */
-    });
+    .catch(() => {});
 }
 
 /* =========================================================
-   67 — INITIAL SCENE POSITION
+   63 — INITIAL SCENE POSITION
    ========================================================= */
 
 function FLCorrectInitialScenePosition() {
   const scene = window.FLSite?.getCurrentScene?.() || "welcome";
 
-  const landing = scene === "welcome" ? "intro" : "ready";
+  let landing = scene === "welcome" ? "intro" : "ready";
+
+  /*
+   * Projects intentionally begin with Nada when the page is
+   * first loaded directly into the Recent Projects scene.
+   *
+   * Pulse and Lega remain available through the normal
+   * project navigation once the scene is active.
+   */
+
+  if (scene === "projects") {
+    landing = "nadaReady";
+  }
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
@@ -4538,7 +4960,7 @@ function FLCorrectInitialScenePosition() {
 }
 
 /* =========================================================
-   68 — INITIALISE
+   64 — INITIALISE
    ========================================================= */
 
 function FLInitialiseAnimations() {
@@ -4565,14 +4987,10 @@ function FLInitialiseAnimations() {
 }
 
 /* =========================================================
-   69 — PUBLIC ANIMATION API
+   65 — PUBLIC ANIMATION API
    ========================================================= */
 
 window.FLAnimations = {
-  /* -----------------------------------------------------
-       SCENE NAVIGATION
-    ----------------------------------------------------- */
-
   goToScene(sceneName, options = {}) {
     return FLGoToScene(sceneName, options);
   },
@@ -4581,29 +4999,17 @@ window.FLAnimations = {
     return FLAdvanceScene(sceneName);
   },
 
-  /* -----------------------------------------------------
-       PROJECT NAVIGATION
-    ----------------------------------------------------- */
-
   changeProject(projectId) {
     return FLChangeProject(projectId);
   },
-
-  /* -----------------------------------------------------
-       AUTOPLAY STATE
-    ----------------------------------------------------- */
 
   isAutoPlaying() {
     return FLAnimationState.autoPlay.active;
   },
 
   cancelAutoPlay() {
-    FLKillScrollTween();
+    FLStopScrollTween();
   },
-
-  /* -----------------------------------------------------
-       LIFECYCLE
-    ----------------------------------------------------- */
 
   rebuild(options = {}) {
     FLRebuildAnimations(options);
@@ -4613,20 +5019,16 @@ window.FLAnimations = {
     FLRefreshLayout();
   },
 
-  /* -----------------------------------------------------
-       DEBUG / STATE
-    ----------------------------------------------------- */
-
   getState() {
     return FLAnimationState;
   },
 };
 
 /* =========================================================
-   70 — RUN
+   66 — RUN
 
-   main.js loads before animations.js, so window.FLSite is
-   already available when this initialises.
+   main.js is loaded before animations.js, so the FLSite API
+   is available by the time this initializes.
    ========================================================= */
 
 if (document.readyState === "loading") {

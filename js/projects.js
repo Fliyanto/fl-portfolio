@@ -1,16 +1,6 @@
 /* =========================================================
    F.LIYANTO PORTFOLIO
    PROJECT DATABASE
-
-   Stores:
-   - Project order
-   - Dates / duration
-   - Disciplines
-   - Descriptions
-   - Interaction identities
-   - Case-study routes
-   - Future live-project links
-   - Project state helpers
    ========================================================= */
 
 /* =========================================================
@@ -19,8 +9,8 @@
 
 const FLProjects = {
   /* =====================================================
-       NADA NUSANTARA
-       ===================================================== */
+     NADA NUSANTARA
+     ===================================================== */
 
   "nada-nusantara": {
     id: "nada-nusantara",
@@ -28,10 +18,6 @@ const FLProjects = {
     number: "01",
 
     title: "Nada Nusantara",
-
-    /* -------------------------------------------------
-           TIMELINE
-        ------------------------------------------------- */
 
     timeline: {
       year: 2025,
@@ -42,25 +28,24 @@ const FLProjects = {
 
       startLabel: {
         en: "Jul 2025",
+
         id: "Jul 2025",
       },
 
       endLabel: {
         en: "Oct 2025",
+
         id: "Okt 2025",
       },
 
       displayLabel: {
         en: "Jul — Oct 2025",
+
         id: "Jul — Okt 2025",
       },
 
       status: "completed",
     },
-
-    /* -------------------------------------------------
-           PROJECT TYPE
-        ------------------------------------------------- */
 
     type: {
       en: "Interactive Web Experience",
@@ -68,67 +53,37 @@ const FLProjects = {
       id: "Pengalaman Web Interaktif",
     },
 
-    /* -------------------------------------------------
-           DISCIPLINES
-        ------------------------------------------------- */
-
     disciplines: ["Interaction Design", "Web Design", "Front-End"],
-
-    /* -------------------------------------------------
-           TECHNOLOGY
-        ------------------------------------------------- */
 
     technology: ["HTML", "CSS", "JavaScript"],
 
-    /* -------------------------------------------------
-           HOMEPAGE PREVIEW
-        ------------------------------------------------- */
-
     preview: {
-      en: "An interactive web experience exploring Indonesian music, culture and digital storytelling through sound, movement and playful interaction.",
+      en: "An interactive web experience exploring Indonesian traditional instruments through sound, spatial interaction and playful visual movement.",
 
-      id: "Sebuah pengalaman web interaktif yang mengeksplorasi musik, budaya dan storytelling digital Indonesia melalui suara, gerakan dan interaksi yang playful.",
+      id: "Sebuah pengalaman web interaktif yang mengeksplorasi alat musik tradisional Indonesia melalui suara, interaksi spasial, dan gerakan visual yang playful.",
     },
-
-    /* -------------------------------------------------
-           CASE STUDY INTRODUCTION
-
-           Used later on:
-           projects/nada-nusantara.html
-        ------------------------------------------------- */
 
     introduction: {
-      en: "Nada Nusantara is an interactive web experience created to explore Indonesian music and cultural identity through digital interaction. The project combines sound, visual design, front-end development and playful navigation to encourage users to discover Indonesian music in a more engaging way.",
+      en: "Nada Nusantara is an interactive web experience exploring Indonesian traditional instruments through digital interaction, sound and playful visual movement. The project combines cultural storytelling, interface design and front-end development to encourage users to discover Indonesian music through interaction rather than static information.",
 
-      id: "Nada Nusantara adalah pengalaman web interaktif yang dibuat untuk mengeksplorasi musik dan identitas budaya Indonesia melalui interaksi digital. Proyek ini menggabungkan suara, desain visual, front-end development dan navigasi yang playful untuk mengajak pengguna mengenal musik Indonesia dengan cara yang lebih menarik.",
+      id: "Nada Nusantara adalah pengalaman web interaktif yang mengeksplorasi alat musik tradisional Indonesia melalui interaksi digital, suara, dan gerakan visual yang playful. Proyek ini menggabungkan storytelling budaya, desain interface, dan front-end development agar pengguna dapat mengenal musik Indonesia melalui interaksi, bukan hanya informasi statis.",
     },
-
-    /* -------------------------------------------------
-           PROJECT PURPOSE
-        ------------------------------------------------- */
 
     purpose: {
-      en: "The project explores how an interactive website can communicate cultural identity through music, movement and digital storytelling instead of relying only on static information.",
+      en: "The project explores how sound, movement and interactive web design can communicate cultural identity while encouraging playful discovery.",
 
-      id: "Proyek ini mengeksplorasi bagaimana sebuah website interaktif dapat menyampaikan identitas budaya melalui musik, gerakan dan storytelling digital, bukan hanya melalui informasi statis.",
+      id: "Proyek ini mengeksplorasi bagaimana suara, gerakan, dan desain web interaktif dapat menyampaikan identitas budaya sekaligus mendorong proses eksplorasi yang playful.",
     },
-
-    /* -------------------------------------------------
-           INTERACTION IDENTITY
-        ------------------------------------------------- */
 
     interaction: {
       theme: "rhythm",
 
       hoverLabel: {
         en: "Feel the rhythm",
+
         id: "Rasakan ritmenya",
       },
     },
-
-    /* -------------------------------------------------
-           COPYRIGHT / EDUCATIONAL DISCLAIMER
-        ------------------------------------------------- */
 
     disclaimer: {
       enabled: true,
@@ -146,24 +101,18 @@ const FLProjects = {
       },
     },
 
-    /* -------------------------------------------------
-           LINKS
-
-           liveProject stays null until you add it later.
-        ------------------------------------------------- */
-
     links: {
       caseStudy: "projects/nada-nusantara.html",
 
-      liveProject: null,
+      liveProject: "https://nadanusantarafinal.netlify.app/",
 
       github: null,
     },
   },
 
   /* =====================================================
-       PULSE DIARY
-       ===================================================== */
+     PULSE DIARY
+     ===================================================== */
 
   "pulse-diary": {
     id: "pulse-diary",
@@ -171,12 +120,6 @@ const FLProjects = {
     number: "02",
 
     title: "Pulse Diary",
-
-    /* -------------------------------------------------
-           TIMELINE
-
-           Exact months can be added later.
-        ------------------------------------------------- */
 
     timeline: {
       year: 2026,
@@ -187,25 +130,24 @@ const FLProjects = {
 
       startLabel: {
         en: "2026",
+
         id: "2026",
       },
 
       endLabel: {
         en: "2026",
+
         id: "2026",
       },
 
       displayLabel: {
         en: "2026",
+
         id: "2026",
       },
 
       status: "completed",
     },
-
-    /* -------------------------------------------------
-           PROJECT TYPE
-        ------------------------------------------------- */
 
     type: {
       en: "Interactive Digital Diary",
@@ -213,85 +155,54 @@ const FLProjects = {
       id: "Digital Diary Interaktif",
     },
 
-    /* -------------------------------------------------
-           DISCIPLINES
-        ------------------------------------------------- */
-
     disciplines: ["UI Design", "Interaction Design", "Creative Coding"],
-
-    /* -------------------------------------------------
-           TECHNOLOGY
-        ------------------------------------------------- */
 
     technology: ["HTML", "CSS", "JavaScript"],
 
-    /* -------------------------------------------------
-           HOMEPAGE PREVIEW
-        ------------------------------------------------- */
-
     preview: {
-      en: "An expressive digital diary exploring how interface behaviour, visual feedback and interaction can make personal reflection feel more engaging.",
+      en: "An expressive digital diary that transforms daily emotional reflections into a visual pulse through colour, rhythm and interaction.",
 
-      id: "Sebuah digital diary ekspresif yang mengeksplorasi bagaimana perilaku interface, feedback visual dan interaksi dapat membuat proses refleksi pribadi terasa lebih menarik.",
+      id: "Sebuah digital diary ekspresif yang mengubah refleksi emosional sehari-hari menjadi visual pulse melalui warna, ritme, dan interaksi.",
     },
-
-    /* -------------------------------------------------
-           CASE STUDY INTRODUCTION
-        ------------------------------------------------- */
 
     introduction: {
-      en: "Pulse Diary explores how a digital diary can feel more expressive than a traditional text-based journal. The experience uses visual response, motion and interactive behaviour to make reflection feel more personal and engaging.",
+      en: "Pulse Diary explores how a digital diary can make emotional reflection feel more expressive than a traditional text-based journal. Daily entries are translated into visual responses through colour, rhythm, interface behaviour and interactive feedback.",
 
-      id: "Pulse Diary mengeksplorasi bagaimana sebuah digital diary dapat terasa lebih ekspresif dibandingkan jurnal berbasis teks biasa. Pengalaman ini menggunakan respons visual, motion dan perilaku interaktif untuk membuat proses refleksi terasa lebih personal dan menarik.",
+      id: "Pulse Diary mengeksplorasi bagaimana digital diary dapat membuat refleksi emosional terasa lebih ekspresif dibandingkan jurnal berbasis teks tradisional. Catatan harian diterjemahkan menjadi respons visual melalui warna, ritme, perilaku interface, dan feedback interaktif.",
     },
-
-    /* -------------------------------------------------
-           PROJECT PURPOSE
-        ------------------------------------------------- */
 
     purpose: {
-      en: "The project investigates how interface behaviour and responsive visual feedback can make personal reflection feel less static and more emotionally engaging.",
+      en: "The project investigates how responsive visual feedback and interface behaviour can make personal reflection feel less static and more emotionally engaging.",
 
-      id: "Proyek ini mengeksplorasi bagaimana perilaku interface dan feedback visual yang responsif dapat membuat proses refleksi pribadi terasa lebih hidup dan lebih emosional.",
+      id: "Proyek ini mengeksplorasi bagaimana feedback visual yang responsif dan perilaku interface dapat membuat proses refleksi pribadi terasa lebih hidup dan lebih emosional.",
     },
-
-    /* -------------------------------------------------
-           INTERACTION IDENTITY
-        ------------------------------------------------- */
 
     interaction: {
       theme: "pulse",
 
       hoverLabel: {
         en: "Feel the pulse",
+
         id: "Rasakan pulsanya",
       },
     },
-
-    /* -------------------------------------------------
-           DISCLAIMER
-        ------------------------------------------------- */
 
     disclaimer: {
       enabled: false,
     },
 
-    /* -------------------------------------------------
-           LINKS
-        ------------------------------------------------- */
-
     links: {
       caseStudy: "projects/pulse-diary.html",
 
-      liveProject: null,
+      liveProject: "https://pulsediary.netlify.app/",
 
       github: null,
     },
   },
 
   /* =====================================================
-       LEGA
-       ===================================================== */
+     LEGA
+     ===================================================== */
 
   lega: {
     id: "lega",
@@ -300,122 +211,84 @@ const FLProjects = {
 
     title: "Lega",
 
-    /* -------------------------------------------------
-           TIMELINE
-        ------------------------------------------------- */
-
     timeline: {
       year: 2026,
 
-      startMonth: 8,
+      startMonth: null,
 
       endMonth: null,
 
       startLabel: {
-        en: "Aug 2026",
-        id: "Agu 2026",
+        en: "2026",
+
+        id: "2026",
       },
 
       endLabel: {
-        en: "Ongoing",
-        id: "Berlangsung",
+        en: "2026",
+
+        id: "2026",
       },
 
       displayLabel: {
-        en: "Aug 2026 — Ongoing",
-        id: "Agu 2026 — Sekarang",
+        en: "2026",
+
+        id: "2026",
       },
 
-      status: "ongoing",
+      status: "completed",
     },
-
-    /* -------------------------------------------------
-           PROJECT TYPE
-        ------------------------------------------------- */
 
     type: {
-      en: "Emotional Reflection Experience",
+      en: "Interactive Emotional Reflection Experience",
 
-      id: "Pengalaman Refleksi Emosional",
+      id: "Pengalaman Refleksi Emosional Interaktif",
     },
 
-    /* -------------------------------------------------
-           DISCIPLINES
-        ------------------------------------------------- */
-
-    disciplines: [
-      "UI Design",
-
-      "Interaction Design",
-
-      "UX Research",
-
-      "Front-End",
-    ],
-
-    /* -------------------------------------------------
-           TECHNOLOGY
-        ------------------------------------------------- */
+    disciplines: ["UI Design", "Interaction Design", "Front-End"],
 
     technology: ["HTML", "CSS", "JavaScript"],
 
-    /* -------------------------------------------------
-           HOMEPAGE PREVIEW
-        ------------------------------------------------- */
-
     preview: {
-      en: "A private emotional reflection experience designed to help people understand what they are feeling without needing to label the emotion first.",
+      en: "A private emotional reflection experience that uses sliders, templates and visual timelines to help people understand what they are feeling without needing to label the emotion first.",
 
-      id: "Sebuah pengalaman refleksi emosional privat yang dirancang untuk membantu seseorang memahami apa yang sedang mereka rasakan tanpa harus langsung memberi label pada emosinya.",
+      id: "Sebuah pengalaman refleksi emosional pribadi yang menggunakan slider, template dan timeline visual untuk membantu pengguna memahami apa yang mereka rasakan tanpa harus memberi label pada emosinya terlebih dahulu.",
     },
-
-    /* -------------------------------------------------
-           CASE STUDY INTRODUCTION
-        ------------------------------------------------- */
 
     introduction: {
-      en: "Lega is a private emotional reflection experience built around the idea that people should not always need to immediately name what they are feeling. Instead, users reflect through simple interactive controls describing qualities such as intensity, heaviness, tension, energy and overwhelm.",
+      en: "Lega is a private emotional reflection experience designed to help people understand what they are feeling without requiring them to name or label the emotion first. The interface uses sliders, templates, emojis and visual timelines to make reflection easier to start, revisit and understand over time.",
 
-      id: "Lega adalah pengalaman refleksi emosional privat yang dibangun dari gagasan bahwa seseorang tidak selalu harus langsung memberi nama pada apa yang sedang mereka rasakan. Sebagai gantinya, pengguna melakukan refleksi melalui kontrol interaktif sederhana seperti intensitas, rasa berat, ketegangan, energi dan overwhelm.",
+      id: "Lega adalah pengalaman refleksi emosional pribadi yang dirancang untuk membantu pengguna memahami apa yang mereka rasakan tanpa harus langsung memberi nama atau label pada emosinya. Interface menggunakan slider, template, emoji dan timeline visual agar proses refleksi lebih mudah dimulai, dilihat kembali dan dipahami dari waktu ke waktu.",
     },
-
-    /* -------------------------------------------------
-           PROJECT PURPOSE
-        ------------------------------------------------- */
 
     purpose: {
-      en: "The project explores how emotional reflection can feel easier to begin when users are not immediately asked to identify or label a specific emotion.",
+      en: "The project explores how interaction design can make emotional reflection feel more approachable by reducing the pressure to identify emotions through words before users are ready.",
 
-      id: "Proyek ini mengeksplorasi bagaimana refleksi emosional dapat terasa lebih mudah untuk dimulai ketika pengguna tidak langsung diminta untuk mengidentifikasi atau memberi label pada emosi tertentu.",
+      id: "Proyek ini mengeksplorasi bagaimana interaction design dapat membuat refleksi emosional terasa lebih mudah didekati dengan mengurangi tekanan untuk menjelaskan emosi melalui kata-kata sebelum pengguna siap.",
     },
-
-    /* -------------------------------------------------
-           INTERACTION IDENTITY
-        ------------------------------------------------- */
 
     interaction: {
-      theme: "sliders",
+      theme: "lega",
 
       hoverLabel: {
-        en: "Move the feeling",
-        id: "Gerakkan rasanya",
+        en: "Take a moment",
+
+        id: "Luangkan sejenak",
       },
     },
-
-    /* -------------------------------------------------
-           DISCLAIMER
-        ------------------------------------------------- */
 
     disclaimer: {
       enabled: false,
     },
 
-    /* -------------------------------------------------
-           LINKS
-        ------------------------------------------------- */
+    /*
+     * The Lega project itself remains fully represented in
+     * the portfolio. Its final destination can be added here
+     * once the live build is ready.
+     */
 
     links: {
-      caseStudy: "projects/lega.html",
+      caseStudy: null,
 
       liveProject: null,
 
@@ -426,6 +299,12 @@ const FLProjects = {
 
 /* =========================================================
    02 — PROJECT ORDER
+
+   This order is shared by:
+   - Previous / Next controls
+   - Project progress
+   - Timeline markers
+   - Scroll / click animation routing
    ========================================================= */
 
 const FLProjectOrder = ["nada-nusantara", "pulse-diary", "lega"];
@@ -449,9 +328,9 @@ function getFLProject(projectId) {
    ========================================================= */
 
 function getFLProjectsInOrder() {
-  return FLProjectOrder.map((projectId) => FLProjects[projectId])
-
-    .filter(Boolean);
+  return FLProjectOrder.map((projectId) => FLProjects[projectId]).filter(
+    Boolean,
+  );
 }
 
 /* =========================================================
@@ -489,33 +368,17 @@ function getFLProjectText(projectId, property, language = "en") {
     return null;
   }
 
-  /*
-       Arrays are returned directly.
-    */
-
   if (Array.isArray(value)) {
     return value;
   }
-
-  /*
-       Normal values are returned directly.
-    */
 
   if (typeof value !== "object") {
     return value;
   }
 
-  /*
-       Bilingual object.
-    */
-
   if (value[language] !== undefined) {
     return value[language];
   }
-
-  /*
-       Fall back to English.
-    */
 
   if (value.en !== undefined) {
     return value.en;
@@ -526,11 +389,6 @@ function getFLProjectText(projectId, property, language = "en") {
 
 /* =========================================================
    09 — SET ACTIVE PROJECT
-
-   Updates internal project state and broadcasts an event.
-
-   The visual transition itself will be handled later
-   by main.js / animations.js.
    ========================================================= */
 
 function setActiveFLProject(projectId) {
@@ -560,6 +418,8 @@ function setActiveFLProject(projectId) {
         previousProjectId,
 
         previousIndex,
+
+        progress: getFLProjectProgress(),
       },
     }),
   );
@@ -628,7 +488,12 @@ function moveToPreviousFLProject() {
 }
 
 /* =========================================================
-   14 — TIMELINE PROGRESS
+   14 — PROJECT PROGRESS
+
+   3-project result:
+   Nada  → 0.0
+   Pulse → 0.5
+   Lega  → 1.0
    ========================================================= */
 
 function getFLProjectProgress() {
@@ -638,13 +503,91 @@ function getFLProjectProgress() {
 
   return activeFLProjectIndex / (FLProjectOrder.length - 1);
 }
+/* =========================================================
+   15 — UPDATE PROJECT DOM STATE
+   ========================================================= */
+
+function updateFLProjectDOMState(projectId) {
+  const project = getFLProject(projectId);
+
+  if (!project) {
+    return;
+  }
+
+  const activeIndex = getFLProjectIndex(projectId);
+
+  /* -----------------------------------------------------
+     PANELS
+     ----------------------------------------------------- */
+
+  document.querySelectorAll("[data-project-panel]").forEach((panel) => {
+    const isActive = panel.dataset.projectPanel === projectId;
+
+    panel.classList.toggle("is-active", isActive);
+
+    panel.setAttribute("aria-hidden", String(!isActive));
+  });
+
+  /* -----------------------------------------------------
+     TIMELINE MARKERS
+     ----------------------------------------------------- */
+
+  document.querySelectorAll("[data-project-jump]").forEach((marker) => {
+    const isActive = marker.dataset.projectJump === projectId;
+
+    marker.classList.toggle("is-active", isActive);
+
+    marker.setAttribute("aria-current", isActive ? "true" : "false");
+  });
+
+  /* -----------------------------------------------------
+     COUNTER
+     ----------------------------------------------------- */
+
+  const counter = document.querySelector("[data-project-current]");
+
+  if (counter) {
+    counter.textContent = String(activeIndex + 1).padStart(2, "0");
+  }
+
+  /* -----------------------------------------------------
+     PROGRESS FILL
+
+     3 project positions:
+     Nada  → 0%
+     Pulse → 50%
+     Lega  → 100%
+     ----------------------------------------------------- */
+
+  const progressFill = document.querySelector("[data-project-progress-fill]");
+
+  if (progressFill) {
+    const progress = getFLProjectProgress();
+
+    progressFill.style.setProperty("--project-progress", progress);
+
+    progressFill.dataset.progress = String(progress);
+  }
+
+  /* -----------------------------------------------------
+     PREVIOUS / NEXT CONTROLS
+     ----------------------------------------------------- */
+
+  const previousButton = document.querySelector("[data-project-previous]");
+
+  const nextButton = document.querySelector("[data-project-next]");
+
+  if (previousButton) {
+    previousButton.disabled = activeIndex <= 0;
+  }
+
+  if (nextButton) {
+    nextButton.disabled = activeIndex >= FLProjectOrder.length - 1;
+  }
+}
 
 /* =========================================================
-   15 — INITIALISE PROJECT ELEMENTS
-
-   Adds project metadata to the existing HTML so CSS and
-   animations.js can understand which interaction belongs
-   to each project.
+   16 — INITIALISE PROJECT ELEMENTS
    ========================================================= */
 
 function initialiseFLProjectElements() {
@@ -654,8 +597,12 @@ function initialiseFLProjectElements() {
     const project = getFLProject(projectId);
 
     if (!project) {
+      panel.hidden = true;
+
       return;
     }
+
+    panel.hidden = false;
 
     panel.dataset.projectIndex = getFLProjectIndex(projectId);
 
@@ -666,7 +613,14 @@ function initialiseFLProjectElements() {
 }
 
 /* =========================================================
-   16 — INITIALISE READ MORE LINKS
+   17 — INITIALISE LIVE PROJECT LINKS
+
+   Nada and Pulse currently have live destinations.
+
+   Lega remains part of the full portfolio experience, but
+   its final URL is intentionally null for now. The button
+   remains in the HTML and can be activated later simply by
+   adding the finished URL to FLProjects.lega.links.
    ========================================================= */
 
 function initialiseFLProjectLinks() {
@@ -681,16 +635,56 @@ function initialiseFLProjectLinks() {
       return;
     }
 
-    if (project.links.caseStudy) {
-      link.href = project.links.caseStudy;
+    const destination = project.links.liveProject || project.links.caseStudy;
+
+    /* -------------------------------------------------
+         NO DESTINATION YET
+
+         Keep the existing visual control in place.
+         main.js already prevents "#" placeholder links
+         from navigating.
+         ------------------------------------------------- */
+
+    if (!destination) {
+      link.href = "#";
+
+      link.setAttribute("aria-disabled", "true");
+
+      link.removeAttribute("target");
+
+      link.removeAttribute("rel");
+
+      link.setAttribute("aria-label", project.title);
+
+      return;
     }
 
-    link.setAttribute("aria-label", `Read more about ${project.title}`);
+    /* -------------------------------------------------
+         ACTIVE DESTINATION
+         ------------------------------------------------- */
+
+    link.removeAttribute("aria-disabled");
+
+    link.href = destination;
+
+    if (project.links.liveProject) {
+      link.target = "_blank";
+
+      link.rel = "noopener noreferrer";
+
+      link.setAttribute("aria-label", `View ${project.title} live project`);
+    } else {
+      link.removeAttribute("target");
+
+      link.removeAttribute("rel");
+
+      link.setAttribute("aria-label", `Read more about ${project.title}`);
+    }
   });
 }
 
 /* =========================================================
-   17 — INITIALISE PROJECT MARKERS
+   18 — INITIALISE PROJECT MARKERS
    ========================================================= */
 
 function initialiseFLProjectMarkers() {
@@ -705,12 +699,28 @@ function initialiseFLProjectMarkers() {
       return;
     }
 
+    button.disabled = false;
+
     button.dataset.projectIndex = getFLProjectIndex(projectId);
   });
 }
 
 /* =========================================================
-   18 — INITIALISE PROJECT DATABASE
+   19 — PROJECT STATE LISTENER
+   ========================================================= */
+
+function handleFLProjectDOMChange(event) {
+  const projectId = event.detail?.projectId;
+
+  if (!projectId) {
+    return;
+  }
+
+  updateFLProjectDOMState(projectId);
+}
+
+/* =========================================================
+   20 — INITIALISE PROJECT DATABASE
    ========================================================= */
 
 function initialiseFLProjects() {
@@ -719,23 +729,26 @@ function initialiseFLProjects() {
   initialiseFLProjectLinks();
 
   initialiseFLProjectMarkers();
+
+  updateFLProjectDOMState(FLProjectOrder[activeFLProjectIndex]);
+
+  window.addEventListener("flProjectChange", handleFLProjectDOMChange);
 }
 
 /* =========================================================
-   19 — RUN
+   21 — RUN
    ========================================================= */
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initialiseFLProjects);
+  document.addEventListener("DOMContentLoaded", initialiseFLProjects, {
+    once: true,
+  });
 } else {
   initialiseFLProjects();
 }
 
 /* =========================================================
-   20 — GLOBAL ACCESS
-
-   Allows main.js, animations.js and future case-study pages
-   to access the project database.
+   22 — GLOBAL ACCESS
    ========================================================= */
 
 window.FLProjects = FLProjects;

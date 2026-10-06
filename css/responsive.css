@@ -5,6 +5,7 @@
 
 /* =========================================================
    01 — COMPACT DESKTOP
+
    1280px AND BELOW
    ========================================================= */
 
@@ -16,8 +17,8 @@
   }
 
   /* -----------------------------------------------------
-       HEADER
-    ----------------------------------------------------- */
+     HEADER
+     ----------------------------------------------------- */
 
   .site-header {
     grid-template-columns:
@@ -32,152 +33,299 @@
     gap: clamp(1rem, 1.8vw, 1.6rem);
   }
 
-  /* -----------------------------------------------------
-       WELCOME
-    ----------------------------------------------------- */
+  /* =====================================================
+     WELCOME
+     ===================================================== */
+
+  .welcome__sequence {
+    min-height: clamp(390px, 53vh, 550px);
+  }
 
   .welcome__intro {
     width: min(100%, 980px);
   }
 
-  .welcome-specialism--ui {
-    right: 5%;
-  }
-
-  .welcome-specialism--interaction {
-    right: 8%;
+  .welcome__title {
+    font-size: clamp(3.8rem, 7vw, 7.2rem);
   }
 
   /* -----------------------------------------------------
-       ABOUT
-    ----------------------------------------------------- */
+     WELCOME SPECIALISMS
+
+     Keep the new graphic composition intact instead of
+     reverting to the older small floating labels.
+     ----------------------------------------------------- */
+
+  .welcome-specialism {
+    min-height: clamp(70px, 8vh, 96px);
+
+    padding: clamp(0.85rem, 1.5vw, 1.25rem) clamp(1.3rem, 2.3vw, 2.25rem);
+  }
+
+  .welcome-specialism--ui {
+    top: 8%;
+    left: 56%;
+
+    width: clamp(270px, 31vw, 430px);
+
+    font-size: clamp(1.9rem, 3.2vw, 3.55rem);
+  }
+
+  .welcome-specialism--interaction {
+    top: 39%;
+    left: 21%;
+
+    width: clamp(460px, 54vw, 690px);
+
+    font-size: clamp(2.25rem, 4vw, 4.4rem);
+  }
+
+  .welcome-specialism--frontend {
+    left: 6%;
+    bottom: 4%;
+
+    width: clamp(285px, 36vw, 470px);
+
+    font-size: clamp(2rem, 3.4vw, 3.8rem);
+  }
+
+  .welcome__statement {
+    width: min(84vw, 1000px);
+  }
+
+  .welcome__statement-text {
+    font-size: clamp(3rem, 6.5vw, 6.6rem);
+  }
+
+  /* =====================================================
+     ABOUT
+     ===================================================== */
 
   .about {
     grid-template-columns:
       minmax(0, 0.88fr)
-      minmax(470px, 1.12fr);
+      minmax(430px, 1.12fr);
 
-    column-gap: clamp(2.2rem, 3.5vw, 3.8rem);
+    column-gap: clamp(2rem, 3.5vw, 3.8rem);
   }
+
+  .about__title {
+    font-size: clamp(2.6rem, 3.9vw, 4.15rem);
+  }
+
+  .about__story {
+    font-size: clamp(0.94rem, 1.08vw, 1.08rem);
+  }
+
+  /* -----------------------------------------------------
+     TRAVEL STORY
+     ----------------------------------------------------- */
 
   .travel-story {
     grid-template-columns:
-      minmax(120px, 0.82fr)
-      minmax(165px, 1fr)
-      minmax(175px, 1fr);
+      minmax(110px, 0.75fr)
+      minmax(175px, 1.12fr)
+      minmax(165px, 0.92fr);
 
-    gap: 0.85rem;
+    gap: clamp(0.65rem, 1.2vw, 1rem);
+
+    min-height: clamp(235px, 29vh, 310px);
+
+    padding: clamp(1.2rem, 1.8vw, 1.7rem);
   }
 
   .travel-location--origin {
-    width: min(100%, 160px);
+    width: min(100%, 150px);
   }
 
   .travel-location--destination {
-    width: min(100%, 190px);
+    width: min(100%, 185px);
 
-    min-width: 165px;
+    min-width: 155px;
   }
 
   .travel-location__city {
-    font-size: clamp(1.2rem, 1.55vw, 1.65rem);
+    font-size: clamp(1.12rem, 1.45vw, 1.6rem);
   }
 
-  /* -----------------------------------------------------
-       WHAT I DO
-    ----------------------------------------------------- */
+  .travel-location__caption {
+    max-width: 165px;
+  }
+
+  .travel-route {
+    height: clamp(150px, 18vh, 195px);
+  }
+
+  /* =====================================================
+     WHAT I DO
+     ===================================================== */
 
   .services__intro {
     grid-template-columns:
-      minmax(135px, 0.36fr)
-      minmax(0, 1.64fr);
+      minmax(125px, 0.34fr)
+      minmax(0, 1.66fr);
 
-    column-gap: 2.8rem;
+    column-gap: clamp(2rem, 3vw, 2.8rem);
   }
 
   .services__title {
-    font-size: clamp(2.4rem, 4vw, 4rem);
+    font-size: clamp(2.3rem, 3.7vw, 3.9rem);
   }
 
   .discipline-playground {
-    height: clamp(300px, 40vh, 450px);
+    height: clamp(320px, 42vh, 470px);
+
+    gap: clamp(0.75rem, 1.1vw, 1rem);
+  }
+
+  .discipline__title {
+    font-size: clamp(1.45rem, 2.25vw, 2.55rem);
   }
 
   .discipline--ui {
-    width: 36%;
+    margin-right: 0.3rem;
   }
 
   .discipline--interaction {
-    right: 2%;
-
-    width: 39%;
+    margin-left: 0.3rem;
   }
 
   .discipline--frontend {
-    left: 10%;
-
-    width: 38%;
+    margin-left: 0.85rem;
   }
 
   .discipline--web {
-    width: 40%;
-  }
-
-  .discipline--interaction .discipline__symbol {
-    right: clamp(2.2rem, 3.7vw, 3.7rem);
-
-    bottom: clamp(1.6rem, 2.7vw, 2.5rem);
+    margin-right: 0.85rem;
   }
 
   /* -----------------------------------------------------
-       PROJECTS
-    ----------------------------------------------------- */
+     COMPACT DESKTOP ACTIVE DISCIPLINE
+
+     Maintain the new compact expanded-card treatment.
+     ----------------------------------------------------- */
+
+  .discipline-playground.has-active .discipline {
+    height: clamp(290px, 34vh, 360px);
+  }
+
+  .discipline.is-active .discipline__trigger {
+    padding: 1.15rem 1.35rem 0.65rem;
+  }
+
+  .discipline.is-active .discipline__title {
+    font-size: clamp(2.1rem, 3.3vw, 3.65rem);
+  }
+
+  .discipline.is-active .discipline__details {
+    width: calc(100% - 2.7rem);
+
+    margin: 0 1.35rem 1.25rem;
+
+    gap: 0.7rem;
+  }
+
+  .discipline.is-active .discipline__description {
+    max-width: 680px;
+
+    font-size: clamp(0.95rem, 1.08vw, 1.06rem);
+  }
+
+  /* =====================================================
+     PROJECTS
+     ===================================================== */
 
   .projects__heading {
     grid-template-columns:
-      minmax(135px, 0.36fr)
-      minmax(0, 1.64fr);
+      minmax(125px, 0.34fr)
+      minmax(0, 1.66fr);
 
-    column-gap: 2.8rem;
+    column-gap: clamp(2rem, 3vw, 2.8rem);
   }
 
   .projects__title {
-    font-size: clamp(2.4rem, 4vw, 4rem);
+    font-size: clamp(2.3rem, 3.7vw, 3.9rem);
   }
 
   .project-stage {
     grid-template-columns:
-      minmax(145px, 0.28fr)
-      minmax(0, 1.72fr);
+      minmax(125px, 0.24fr)
+      minmax(0, 1.76fr);
 
-    gap: 1.8rem;
+    gap: clamp(1.1rem, 1.8vw, 1.7rem);
 
-    min-height: clamp(320px, 42vh, 480px);
+    min-height: clamp(315px, 42vh, 490px);
   }
 
-  .project-panel {
-    padding: clamp(1.15rem, 2.1vw, 2.2rem);
+  .project-panel__content {
+    padding: clamp(1.2rem, 1.9vw, 2.1rem);
+  }
+
+  .project-panel__meta,
+  .project-panel__name,
+  .project-panel__disciplines {
+    width: min(65%, 680px);
   }
 
   .project-panel__name {
-    font-size: clamp(2.7rem, 4.8vw, 5.2rem);
+    font-size: clamp(2.5rem, 4.3vw, 4.8rem);
   }
 
   .project-preview {
-    width: min(100%, 590px);
+    width: min(61%, 570px);
   }
 
-  /* -----------------------------------------------------
-       CONTACT
-    ----------------------------------------------------- */
+  .project-disclaimer {
+    width: min(59%, 560px);
+  }
+
+  .project-visual--pulse,
+  .project-visual--lega {
+    width: 39%;
+  }
+
+  .lega-visual__orb {
+    right: clamp(1.4rem, 3vw, 3.2rem);
+
+    width: clamp(120px, 14vw, 210px);
+  }
+
+  .lega-visual__sliders {
+    right: clamp(1.4rem, 3vw, 3.2rem);
+
+    width: min(74%, 270px);
+  }
+
+  .pulse-ring--outer {
+    width: clamp(180px, 21vw, 330px);
+  }
+
+  .pulse-ring--middle {
+    width: clamp(135px, 15.5vw, 245px);
+  }
+
+  .pulse-ring--inner {
+    width: clamp(88px, 10vw, 155px);
+  }
+
+  /* =====================================================
+     CONTACT
+     ===================================================== */
 
   .contact__content {
-    max-width: 860px;
+    max-width: 880px;
+  }
+
+  .contact__title {
+    font-size: clamp(3.6rem, 6.4vw, 7rem);
+  }
+
+  .contact__brand {
+    font-size: clamp(9rem, 22vw, 21rem);
   }
 }
-
 /* =========================================================
    02 — SHORT LAPTOP / DESKTOP HEIGHT
+
    820px AND BELOW
    ========================================================= */
 
@@ -186,135 +334,192 @@
     --header-height: 72px;
   }
 
+  /* =====================================================
+     SCENE SYSTEM
+     ===================================================== */
+
   .scene {
-    padding: calc(var(--header-height) + 0.85rem) var(--page-padding) 1rem;
+    padding: calc(var(--header-height) + 0.8rem) var(--page-padding) 0.95rem;
   }
 
   .scene__inner {
-    min-height: calc(100svh - var(--header-height) - 1.85rem);
+    min-height: calc(100svh - var(--header-height) - 1.75rem);
   }
 
-  /* -----------------------------------------------------
-       HEADER
-    ----------------------------------------------------- */
+  /* =====================================================
+     HEADER
+     ===================================================== */
 
   .site-header {
     height: var(--header-height);
   }
 
-  /* -----------------------------------------------------
-       WELCOME
-    ----------------------------------------------------- */
+  /* =====================================================
+     WELCOME
+     ===================================================== */
+
+  .welcome__sequence {
+    min-height: clamp(300px, 49vh, 390px);
+  }
 
   .welcome__eyebrow {
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
   }
 
   .welcome__title {
-    font-size: clamp(3.6rem, 6.5vw, 6.6rem);
+    font-size: clamp(3.4rem, 6vw, 6rem);
+  }
+
+  .welcome-specialism {
+    min-height: clamp(58px, 7vh, 74px);
+
+    padding: 0.65rem 1.15rem;
+  }
+
+  .welcome-specialism--ui {
+    top: 2%;
+
+    width: clamp(245px, 28vw, 390px);
+
+    font-size: clamp(1.65rem, 2.75vw, 2.9rem);
+  }
+
+  .welcome-specialism--interaction {
+    top: 36%;
+
+    width: clamp(420px, 48vw, 620px);
+
+    font-size: clamp(1.95rem, 3.45vw, 3.6rem);
+  }
+
+  .welcome-specialism--frontend {
+    bottom: 0;
+
+    width: clamp(260px, 31vw, 420px);
+
+    font-size: clamp(1.7rem, 2.9vw, 3.05rem);
+  }
+
+  .welcome__statement-text {
+    font-size: clamp(2.7rem, 5.8vw, 5.8rem);
   }
 
   .scene-progress {
     bottom: 0;
   }
 
-  /* -----------------------------------------------------
-       ABOUT
-    ----------------------------------------------------- */
+  /* =====================================================
+     ABOUT
+     ===================================================== */
 
   .about {
     grid-template-columns:
-      minmax(0, 0.86fr)
-      minmax(430px, 1.14fr);
+      minmax(0, 0.83fr)
+      minmax(405px, 1.17fr);
 
-    column-gap: 2.25rem;
+    column-gap: clamp(1.6rem, 2.8vw, 2.6rem);
+  }
+
+  .about__content {
+    padding-top: 1rem;
   }
 
   .about__eyebrow {
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.5rem;
   }
 
   .about__title {
-    font-size: clamp(2.3rem, 3.4vw, 3.45rem);
+    font-size: clamp(2.15rem, 3.15vw, 3.2rem);
   }
 
   .about__story {
-    gap: 0.65rem;
+    gap: 0.55rem;
 
-    margin-top: 1rem;
+    margin-top: 0.85rem;
 
-    font-size: clamp(0.83rem, 0.95vw, 0.92rem);
+    font-size: clamp(0.8rem, 0.9vw, 0.9rem);
 
-    line-height: 1.44;
-  }
-
-  .travel-story {
-    grid-template-columns:
-      minmax(110px, 0.78fr)
-      minmax(150px, 0.96fr)
-      minmax(170px, 1fr);
-
-    min-height: 195px;
-
-    padding: 1rem;
-
-    gap: 0.65rem;
-
-    border-radius: 32px;
-  }
-
-  .travel-route {
-    height: 135px;
-  }
-
-  .travel-location--origin {
-    width: min(100%, 145px);
-  }
-
-  .travel-location--destination {
-    width: min(100%, 180px);
-
-    min-width: 160px;
-  }
-
-  .travel-location__city {
-    font-size: clamp(1.05rem, 1.3vw, 1.42rem);
-  }
-
-  .travel-location__country {
-    font-size: 0.7rem;
-  }
-
-  .travel-location__caption {
-    max-width: 155px;
-
-    font-size: 0.62rem;
+    line-height: 1.42;
   }
 
   /* -----------------------------------------------------
-       WHAT I DO
-    ----------------------------------------------------- */
+     SHORT TRAVEL STORY
+     ----------------------------------------------------- */
+
+  .travel-story {
+    grid-template-columns:
+      minmax(100px, 0.72fr)
+      minmax(140px, 1fr)
+      minmax(145px, 0.93fr);
+
+    min-height: 180px;
+
+    gap: 0.55rem;
+
+    padding: 0.85rem;
+
+    border-radius: 28px;
+  }
+
+  .travel-route {
+    height: 120px;
+  }
+
+  .travel-location--origin {
+    width: min(100%, 132px);
+  }
+
+  .travel-location--destination {
+    width: min(100%, 165px);
+
+    min-width: 145px;
+  }
+
+  .travel-location__city {
+    font-size: clamp(0.98rem, 1.2vw, 1.32rem);
+  }
+
+  .travel-location__country {
+    font-size: 0.66rem;
+  }
+
+  .travel-location__caption {
+    max-width: 145px;
+
+    font-size: 0.59rem;
+  }
+
+  .travel-plane {
+    width: 2.25rem;
+    height: 2.25rem;
+
+    font-size: 0.92rem;
+  }
+
+  /* =====================================================
+     WHAT I DO
+     ===================================================== */
 
   .services {
-    min-height: calc(100svh - var(--header-height) - 1.85rem);
+    min-height: calc(100svh - var(--header-height) - 1.75rem);
   }
 
   .services .scene-indicator {
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.25rem;
   }
 
   .services__intro {
-    margin-bottom: 0.3rem;
+    column-gap: 1.8rem;
 
-    column-gap: 2.1rem;
+    margin-bottom: 0.22rem;
   }
 
   .services__eyebrow {
-    font-size: 0.7rem;
+    font-size: 0.66rem;
   }
 
   .services__title {
-    font-size: clamp(2.05rem, 3.2vw, 3.3rem);
+    font-size: clamp(1.95rem, 2.95vw, 3rem);
 
     line-height: 0.92;
   }
@@ -322,207 +527,352 @@
   .services__instruction {
     margin-top: 0;
 
-    font-size: 0.7rem;
+    font-size: 0.66rem;
   }
 
   .discipline-playground {
-    height: clamp(260px, 37vh, 330px);
+    height: clamp(250px, 36vh, 320px);
+
+    gap: 0.6rem;
 
     margin-top: 0;
   }
 
   .discipline__trigger {
-    padding: 0.85rem 0.95rem;
+    padding: 0.78rem 0.86rem;
+  }
+
+  .discipline__number {
+    font-size: 0.62rem;
   }
 
   .discipline__title {
-    font-size: clamp(1.25rem, 1.9vw, 2rem);
+    font-size: clamp(1.15rem, 1.75vw, 1.85rem);
   }
 
   .discipline__symbol {
-    width: 1.9rem;
-    height: 1.9rem;
+    right: 0.8rem;
+    bottom: 0.8rem;
+
+    width: 1.85rem;
+    height: 1.85rem;
   }
 
-  .discipline--ui {
-    height: 39%;
-  }
-
+  .discipline--ui,
   .discipline--interaction {
-    height: 41%;
+    margin-inline: 0.15rem;
   }
 
-  .discipline--frontend {
-    bottom: 7%;
-
-    height: 30%;
-  }
-
+  .discipline--frontend,
   .discipline--web {
-    bottom: 6%;
-
-    height: 31%;
-  }
-
-  .discipline--interaction .discipline__trigger {
-    padding: 1.15rem 2.2rem;
-  }
-
-  .discipline--interaction .discipline__symbol {
-    right: clamp(2rem, 3.6vw, 3.5rem);
-
-    bottom: clamp(1.35rem, 2.4vw, 2.15rem);
-  }
-
-  .scene-next--projects {
-    margin-top: 0.1rem;
+    margin-inline: 0.55rem;
   }
 
   /* -----------------------------------------------------
-       PROJECTS
-    ----------------------------------------------------- */
+     SHORT ACTIVE DISCIPLINE
+
+     Expanded cards remain intentionally compact rather
+     than reverting to full playground height.
+     ----------------------------------------------------- */
+
+  .discipline-playground.has-active .discipline {
+    height: min(100%, 285px);
+  }
+
+  .discipline.is-active .discipline__trigger {
+    padding: 0.82rem 1rem 0.42rem;
+  }
+
+  .discipline.is-active .discipline__title {
+    font-size: clamp(1.7rem, 2.55vw, 2.7rem);
+  }
+
+  .discipline.is-active .discipline__details {
+    width: calc(100% - 2rem);
+
+    margin: 0 1rem 0.85rem;
+
+    gap: 0.48rem;
+  }
+
+  .discipline.is-active .discipline__skills {
+    gap: 0.3rem;
+  }
+
+  .discipline__skills li {
+    padding: 0.28rem 0.52rem;
+
+    font-size: 0.62rem;
+  }
+
+  .discipline.is-active .discipline__description {
+    margin-top: 0;
+
+    font-size: clamp(0.82rem, 0.92vw, 0.92rem);
+
+    line-height: 1.38;
+  }
+
+  .scene-next--projects {
+    margin-top: 0.05rem;
+  }
+
+  /* =====================================================
+     PROJECTS
+     ===================================================== */
 
   .projects {
-    min-height: calc(100svh - var(--header-height) - 1.85rem);
+    min-height: calc(100svh - var(--header-height) - 1.75rem);
   }
 
   .projects .scene-indicator {
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.24rem;
   }
 
   .projects__heading {
-    margin-bottom: 0.3rem;
+    column-gap: 1.8rem;
 
-    column-gap: 2.1rem;
+    margin-bottom: 0.22rem;
   }
 
   .projects__title {
-    font-size: clamp(2.05rem, 3.2vw, 3.3rem);
+    font-size: clamp(1.95rem, 2.95vw, 3rem);
 
     line-height: 0.92;
   }
 
   .project-stage {
-    min-height: clamp(275px, 38vh, 345px);
+    grid-template-columns:
+      minmax(112px, 0.22fr)
+      minmax(0, 1.78fr);
 
-    padding: 0.7rem;
+    gap: 0.9rem;
 
-    gap: 1.15rem;
+    min-height: clamp(260px, 37vh, 330px);
 
-    border-radius: 28px;
+    padding: 0.6rem;
+
+    border-radius: 26px;
   }
 
   .project-progress {
-    padding-top: 0.15rem;
+    padding-top: 0.1rem;
   }
 
   .project-progress__rail {
-    top: 1.8rem;
-    bottom: 1.9rem;
+    top: 1.7rem;
+    bottom: 1.75rem;
   }
 
   .project-progress__markers {
-    padding-block: 0.1rem;
+    padding-block: 0.05rem;
   }
 
   .project-progress__marker {
-    padding: 0.3rem 0;
+    padding: 0.24rem 0;
   }
 
   .project-progress__label {
-    font-size: 0.65rem;
-  }
-
-  .project-panel {
-    padding: 0.85rem 1.05rem;
-  }
-
-  .project-panel__meta {
-    margin-bottom: 0.3rem;
-
     font-size: 0.61rem;
   }
 
+  .project-panel__content {
+    padding: 0.76rem 0.95rem;
+  }
+
+  .project-panel__meta {
+    margin-bottom: 0.24rem;
+
+    font-size: 0.57rem;
+  }
+
   .project-panel__number {
-    width: 1.55rem;
-    height: 1.55rem;
+    width: 1.45rem;
+    height: 1.45rem;
   }
 
   .project-panel__name {
-    font-size: clamp(2.15rem, 3.8vw, 4rem);
+    font-size: clamp(2rem, 3.45vw, 3.65rem);
   }
 
   .project-panel__disciplines {
-    margin-top: 0.4rem;
+    gap: 0.26rem;
+
+    margin-top: 0.32rem;
   }
 
   .project-panel__disciplines li {
-    padding: 0.26rem 0.46rem;
+    padding: 0.22rem 0.4rem;
 
-    font-size: 0.6rem;
+    font-size: 0.56rem;
   }
 
   .project-preview {
-    min-height: 2.75em;
-
-    margin-top: 0.4rem;
+    margin-top: 0.32rem;
   }
 
   .project-preview__text {
-    font-size: clamp(0.74rem, 0.83vw, 0.85rem);
+    font-size: clamp(0.7rem, 0.76vw, 0.8rem);
 
-    line-height: 1.36;
+    line-height: 1.34;
   }
 
   .project-panel__actions {
-    margin-top: 0.48rem;
+    margin-top: 0.38rem;
   }
 
   .project-read-more {
-    padding: 0.48rem 0.7rem;
+    min-height: 2.15rem;
 
-    font-size: 0.66rem;
+    padding: 0.42rem 0.62rem;
+
+    font-size: 0.62rem;
   }
 
   .project-disclaimer {
-    margin-top: 0.35rem;
+    margin-top: 0.28rem;
 
-    padding-top: 0.35rem;
+    padding-top: 0.28rem;
 
-    font-size: 0.58rem;
+    font-size: 0.54rem;
   }
 
   .project-controls {
-    margin-top: 0.2rem;
-  }
+    min-height: 2.35rem;
 
-  .projects__interaction-hint {
     margin-top: 0.12rem;
   }
 
+  .project-controls__button {
+    min-height: 2.2rem;
+
+    padding: 0.42rem 0.65rem;
+
+    font-size: 0.65rem;
+  }
+
+  .projects__interaction-hint {
+    margin-top: 0.05rem;
+  }
+
   .scene-next--contact {
-    margin-top: 0.15rem;
+    margin-top: 0.08rem;
   }
 
   /* -----------------------------------------------------
-       CONTACT
-    ----------------------------------------------------- */
+     PROJECT VISUALS
+     ----------------------------------------------------- */
+
+  .project-visual--pulse,
+  .project-visual--lega {
+    width: 38%;
+  }
+
+  /* -----------------------------------------------------
+     LEGA — SHORT DESKTOP VISUAL
+
+     Keep the reflection graphic visible without letting the
+     orb or sliders compete with the project description.
+     ----------------------------------------------------- */
+
+  .lega-visual__orb {
+    top: 1rem;
+
+    right: clamp(1.2rem, 2.4vw, 2.1rem);
+
+    width: clamp(100px, 11.5vw, 160px);
+  }
+
+  .lega-visual__core {
+    width: clamp(34px, 3.8vw, 54px);
+  }
+
+  .lega-visual__sliders {
+    right: clamp(1.2rem, 2.4vw, 2.1rem);
+
+    bottom: clamp(1rem, 2.8vh, 1.5rem);
+
+    width: min(74%, 220px);
+
+    gap: clamp(0.42rem, 0.8vh, 0.62rem);
+  }
+
+  .lega-visual__slider {
+    height: 0.72rem;
+  }
+
+  .lega-visual__slider > span {
+    width: 0.78rem;
+    height: 0.78rem;
+  }
+
+  /* -----------------------------------------------------
+     PULSE
+     ----------------------------------------------------- */
+
+  .pulse-ring--outer {
+    width: clamp(150px, 18vw, 255px);
+  }
+
+  .pulse-ring--middle {
+    width: clamp(112px, 13.5vw, 190px);
+  }
+
+  .pulse-ring--inner {
+    width: clamp(72px, 8.5vw, 125px);
+  }
+
+  /* =====================================================
+     CONTACT
+     ===================================================== */
+
+  .contact__content {
+    padding-top: 1rem;
+  }
+
+  .contact__eyebrow {
+    margin-bottom: 0.5rem;
+  }
 
   .contact__title {
-    font-size: clamp(3rem, 5.5vw, 5.7rem);
+    font-size: clamp(2.9rem, 5vw, 5.2rem);
   }
 
   .contact__description {
-    margin-top: 1rem;
+    margin-top: 0.82rem;
+
+    font-size: clamp(0.84rem, 0.94vw, 0.94rem);
+
+    line-height: 1.48;
   }
 
   .contact-links {
-    margin-top: 1.5rem;
+    gap: 0.32rem;
+
+    margin-top: 1.15rem;
+  }
+
+  .contact-link {
+    padding: 0.58rem 0.8rem;
+  }
+
+  .contact-link__value {
+    font-size: clamp(0.94rem, 1.18vw, 1.15rem);
+  }
+
+  .contact__restart {
+    min-height: 2.4rem;
+
+    padding: 0.5rem 0.72rem;
+  }
+
+  .contact__brand {
+    font-size: clamp(8rem, 20vw, 17rem);
   }
 }
-
 /* =========================================================
    03 — TABLET / IPAD
+
    960px AND BELOW
    ========================================================= */
 
@@ -534,16 +884,16 @@
   }
 
   /* =====================================================
-       DOCUMENT
-    ====================================================== */
+     DOCUMENT
+     ===================================================== */
 
   body {
     overflow-x: hidden;
   }
 
   /* =====================================================
-       HEADER
-    ====================================================== */
+     HEADER
+     ===================================================== */
 
   .site-header {
     grid-template-columns:
@@ -569,17 +919,19 @@
   }
 
   /* =====================================================
-       NAV TOGGLE
-    ====================================================== */
+     NAV TOGGLE
+     ===================================================== */
 
   .nav-toggle {
     display: flex;
-    flex-direction: column;
-
-    justify-content: center;
 
     width: 2.8rem;
     height: 2.8rem;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
 
     gap: 0.38rem;
 
@@ -627,8 +979,8 @@
   }
 
   /* =====================================================
-       MOBILE NAV
-    ====================================================== */
+     MOBILE / TABLET NAV
+     ===================================================== */
 
   .mobile-nav {
     position: fixed;
@@ -641,6 +993,7 @@
     z-index: 950;
 
     display: flex;
+
     flex-direction: column;
 
     padding: 1.5rem var(--page-padding) 2rem;
@@ -700,8 +1053,8 @@
   }
 
   /* =====================================================
-       ACCESSIBILITY PANEL
-    ====================================================== */
+     ACCESSIBILITY PANEL
+     ===================================================== */
 
   .accessibility-panel {
     top: calc(var(--header-height) + 0.7rem);
@@ -710,63 +1063,133 @@
   }
 
   /* =====================================================
-       SCENE SYSTEM
-    ====================================================== */
+     SCENE SYSTEM
+     ===================================================== */
 
   .scene {
     min-height: 100svh;
 
-    padding: calc(var(--header-height) + 1.35rem) var(--page-padding) 2rem;
+    padding: calc(var(--header-height) + 1.25rem) var(--page-padding) 1.8rem;
   }
 
   .scene__inner {
-    min-height: calc(100svh - var(--header-height) - 3.35rem);
+    min-height: calc(100svh - var(--header-height) - 3.05rem);
   }
 
   /* =====================================================
-       WELCOME
-    ====================================================== */
+     WELCOME
+     ===================================================== */
+
+  .welcome {
+    justify-content: center;
+  }
+
+  .welcome__sequence {
+    min-height: clamp(500px, 62vh, 650px);
+  }
+
+  .welcome__intro {
+    width: min(100%, 760px);
+  }
 
   .welcome__title {
     font-size: clamp(4rem, 10.5vw, 6.8rem);
+  }
+
+  .welcome__statement {
+    width: min(88vw, 760px);
   }
 
   .welcome__statement-text {
     font-size: clamp(2.9rem, 7.8vw, 5.3rem);
   }
 
-  .welcome-specialism {
-    font-size: clamp(0.98rem, 2.2vw, 1.4rem);
+  /* -----------------------------------------------------
+     TABLET WELCOME SPECIALISMS
 
-    padding: 0.68rem 0.95rem;
+     Still large graphic typography, but rearranged into a
+     tighter diagonal composition for iPad proportions.
+     ----------------------------------------------------- */
+
+  .welcome-specialism {
+    min-height: clamp(64px, 7.5vh, 88px);
+
+    padding: 0.8rem 1.25rem;
   }
 
   .welcome-specialism--ui {
-    top: 18%;
-    right: 4%;
+    top: 9%;
+    left: 52%;
+
+    width: clamp(260px, 43vw, 390px);
+
+    font-size: clamp(1.85rem, 4vw, 3.2rem);
   }
 
   .welcome-specialism--interaction {
-    right: 7%;
-    bottom: 24%;
+    top: 39%;
+    left: 11%;
+
+    width: clamp(470px, 72vw, 650px);
+
+    font-size: clamp(2.3rem, 5.2vw, 4rem);
   }
 
   .welcome-specialism--frontend {
-    bottom: 17%;
-    left: 5%;
+    left: 4%;
+    bottom: 5%;
+
+    width: clamp(290px, 48vw, 430px);
+
+    font-size: clamp(2rem, 4.4vw, 3.4rem);
+  }
+
+  /* -----------------------------------------------------
+     WELCOME SHAPES
+     ----------------------------------------------------- */
+
+  .shape--welcome-one {
+    top: 7%;
+    right: -5%;
+
+    width: clamp(190px, 31vw, 310px);
+  }
+
+  .shape--welcome-two {
+    right: 21%;
+    bottom: 6%;
+
+    width: clamp(105px, 15vw, 155px);
+  }
+
+  .shape--welcome-three {
+    top: 18%;
+    left: -7%;
+
+    width: clamp(95px, 14vw, 145px);
+  }
+
+  .shape--welcome-four {
+    right: -4%;
+    bottom: 20%;
+
+    width: clamp(82px, 10vw, 115px);
+
+    height: clamp(145px, 18vw, 195px);
   }
 
   /* =====================================================
-       ABOUT
-    ====================================================== */
+     ABOUT
+     ===================================================== */
 
   .about {
     display: flex;
+
     flex-direction: column;
 
     justify-content: center;
 
-    gap: clamp(1.8rem, 3.5vw, 2.7rem);
+    gap: clamp(1.4rem, 2.8vw, 2rem);
   }
 
   .about .scene-indicator {
@@ -776,267 +1199,573 @@
   }
 
   .about__content {
+    width: 100%;
+
     max-width: 760px;
+
+    padding-top: 0;
+  }
+
+  .about__eyebrow {
+    margin-bottom: 0.7rem;
   }
 
   .about__title {
-    font-size: clamp(2.8rem, 7vw, 4.8rem);
+    font-size: clamp(2.8rem, 7vw, 4.6rem);
   }
 
   .about__story {
     max-width: 680px;
 
-    margin-top: 1.5rem;
+    gap: 0.75rem;
+
+    margin-top: 1.25rem;
   }
 
   /* =====================================================
-       TRAVEL STORY
-       ====================================================== */
+     TRAVEL STORY
+     ===================================================== */
 
   .travel-story {
     width: 100%;
 
     grid-template-columns:
-      minmax(120px, 0.8fr)
-      minmax(170px, 1.1fr)
-      minmax(175px, 0.9fr);
+      minmax(110px, 0.75fr)
+      minmax(175px, 1.12fr)
+      minmax(165px, 0.9fr);
 
-    min-height: 215px;
+    min-height: clamp(205px, 25vh, 250px);
 
-    padding: clamp(1.15rem, 2.4vw, 1.6rem);
+    gap: 0.75rem;
 
-    gap: 0.8rem;
+    padding: clamp(1.05rem, 2.2vw, 1.45rem);
 
     border-radius: var(--radius-lg);
   }
 
   .travel-location--origin {
-    width: min(100%, 150px);
+    width: min(100%, 145px);
   }
 
   .travel-location--destination {
-    width: min(100%, 185px);
+    width: min(100%, 180px);
 
-    min-width: 165px;
+    min-width: 150px;
   }
 
   .travel-route {
-    height: 155px;
+    height: clamp(140px, 17vh, 170px);
   }
 
   .travel-location__city {
-    font-size: clamp(1.15rem, 2.4vw, 1.55rem);
+    font-size: clamp(1.1rem, 2.3vw, 1.5rem);
+  }
+
+  .travel-location__country {
+    font-size: 0.72rem;
   }
 
   .travel-location__caption {
-    max-width: 155px;
+    max-width: 150px;
+
+    font-size: 0.66rem;
+  }
+
+  .travel-plane {
+    width: 2.4rem;
+    height: 2.4rem;
+
+    font-size: 0.96rem;
   }
 
   .about .scene-next {
     position: static;
 
     align-self: flex-end;
+
+    margin-top: 0.15rem;
   }
 
   /* =====================================================
-       WHAT I DO
-    ====================================================== */
+     WHAT I DO
+     ===================================================== */
 
   .services {
     display: flex;
+
     flex-direction: column;
 
     justify-content: flex-start;
   }
 
   .services .scene-indicator {
-    margin-bottom: 0.9rem;
+    margin-bottom: 0.75rem;
   }
 
   .services__intro {
     display: block;
 
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
   }
 
   .services__eyebrow {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem;
   }
 
   .services__title {
     max-width: 760px;
 
-    font-size: clamp(2.45rem, 6.5vw, 4.3rem);
+    font-size: clamp(2.4rem, 6vw, 4rem);
   }
 
   .services__instruction {
-    margin-top: 0.7rem;
+    max-width: 600px;
+
+    margin-top: 0.55rem;
   }
 
   /* -----------------------------------------------------
-       DISCIPLINE PLAYGROUND
-    ----------------------------------------------------- */
+     TABLET DISCIPLINE GRID
+
+     Tablet keeps the 2×2 visual system rather than turning
+     into the mobile stack prematurely.
+     ----------------------------------------------------- */
 
   .discipline-playground {
-    height: clamp(470px, 55vh, 560px);
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+
+    gap: 0.75rem;
+
+    height: clamp(390px, 48vh, 500px);
 
     min-height: 0;
 
-    margin-top: 0.9rem;
+    margin-top: 0.7rem;
+  }
+
+  .discipline {
+    position: relative;
+
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+
+    width: auto;
+    height: auto;
+
+    margin: 0;
   }
 
   .discipline--ui {
-    top: 1%;
-    left: 0;
+    grid-column: 1;
+    grid-row: 1;
 
-    width: 45%;
-    height: 40%;
+    margin: 0;
+
+    border-radius: 26px 50px 26px 26px;
   }
 
   .discipline--interaction {
-    top: 0;
-    right: 0;
+    grid-column: 2;
+    grid-row: 1;
 
-    width: 48%;
-    height: 43%;
+    margin: 0;
+
+    border-radius: 50px 26px 26px 26px;
   }
 
   .discipline--frontend {
-    bottom: 4%;
-    left: 2%;
+    grid-column: 1;
+    grid-row: 2;
 
-    width: 46%;
-    height: 39%;
+    margin: 0 0 0 0.55rem;
+
+    border-radius: 26px 26px 50px 26px;
   }
 
   .discipline--web {
-    right: 0;
-    bottom: 4%;
+    grid-column: 2;
+    grid-row: 2;
 
-    width: 47%;
-    height: 39%;
+    margin: 0 0.55rem 0 0;
+
+    border-radius: 26px 26px 26px 50px;
+  }
+
+  .discipline__trigger {
+    padding: clamp(0.95rem, 2vw, 1.3rem);
   }
 
   .discipline__title {
-    font-size: clamp(1.8rem, 4.3vw, 2.9rem);
+    font-size: clamp(1.55rem, 3.6vw, 2.55rem);
   }
 
-  .discipline--interaction .discipline__symbol {
-    right: clamp(2.4rem, 5vw, 4.1rem);
-
-    bottom: clamp(1.8rem, 4vw, 2.8rem);
+  .discipline__symbol {
+    right: 0.95rem;
+    bottom: 0.95rem;
   }
 
-  .discipline.is-active {
-    top: 0;
-    right: auto;
+  /* -----------------------------------------------------
+     TABLET ACTIVE DISCIPLINE
+
+     Keep the new compact desktop hierarchy:
+     number → title → skills → description.
+
+     The card expands wide, but not full-height.
+     ----------------------------------------------------- */
+
+  .discipline-playground.has-active {
+    display: block;
+  }
+
+  .discipline-playground.has-active .discipline {
+    position: absolute;
+
+    top: 50%;
+    right: 0;
     bottom: auto;
     left: 0;
 
     width: 100%;
-    height: 100%;
+
+    height: clamp(300px, 36vh, 350px);
+
+    max-height: 100%;
+
+    margin: 0;
+
+    border-radius: var(--radius-lg);
+  }
+
+  .discipline-playground.has-active .discipline:not(.is-active) {
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+  }
+
+  .discipline-playground.has-active .discipline.is-active {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: translateY(-50%);
+
+    pointer-events: auto;
+  }
+
+  .discipline.is-active .discipline__trigger {
+    padding: 1.05rem 1.2rem 0.58rem;
+  }
+
+  .discipline.is-active .discipline__title {
+    font-size: clamp(2rem, 4.8vw, 3.4rem);
+  }
+
+  .discipline.is-active .discipline__details {
+    width: calc(100% - 2.4rem);
+
+    max-width: 720px;
+
+    margin: 0 1.2rem 1.1rem;
+
+    gap: 0.62rem;
+  }
+
+  .discipline.is-active .discipline__skills {
+    gap: 0.34rem;
+  }
+
+  .discipline__skills li {
+    padding: 0.34rem 0.6rem;
+
+    font-size: 0.66rem;
+  }
+
+  .discipline.is-active .discipline__description {
+    max-width: 650px;
+
+    margin-top: 0.1rem;
+
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+
+    line-height: 1.45;
+  }
+
+  .discipline.is-active .discipline__symbol {
+    top: 0.95rem;
+    right: 0.95rem;
+    bottom: auto;
+  }
+
+  .scene-next--projects {
+    align-self: flex-end;
+
+    margin-top: 0.65rem;
   }
 
   /* =====================================================
-       PROJECTS
-    ====================================================== */
+     PROJECTS
+     ===================================================== */
 
   .projects {
     display: flex;
+
     flex-direction: column;
   }
 
   .projects .scene-indicator {
-    margin-bottom: 0.9rem;
+    margin-bottom: 0.75rem;
   }
 
   .projects__heading {
     display: block;
 
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
   }
 
   .projects__eyebrow {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem;
   }
 
   .projects__title {
     max-width: 760px;
 
-    font-size: clamp(2.45rem, 6.5vw, 4.3rem);
+    font-size: clamp(2.4rem, 6vw, 4rem);
   }
+
+  /* -----------------------------------------------------
+     PROJECT STAGE
+     ----------------------------------------------------- */
 
   .project-stage {
     grid-template-columns:
-      135px
+      112px
       minmax(0, 1fr);
 
-    gap: 1.4rem;
+    gap: 1rem;
 
-    min-height: clamp(470px, 55vh, 570px);
+    min-height: clamp(400px, 49vh, 520px);
 
-    padding: 0.9rem;
+    padding: 0.75rem;
+
+    border-radius: var(--radius-lg);
   }
 
   .project-progress__label {
-    font-size: 0.68rem;
+    font-size: 0.64rem;
+  }
+
+  .project-progress__rail {
+    left: 0.61rem;
+  }
+
+  /* -----------------------------------------------------
+     PROJECT PANEL
+
+     Nada, Pulse and Lega stay in one fixed coordinate
+     system so the project stage never shifts between cards.
+     ----------------------------------------------------- */
+
+  .project-display {
+    min-height: 100%;
   }
 
   .project-panel {
-    padding: clamp(1.3rem, 3vw, 2.2rem);
+    position: absolute;
+
+    inset: 0;
+
+    min-height: 100%;
+
+    border-radius: var(--radius-lg);
+  }
+
+  .project-panel__content {
+    padding: clamp(1.1rem, 2.7vw, 1.75rem);
+  }
+
+  .project-panel__meta,
+  .project-panel__name,
+  .project-panel__disciplines {
+    width: min(67%, 580px);
   }
 
   .project-panel__name {
-    font-size: clamp(3rem, 6.8vw, 5.4rem);
+    font-size: clamp(2.55rem, 6vw, 4.6rem);
   }
 
   .project-preview {
-    width: min(100%, 520px);
-
-    min-height: 3.5em;
+    width: min(63%, 500px);
   }
 
   .project-preview__text {
-    max-width: 520px;
+    max-width: 500px;
+
+    font-size: clamp(0.82rem, 1.75vw, 0.94rem);
   }
 
-  .project-visual--sliders {
-    padding-left: 50%;
-    padding-right: 1.5rem;
+  .project-disclaimer {
+    width: min(61%, 480px);
+  }
+
+  /* -----------------------------------------------------
+     NADA
+     ----------------------------------------------------- */
+
+  .project-visual--rhythm {
+    padding-right: 1.35rem;
+
+    opacity: 0.72;
+  }
+
+  /* -----------------------------------------------------
+     PULSE + LEGA
+     ----------------------------------------------------- */
+
+  .project-visual--pulse,
+  .project-visual--lega {
+    width: 38%;
+  }
+
+  .project-visual--pulse {
+    opacity: 0.84;
+  }
+
+  .project-visual--lega {
+    opacity: 0.92;
+  }
+
+  /* -----------------------------------------------------
+     PULSE VISUAL
+     ----------------------------------------------------- */
+
+  .pulse-ring--outer {
+    width: clamp(170px, 29vw, 275px);
+  }
+
+  .pulse-ring--middle {
+    width: clamp(125px, 21vw, 205px);
+  }
+
+  .pulse-ring--inner {
+    width: clamp(82px, 13.5vw, 135px);
+  }
+
+  .pulse-core {
+    width: clamp(42px, 7vw, 68px);
+  }
+
+  /* -----------------------------------------------------
+     LEGA VISUAL
+
+     The reflection orb stays in the upper-right while the
+     slider group sits beneath it, leaving the left side of
+     the panel clear for project information.
+     ----------------------------------------------------- */
+
+  .lega-visual__orb {
+    top: clamp(1.5rem, 3vh, 2.4rem);
+
+    right: clamp(1.2rem, 2.8vw, 2.2rem);
+
+    width: clamp(118px, 18vw, 185px);
+  }
+
+  .lega-visual__core {
+    width: clamp(38px, 5.5vw, 58px);
+  }
+
+  .lega-visual__sliders {
+    right: clamp(1.2rem, 2.8vw, 2.2rem);
+
+    bottom: clamp(1.4rem, 3vh, 2.2rem);
+
+    width: min(76%, 235px);
+
+    gap: clamp(0.55rem, 1vh, 0.78rem);
+  }
+
+  .lega-visual__slider {
+    height: 0.78rem;
+  }
+
+  .lega-visual__slider > span {
+    width: 0.82rem;
+    height: 0.82rem;
+  }
+
+  /* -----------------------------------------------------
+     THREE PROJECT MARKERS
+
+     The existing vertical rail can support three projects
+     without changing the overall stage geometry.
+     ----------------------------------------------------- */
+
+  .project-progress__markers {
+    justify-content: space-evenly;
+  }
+
+  .project-progress__marker {
+    min-height: 2.5rem;
   }
 
   .project-controls {
-    margin-top: 0.7rem;
+    margin-top: 0.5rem;
   }
 
   .scene-next--contact {
-    margin-top: 0.7rem;
+    align-self: flex-end;
+
+    margin-top: 0.5rem;
   }
 
   /* =====================================================
-       CONTACT
-    ====================================================== */
-
-  .contact .scene-indicator {
-    position: static;
-
-    margin-bottom: 2.5rem;
-
-    align-self: flex-start;
-  }
+     CONTACT
+     ===================================================== */
 
   .contact {
     justify-content: center;
   }
 
+  .contact .scene-indicator {
+    position: static;
+
+    align-self: flex-start;
+
+    margin-bottom: 1.8rem;
+  }
+
+  .contact__content {
+    max-width: 820px;
+
+    padding-top: 0;
+  }
+
   .contact__title {
-    font-size: clamp(3.8rem, 9.5vw, 6.8rem);
+    font-size: clamp(3.6rem, 9vw, 6.4rem);
+  }
+
+  .contact__description {
+    max-width: 620px;
+  }
+
+  .contact-links {
+    max-width: 720px;
   }
 
   .contact__brand {
     right: -5%;
 
-    font-size: clamp(10rem, 28vw, 20rem);
+    max-width: 72vw;
+
+    font-size: clamp(9rem, 27vw, 19rem);
   }
 
   .contact__restart {
@@ -1044,12 +1773,12 @@
 
     align-self: flex-end;
 
-    margin-top: 1.7rem;
+    margin-top: 1.3rem;
   }
 
   /* =====================================================
-       FOOTER
-    ====================================================== */
+     FOOTER
+     ===================================================== */
 
   .site-footer {
     grid-template-columns:
@@ -1062,99 +1791,299 @@
   }
 
   /* =====================================================
-       CURSOR
-    ====================================================== */
+     CURSOR
+     ===================================================== */
 
   .custom-cursor {
     display: none;
   }
 }
-
 /* =========================================================
    04 — TABLET WITH SHORT HEIGHT
+
    LANDSCAPE IPAD / COMPACT WINDOWS
    ========================================================= */
 
 @media (max-width: 960px) and (max-height: 760px) {
+  /* =====================================================
+     SCENE SYSTEM
+     ===================================================== */
+
   .scene {
-    min-height: 700px;
+    min-height: 680px;
   }
 
   .scene__inner {
-    min-height: calc(700px - var(--header-height) - 3rem);
+    min-height: calc(680px - var(--header-height) - 2.8rem);
   }
 
-  /* -----------------------------------------------------
-       ABOUT
-    ----------------------------------------------------- */
+  /* =====================================================
+     WELCOME
+     ===================================================== */
+
+  .welcome__sequence {
+    min-height: 440px;
+  }
+
+  .welcome__title {
+    font-size: clamp(3.5rem, 7.8vw, 5.3rem);
+  }
+
+  .welcome__statement-text {
+    font-size: clamp(2.7rem, 6.8vw, 4.7rem);
+  }
+
+  .welcome-specialism {
+    min-height: 58px;
+
+    padding: 0.65rem 1rem;
+  }
+
+  .welcome-specialism--ui {
+    top: 3%;
+
+    width: clamp(230px, 36vw, 330px);
+
+    font-size: clamp(1.6rem, 3.4vw, 2.55rem);
+  }
+
+  .welcome-specialism--interaction {
+    top: 36%;
+
+    width: clamp(400px, 65vw, 560px);
+
+    font-size: clamp(1.95rem, 4.35vw, 3.25rem);
+  }
+
+  .welcome-specialism--frontend {
+    bottom: 1%;
+
+    width: clamp(255px, 41vw, 365px);
+
+    font-size: clamp(1.7rem, 3.7vw, 2.75rem);
+  }
+
+  /* =====================================================
+     ABOUT
+     ===================================================== */
 
   .about {
-    gap: 1.4rem;
+    gap: 1.15rem;
+  }
+
+  .about__title {
+    font-size: clamp(2.35rem, 5.2vw, 3.55rem);
   }
 
   .about__story {
-    gap: 0.65rem;
+    gap: 0.55rem;
 
-    margin-top: 0.9rem;
+    margin-top: 0.8rem;
+
+    font-size: 0.86rem;
+
+    line-height: 1.4;
   }
 
   .travel-story {
-    min-height: 180px;
+    min-height: 165px;
+
+    gap: 0.55rem;
+
+    padding: 0.82rem;
   }
 
   .travel-route {
-    height: 130px;
+    height: 115px;
   }
 
-  /* -----------------------------------------------------
-       WHAT I DO
-    ----------------------------------------------------- */
+  .travel-location__city {
+    font-size: clamp(1rem, 2vw, 1.28rem);
+  }
+
+  .travel-location__caption {
+    max-width: 140px;
+
+    font-size: 0.59rem;
+  }
+
+  /* =====================================================
+     WHAT I DO
+     ===================================================== */
 
   .services__title,
   .projects__title {
-    font-size: clamp(2.15rem, 5.1vw, 3.5rem);
+    font-size: clamp(2.05rem, 4.8vw, 3.2rem);
+  }
+
+  .services__instruction {
+    font-size: 0.72rem;
   }
 
   .discipline-playground {
-    height: 420px;
+    height: 370px;
+
+    gap: 0.6rem;
   }
 
-  .discipline--interaction .discipline__symbol {
-    right: 3rem;
+  .discipline__trigger {
+    padding: 0.85rem;
+  }
 
-    bottom: 2rem;
+  .discipline__title {
+    font-size: clamp(1.42rem, 3.3vw, 2.2rem);
+  }
+
+  .discipline__symbol {
+    width: 1.95rem;
+    height: 1.95rem;
+  }
+
+  .discipline-playground.has-active .discipline {
+    height: min(100%, 285px);
+  }
+
+  /* =====================================================
+     PROJECTS
+     ===================================================== */
+
+  .project-stage {
+    min-height: 375px;
+
+    grid-template-columns:
+      105px
+      minmax(0, 1fr);
+
+    gap: 0.8rem;
   }
 
   /* -----------------------------------------------------
-       PROJECTS
-    ----------------------------------------------------- */
+     THREE PROJECT MARKERS
+     ----------------------------------------------------- */
 
-  .project-stage {
-    min-height: 420px;
+  .project-progress__markers {
+    justify-content: space-evenly;
+
+    padding-block: 0.1rem;
+  }
+
+  .project-progress__marker {
+    min-height: 2.15rem;
+
+    padding: 0.18rem 0;
+  }
+
+  .project-progress__label {
+    font-size: 0.58rem;
+  }
+
+  .project-panel__content {
+    padding: 0.9rem 1rem;
   }
 
   .project-panel__name {
-    font-size: clamp(2.7rem, 5.8vw, 4.6rem);
+    font-size: clamp(2.35rem, 5.2vw, 4rem);
   }
 
-  .project-preview {
-    min-height: 3.3em;
+  .project-preview__text {
+    font-size: 0.8rem;
+
+    line-height: 1.36;
+  }
+
+  .project-read-more {
+    min-height: 2.3rem;
+  }
+
+  .project-controls {
+    margin-top: 0.3rem;
+  }
+
+  /* -----------------------------------------------------
+     PROJECT VISUALS
+     ----------------------------------------------------- */
+
+  .project-visual--pulse,
+  .project-visual--lega {
+    width: 37%;
+  }
+
+  /* -----------------------------------------------------
+     LEGA — LANDSCAPE TABLET
+
+     Shrink the visual slightly so the project information
+     remains dominant on shorter tablet screens.
+     ----------------------------------------------------- */
+
+  .lega-visual__orb {
+    top: 1rem;
+
+    right: clamp(1rem, 2.2vw, 1.6rem);
+
+    width: clamp(96px, 14vw, 145px);
+  }
+
+  .lega-visual__core {
+    width: clamp(32px, 4.5vw, 48px);
+  }
+
+  .lega-visual__sliders {
+    right: clamp(1rem, 2.2vw, 1.6rem);
+
+    bottom: 1rem;
+
+    width: min(74%, 195px);
+
+    gap: 0.42rem;
+  }
+
+  .lega-visual__slider {
+    height: 0.66rem;
+  }
+
+  .lega-visual__slider > span {
+    width: 0.72rem;
+    height: 0.72rem;
+
+    border-width: 1.5px;
+  }
+
+  /* =====================================================
+     CONTACT
+     ===================================================== */
+
+  .contact .scene-indicator {
+    margin-bottom: 1.1rem;
+  }
+
+  .contact__title {
+    font-size: clamp(3rem, 7vw, 5rem);
+  }
+
+  .contact__description {
+    margin-top: 0.8rem;
+  }
+
+  .contact-links {
+    margin-top: 1.15rem;
   }
 }
 /* =========================================================
    05 — MOBILE
+
    720px AND BELOW
    ========================================================= */
 
 @media (max-width: 720px) {
   :root {
     --header-height: 68px;
+
     --page-padding: 1rem;
   }
 
   /* =====================================================
-       GLOBAL
-    ====================================================== */
+     GLOBAL
+     ===================================================== */
 
   body {
     background: var(--color-background);
@@ -1163,26 +2092,26 @@
   .scene {
     min-height: 100svh;
 
-    padding: calc(var(--header-height) + 1.2rem) var(--page-padding) 1.7rem;
+    padding: calc(var(--header-height) + 1.05rem) var(--page-padding) 1.5rem;
   }
 
   .scene__inner {
-    min-height: calc(100svh - var(--header-height) - 2.9rem);
+    min-height: calc(100svh - var(--header-height) - 2.55rem);
   }
 
   .scene-indicator {
     gap: 0.5rem;
 
-    font-size: 0.66rem;
+    font-size: 0.64rem;
   }
 
   .scene-indicator__line {
-    width: 1.7rem;
+    width: 1.65rem;
   }
 
   /* =====================================================
-       HEADER
-    ====================================================== */
+     HEADER
+     ===================================================== */
 
   .site-header {
     height: var(--header-height);
@@ -1202,63 +2131,75 @@
   }
 
   .header-controls {
-    gap: 0.38rem;
-  }
-
-  .language-switcher {
-    padding: 0.28rem 0.42rem;
-
-    gap: 0.08rem;
-  }
-
-  .language-switcher__button {
-    min-width: 1.55rem;
-
-    padding-inline: 0.12rem;
-
-    font-size: 0.64rem;
-  }
-
-  .settings-toggle,
-  .nav-toggle {
-    width: 2.5rem;
-    height: 2.5rem;
+    gap: 0.35rem;
   }
 
   /* =====================================================
-       ACCESSIBILITY PANEL
-    ====================================================== */
+     LANGUAGE CONTROL
+     ===================================================== */
+
+  .language-switcher {
+    gap: 0.06rem;
+
+    padding: 0.26rem 0.38rem;
+  }
+
+  .language-switcher__button {
+    min-width: 1.5rem;
+
+    padding-inline: 0.1rem;
+
+    font-size: 0.62rem;
+  }
+
+  /* =====================================================
+     HEADER BUTTONS
+     ===================================================== */
+
+  .settings-toggle,
+  .nav-toggle {
+    width: 2.45rem;
+    height: 2.45rem;
+  }
+
+  /* =====================================================
+     ACCESSIBILITY PANEL
+     ===================================================== */
 
   .accessibility-panel {
-    top: calc(var(--header-height) + 0.55rem);
+    top: calc(var(--header-height) + 0.5rem);
 
     right: var(--page-padding);
 
     width: calc(100vw - (var(--page-padding) * 2));
 
-    padding: 1rem;
+    padding: 0.95rem;
 
     border-radius: var(--radius-md);
   }
 
   /* =====================================================
-       MOBILE NAV
-    ====================================================== */
+     MOBILE NAV
+     ===================================================== */
 
   .mobile-nav {
-    padding: 1.2rem var(--page-padding) 1.5rem;
+    padding: 1.15rem var(--page-padding) 1.45rem;
   }
 
   .mobile-nav__link {
-    font-size: clamp(1.6rem, 7.8vw, 2.5rem);
+    font-size: clamp(1.55rem, 7.5vw, 2.35rem);
   }
 
   /* =====================================================
-       WELCOME
-    ====================================================== */
+     WELCOME
+     ===================================================== */
 
   .welcome {
     justify-content: center;
+  }
+
+  .welcome__sequence {
+    min-height: clamp(440px, 63vh, 560px);
   }
 
   .welcome__intro {
@@ -1266,13 +2207,13 @@
   }
 
   .welcome__eyebrow {
-    margin-bottom: 1rem;
+    margin-bottom: 0.85rem;
 
-    font-size: 0.7rem;
+    font-size: 0.68rem;
   }
 
   .welcome__title {
-    font-size: clamp(3.2rem, 16vw, 5.4rem);
+    font-size: clamp(3.1rem, 15vw, 5rem);
 
     line-height: 0.9;
   }
@@ -1282,138 +2223,201 @@
   }
 
   .welcome__statement {
-    width: min(92vw, 600px);
+    width: min(92vw, 560px);
   }
 
   .welcome__statement-text {
-    font-size: clamp(2.5rem, 12.5vw, 4.5rem);
+    font-size: clamp(2.35rem, 11.8vw, 4.15rem);
   }
 
   /* -----------------------------------------------------
-       WELCOME SHAPES
-    ----------------------------------------------------- */
+     MOBILE WELCOME SHAPES
+     ----------------------------------------------------- */
 
   .shape--welcome-one {
-    top: 8%;
-    right: -18%;
+    top: 6%;
+    right: -21%;
 
-    width: clamp(180px, 48vw, 270px);
+    width: clamp(165px, 46vw, 245px);
+
+    opacity: 0.78;
   }
 
   .shape--welcome-two {
-    right: 8%;
-    bottom: 9%;
+    right: 5%;
+    bottom: 7%;
 
-    width: clamp(90px, 23vw, 135px);
+    width: clamp(82px, 21vw, 120px);
   }
 
   .shape--welcome-three {
-    top: 16%;
-    left: -13%;
+    top: 18%;
+    left: -16%;
 
-    width: clamp(90px, 23vw, 130px);
+    width: clamp(82px, 21vw, 120px);
   }
 
   .shape--welcome-four {
     display: none;
   }
 
-  /* -----------------------------------------------------
-       WELCOME SPECIALISMS
-    ----------------------------------------------------- */
+  /* =====================================================
+     MOBILE WELCOME SPECIALISMS
+
+     Keep the same three-piece graphic language from desktop,
+     but stack it diagonally so each title has room to read.
+
+     These remain intentionally large — they are not chips.
+     ===================================================== */
 
   .welcome-specialism {
-    padding: 0.58rem 0.8rem;
+    min-height: clamp(58px, 8vh, 72px);
 
-    font-size: clamp(0.86rem, 3.8vw, 1.15rem);
+    padding: 0.68rem 0.95rem;
+
+    white-space: nowrap;
+  }
+
+  .welcome-specialism::after {
+    width: clamp(38px, 11vw, 55px);
   }
 
   .welcome-specialism--ui {
-    top: 20%;
-    right: 3%;
+    top: 7%;
+    left: 30%;
+
+    width: clamp(220px, 63vw, 315px);
+
+    border-radius: 28px 46px 28px 28px;
+
+    font-size: clamp(1.55rem, 7vw, 2.25rem);
   }
 
   .welcome-specialism--interaction {
-    right: 2%;
-    bottom: 24%;
+    top: 39%;
+    left: 3%;
+
+    width: min(94%, 430px);
+
+    justify-content: flex-start;
+
+    border-radius: 30px 52px 30px 52px;
+
+    font-size: clamp(1.8rem, 7.6vw, 2.65rem);
   }
 
   .welcome-specialism--frontend {
-    bottom: 16%;
-    left: 2%;
+    right: 19%;
+    bottom: 4%;
+    left: auto;
+
+    width: clamp(225px, 65vw, 330px);
+
+    border-radius: 46px 28px 28px 46px;
+
+    font-size: clamp(1.6rem, 7vw, 2.3rem);
   }
 
-  /* -----------------------------------------------------
-       WELCOME PROGRESS
-    ----------------------------------------------------- */
+  /* =====================================================
+     WELCOME PROGRESS
+     ===================================================== */
 
   .scene-progress {
     right: 0;
     bottom: 0;
 
-    gap: 0.45rem;
+    gap: 0.4rem;
   }
 
   .scene-progress__continue,
   .scene-next {
-    padding: 0.62rem 0.78rem 0.62rem 0.92rem;
+    min-height: 2.85rem;
 
-    font-size: 0.73rem;
+    padding: 0.58rem 0.65rem 0.58rem 0.85rem;
+
+    font-size: 0.7rem;
   }
 
   .scene-progress__arrow {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 1.7rem;
+    height: 1.7rem;
   }
 
   .scene-progress__hint {
-    max-width: 170px;
+    max-width: 155px;
+
+    font-size: 0.6rem;
 
     text-align: right;
   }
 
+  .scene-progress__steps span {
+    width: 0.32rem;
+    height: 0.32rem;
+  }
+
+  .scene-progress__steps span.is-active {
+    width: 0.95rem;
+  }
+
   /* =====================================================
-       ABOUT
-    ====================================================== */
+     ABOUT
+     ===================================================== */
 
   .about {
     justify-content: flex-start;
 
-    gap: 1.8rem;
+    gap: 1.4rem;
+  }
+
+  .about .scene-indicator {
+    position: static;
+  }
+
+  .about__content {
+    width: 100%;
+
+    padding-top: 0;
+  }
+
+  .about__eyebrow {
+    margin-bottom: 0.65rem;
   }
 
   .about__title {
-    font-size: clamp(2.6rem, 12.5vw, 4.2rem);
+    font-size: clamp(2.45rem, 11.8vw, 3.95rem);
   }
 
   .about__story {
-    gap: 0.85rem;
+    gap: 0.72rem;
 
-    margin-top: 1.4rem;
+    margin-top: 1.15rem;
 
-    font-size: clamp(0.98rem, 4vw, 1.08rem);
+    font-size: clamp(0.94rem, 3.8vw, 1.04rem);
 
-    line-height: 1.56;
+    line-height: 1.52;
   }
 
   /* -----------------------------------------------------
-       ABOUT SHAPES
-    ----------------------------------------------------- */
+     ABOUT SHAPES
+     ----------------------------------------------------- */
 
   .shape--about-one {
-    top: 4%;
-    right: -18%;
+    top: 3%;
+    right: -20%;
 
-    width: clamp(140px, 42vw, 230px);
+    width: clamp(130px, 39vw, 210px);
 
-    opacity: 0.56;
+    opacity: 0.42;
   }
 
   .shape--about-two {
-    bottom: 5%;
-    left: -16%;
+    bottom: 4%;
+    left: -18%;
 
-    width: clamp(120px, 34vw, 195px);
+    width: clamp(110px, 31vw, 180px);
+
+    opacity: 0.62;
   }
 
   .shape--about-three {
@@ -1421,26 +2425,36 @@
   }
 
   /* =====================================================
-       TRAVEL STORY
-       Fully stacked on phones.
-    ====================================================== */
+     MOBILE TRAVEL STORY
+
+     The route stays between the two locations:
+
+     Surabaya
+     ↓
+     animated route
+     ↓
+     Melbourne
+
+     so the plane animation still reads as one journey.
+     ===================================================== */
 
   .travel-story {
     display: grid;
 
     grid-template-columns: 1fr;
 
-    gap: 1rem;
+    gap: 0.85rem;
 
     min-height: auto;
 
-    padding: 1.1rem;
+    padding: 1rem;
 
     border-radius: var(--radius-lg);
   }
 
   .travel-location {
     width: 100%;
+
     max-width: none;
     min-width: 0;
   }
@@ -1454,7 +2468,8 @@
   .travel-route {
     order: 2;
 
-    height: 140px;
+    width: 100%;
+    height: clamp(120px, 28vw, 145px);
   }
 
   .travel-location--destination {
@@ -1463,9 +2478,8 @@
     align-items: flex-start;
 
     width: 100%;
-    min-width: 0;
 
-    padding-right: 0;
+    min-width: 0;
 
     text-align: left;
   }
@@ -1478,211 +2492,401 @@
     white-space: nowrap;
   }
 
+  .travel-location__dot {
+    width: 0.65rem;
+    height: 0.65rem;
+
+    margin-bottom: 0.55rem;
+  }
+
   .travel-location__city {
-    font-size: clamp(1.25rem, 5.8vw, 1.65rem);
+    font-size: clamp(1.2rem, 5.4vw, 1.58rem);
+  }
+
+  .travel-location__country {
+    font-size: 0.7rem;
   }
 
   .travel-location__caption {
-    max-width: 260px;
+    max-width: 250px;
+
+    margin-top: 0.4rem;
+
+    font-size: 0.65rem;
   }
 
   .travel-plane {
-    width: 2.3rem;
-    height: 2.3rem;
+    width: 2.2rem;
+    height: 2.2rem;
 
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .about .scene-next {
     align-self: flex-start;
+
+    margin-top: 0.1rem;
   }
 
   /* =====================================================
-       SERVICES
-    ====================================================== */
+     WHAT I DO
+     ===================================================== */
 
   .services {
     display: flex;
+
     flex-direction: column;
+
+    justify-content: flex-start;
+  }
+
+  .services .scene-indicator {
+    margin-bottom: 0.8rem;
+  }
+
+  .services__intro {
+    display: block;
+
+    margin-bottom: 0.6rem;
+  }
+
+  .services__eyebrow {
+    margin-bottom: 0.6rem;
   }
 
   .services__title {
-    font-size: clamp(2.35rem, 11.8vw, 3.9rem);
+    max-width: 100%;
+
+    font-size: clamp(2.25rem, 11vw, 3.7rem);
   }
 
   .services__instruction {
-    margin-top: 0.7rem;
+    max-width: 520px;
+
+    margin-top: 0.6rem;
+
+    font-size: 0.78rem;
+
+    line-height: 1.45;
   }
 
   /* =====================================================
-       DISCIPLINE PLAYGROUND
-       Clean stacked layout on phones.
-    ====================================================== */
+     MOBILE DISCIPLINE PLAYGROUND
 
-  .discipline-playground {
+     Desktop/tablet use the 2×2 playground.
+
+     Mobile becomes a vertical stack so each discipline can
+     be read and opened without squeezing four cards into a
+     narrow viewport.
+     ===================================================== */
+
+  .discipline-playground,
+  .discipline-playground.has-active {
     display: grid;
 
     grid-template-columns: 1fr;
+    grid-template-rows: none;
 
-    gap: 0.8rem;
+    gap: 0.7rem;
+
+    width: 100%;
 
     height: auto;
+
     min-height: 0;
 
-    margin-top: 1.7rem;
+    margin-top: 1.2rem;
   }
 
-  .discipline {
+  .discipline,
+  .discipline-playground.has-active .discipline {
     position: relative;
+
+    inset: auto;
 
     top: auto;
     right: auto;
     bottom: auto;
     left: auto;
 
+    grid-column: auto;
+    grid-row: auto;
+
     width: 100%;
+
     height: auto;
 
-    min-height: 150px;
+    min-height: 138px;
 
-    transform: none;
+    max-height: none;
+
+    margin: 0;
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
   }
 
+  /*
+   * animations.js centres desktop/tablet active cards using
+   * yPercent:-50. Mobile does not use that geometry, so the
+   * inline transform must be neutralised here.
+   */
+
+  .discipline-playground.has-active .discipline,
+  .discipline-playground.has-active .discipline.is-active,
+  .discipline-playground.has-active .discipline:not(.is-active) {
+    transform: none !important;
+  }
+
+  /* -----------------------------------------------------
+     MOBILE CARD SHAPES
+     ----------------------------------------------------- */
+
   .discipline--ui {
-    border-radius: 22px 62px 22px 22px;
+    border-radius: 22px 48px 22px 22px;
   }
 
   .discipline--interaction {
-    border-radius: 62px;
+    border-radius: 48px 22px 22px 22px;
   }
 
   .discipline--frontend {
-    border-radius: 18px 18px 62px 18px;
+    border-radius: 22px 22px 48px 22px;
   }
 
   .discipline--web {
-    border-radius: 62px 18px 18px 62px;
+    border-radius: 22px 22px 22px 48px;
   }
 
-  .discipline__trigger {
-    min-height: 150px;
+  /* -----------------------------------------------------
+     CLOSED DISCIPLINE
+     ----------------------------------------------------- */
 
-    padding: 1.1rem;
+  .discipline__trigger {
+    min-height: 138px;
+
+    padding: 1rem 1.05rem;
+  }
+
+  .discipline__number {
+    font-size: 0.64rem;
   }
 
   .discipline__title {
-    max-width: calc(100% - 4rem);
+    max-width: calc(100% - 3.8rem);
 
-    font-size: clamp(1.9rem, 8.8vw, 2.8rem);
+    font-size: clamp(1.75rem, 8.4vw, 2.65rem);
   }
 
   .discipline__symbol {
     top: auto;
-    right: 0.95rem;
-    bottom: 0.95rem;
+    right: 0.9rem;
+    bottom: 0.9rem;
 
-    width: 2.15rem;
-    height: 2.15rem;
+    width: 2.05rem;
+    height: 2.05rem;
   }
 
-  .discipline--interaction .discipline__trigger {
-    padding: 1.1rem;
-  }
+  /* -----------------------------------------------------
+     CLOSED DETAILS
 
-  .discipline--interaction .discipline__symbol {
-    top: auto;
-    right: 1.25rem;
-    bottom: 1.15rem;
-  }
+     Keep details out of the layout until a card is opened.
+     ----------------------------------------------------- */
 
   .discipline__details {
     position: static;
 
     display: none;
 
+    width: auto;
+
+    max-width: none;
     max-height: none;
 
-    padding: 0 1.1rem 1.2rem;
+    margin: 0;
+
+    padding: 0 1.05rem 1.1rem;
 
     overflow: visible;
 
     opacity: 1;
 
     transform: none;
+
+    pointer-events: auto;
   }
 
+  /* -----------------------------------------------------
+     ACTIVE MOBILE DISCIPLINE
+
+     Expansion happens in place instead of taking over the
+     entire playground.
+     ----------------------------------------------------- */
+
   .discipline.is-active {
-    position: relative;
-
-    width: 100%;
-    height: auto;
-
-    min-height: 280px;
+    min-height: 0;
 
     border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-card);
   }
 
   .discipline.is-active .discipline__trigger {
-    min-height: 105px;
+    min-height: 0;
+
+    height: auto;
+
+    justify-content: flex-start;
+
+    gap: 0.4rem;
+
+    padding: 1rem 1.05rem 0.65rem;
+  }
+
+  .discipline.is-active .discipline__title {
+    max-width: calc(100% - 3.6rem);
+
+    margin-top: 0.18rem;
+
+    font-size: clamp(1.9rem, 9vw, 2.8rem);
   }
 
   .discipline.is-active .discipline__details {
-    display: grid;
+    display: flex;
+
+    flex-direction: column;
+
+    width: auto;
+
+    max-width: none;
+
+    margin: 0;
+
+    padding: 0 1.05rem 1.15rem;
+
+    gap: 0.7rem;
+  }
+
+  .discipline.is-active .discipline__skills {
+    order: 1;
+
+    gap: 0.32rem;
+
+    margin-top: 0;
+  }
+
+  .discipline__skills li {
+    padding: 0.34rem 0.58rem;
+
+    font-size: 0.64rem;
+  }
+
+  .discipline.is-active .discipline__description {
+    order: 2;
+
+    max-width: none;
+
+    margin-top: 0;
+
+    font-size: clamp(0.9rem, 3.7vw, 1rem);
+
+    line-height: 1.48;
   }
 
   .discipline.is-active .discipline__symbol {
-    top: 1rem;
-    right: 1rem;
+    top: 0.9rem;
+    right: 0.9rem;
     bottom: auto;
+
+    transform: rotate(45deg);
   }
 
-  .discipline-playground.has-active .discipline:not(.is-active) {
-    opacity: 0.42;
+  /*
+   * Other disciplines stay visible while one card is open.
+   * They become quieter rather than disappearing completely,
+   * making it easy to compare or switch categories.
+   */
 
-    transform: scale(0.98);
+  .discipline-playground.has-active .discipline:not(.is-active) {
+    opacity: 0.5;
+
+    visibility: visible;
+
+    pointer-events: auto;
   }
 
   .scene-next--projects {
     align-self: flex-start;
 
-    margin-top: 1.1rem;
+    margin-top: 0.95rem;
   }
 
   /* =====================================================
-       RECENT PROJECTS
-    ====================================================== */
+     RECENT PROJECTS
+     ===================================================== */
 
-  .projects__title {
-    font-size: clamp(2.35rem, 11.8vw, 3.9rem);
+  .projects {
+    display: flex;
+
+    flex-direction: column;
   }
 
-  /* -----------------------------------------------------
-       PROJECT STAGE
-    ----------------------------------------------------- */
+  .projects .scene-indicator {
+    margin-bottom: 0.8rem;
+  }
+
+  .projects__heading {
+    display: block;
+
+    margin-bottom: 0.6rem;
+  }
+
+  .projects__eyebrow {
+    margin-bottom: 0.6rem;
+  }
+
+  .projects__title {
+    max-width: 100%;
+
+    font-size: clamp(2.25rem, 11vw, 3.7rem);
+  }
+
+  /* =====================================================
+     MOBILE PROJECT STAGE
+     ===================================================== */
 
   .project-stage {
     display: block;
 
     min-height: auto;
 
-    margin-top: 1.7rem;
+    margin-top: 1.15rem;
 
-    padding: 0.85rem;
+    padding: 0.7rem;
+
+    overflow: hidden;
 
     border-radius: var(--radius-lg);
   }
 
   /* =====================================================
-       PROJECT TIMELINE
-       Horizontal selector on phones.
-    ====================================================== */
+     MOBILE PROJECT TIMELINE
+
+     Desktop = vertical rail.
+     Mobile = horizontal three-project selector.
+     ===================================================== */
 
   .project-progress {
+    position: relative;
+
     display: block;
 
     min-height: auto;
 
-    padding: 0 0 0.9rem;
+    padding: 0 0 0.82rem;
   }
 
   .project-progress__year {
@@ -1702,14 +2906,16 @@
   .project-progress__fill {
     width: 0%;
     height: 100%;
+
+    transition: width var(--transition-base);
   }
 
   .project-progress__markers {
     display: grid;
 
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 
-    gap: 0.35rem;
+    gap: 0.3rem;
 
     min-height: auto;
 
@@ -1718,34 +2924,64 @@
 
   .project-progress__marker {
     display: flex;
+
+    min-width: 0;
+
     flex-direction: column;
 
     align-items: flex-start;
 
-    gap: 0.4rem;
+    gap: 0.38rem;
 
-    padding: 0.35rem 0.15rem 0.7rem;
+    padding: 0.3rem 0.08rem 0.65rem;
+
+    transform: none;
   }
 
-  .project-progress__marker:hover {
+  .project-progress__marker:nth-child(2) {
+    align-items: center;
+
+    text-align: center;
+  }
+
+  .project-progress__marker:last-child {
+    align-items: flex-end;
+
+    text-align: right;
+  }
+
+  .project-progress__marker:hover,
+  .project-progress__marker.is-active {
     transform: none;
   }
 
   .project-progress__dot {
-    width: 0.85rem;
-    height: 0.85rem;
+    width: 0.82rem;
+    height: 0.82rem;
   }
 
   .project-progress__label {
-    font-size: 0.65rem;
+    max-width: 100%;
+
+    overflow-wrap: anywhere;
+
+    font-size: 0.6rem;
+
+    line-height: 1.2;
   }
 
   /* =====================================================
-       PROJECT DISPLAY
-    ====================================================== */
+     MOBILE PROJECT DISPLAY
+
+     Only the currently active project is displayed.
+     projects.js / animations.js control which panel receives
+     .is-active.
+     ===================================================== */
 
   .project-display {
-    margin-top: 0.9rem;
+    min-height: auto;
+
+    margin-top: 0.8rem;
   }
 
   .project-panel {
@@ -1755,9 +2991,11 @@
 
     display: none;
 
-    min-height: 470px;
+    width: 100%;
 
-    padding: 1.25rem 1.05rem;
+    min-height: clamp(455px, 67vh, 535px);
+
+    overflow: hidden;
 
     border-radius: var(--radius-lg);
 
@@ -1774,8 +3012,33 @@
     display: flex;
   }
 
+  .project-panel__content {
+    width: 100%;
+    height: auto;
+
+    min-height: clamp(455px, 67vh, 535px);
+
+    justify-content: center;
+
+    padding: 1.2rem 1rem;
+  }
+
+  .project-panel__meta,
+  .project-panel__name,
+  .project-panel__disciplines,
+  .project-preview,
+  .project-disclaimer {
+    width: 100%;
+  }
+
+  .project-panel__meta {
+    margin-bottom: 0.55rem;
+  }
+
   .project-panel__name {
-    font-size: clamp(2.9rem, 13.2vw, 4.7rem);
+    max-width: 100%;
+
+    font-size: clamp(2.7rem, 12.6vw, 4.45rem);
   }
 
   .project-panel:hover .project-panel__name,
@@ -1784,62 +3047,176 @@
   }
 
   .project-panel__disciplines {
-    margin-top: 0.9rem;
+    gap: 0.32rem;
+
+    margin-top: 0.75rem;
+  }
+
+  .project-panel__disciplines li {
+    padding: 0.3rem 0.5rem;
+
+    font-size: 0.62rem;
   }
 
   .project-preview {
-    width: 100%;
-
-    min-height: auto;
-
-    margin-top: 1rem;
+    margin-top: 0.85rem;
   }
 
   .project-preview__text {
+    max-width: 100%;
+
     opacity: 1;
 
     transform: none;
 
-    font-size: 0.94rem;
+    font-size: clamp(0.88rem, 3.6vw, 0.96rem);
 
-    line-height: 1.48;
+    line-height: 1.46;
   }
 
   .project-panel__actions {
-    margin-top: 1.2rem;
+    margin-top: 1rem;
+  }
+
+  .project-read-more {
+    min-height: 2.55rem;
+
+    font-size: 0.7rem;
   }
 
   .project-disclaimer {
-    margin-top: 0.8rem;
+    max-width: 100%;
+
+    margin-top: 0.7rem;
+
+    font-size: 0.58rem;
   }
 
   /* -----------------------------------------------------
-       PROJECT VISUALS
-    ----------------------------------------------------- */
+     ALL PROJECT VISUALS
+
+     Decorative visuals stay behind the readable project
+     information and become deliberately softer on mobile.
+     ----------------------------------------------------- */
+
+  .project-visual {
+    opacity: 0.5;
+  }
+
+  /* -----------------------------------------------------
+     NADA VISUAL
+     ----------------------------------------------------- */
 
   .project-visual--rhythm {
     justify-content: flex-end;
 
-    padding-right: 1rem;
+    padding-right: 0.65rem;
 
-    opacity: 0.55;
+    opacity: 0.34;
   }
+
+  .rhythm-line {
+    width: clamp(6px, 1.8vw, 9px);
+  }
+
+  /* -----------------------------------------------------
+     PULSE VISUAL
+     ----------------------------------------------------- */
 
   .project-visual--pulse {
-    transform: translateX(34%);
+    right: -13%;
+    left: auto;
 
-    opacity: 0.6;
+    width: 78%;
+
+    opacity: 0.4;
   }
 
-  .project-visual--sliders {
-    padding: 0 1rem 0 49%;
+  .pulse-ring--outer {
+    width: clamp(170px, 56vw, 270px);
+  }
 
-    opacity: 0.6;
+  .pulse-ring--middle {
+    width: clamp(125px, 42vw, 205px);
+  }
+
+  .pulse-ring--inner {
+    width: clamp(84px, 28vw, 138px);
+  }
+
+  .pulse-core {
+    width: clamp(40px, 13vw, 64px);
+  }
+
+  .pulse-marker {
+    width: 1.75rem;
+    height: 1.75rem;
+
+    font-size: 0.6rem;
+  }
+
+  /* -----------------------------------------------------
+     LEGA VISUAL
+
+     Mobile treats the rings and sliders as a soft background
+     system rather than a second column beside the copy.
+     ----------------------------------------------------- */
+
+  .project-visual--lega {
+    top: 0;
+    right: -7%;
+    bottom: 0;
+    left: auto;
+
+    width: 70%;
+
+    opacity: 0.38;
+  }
+
+  .project-visual--lega::before {
+    opacity: 0.72;
+  }
+
+  .lega-visual__orb {
+    top: clamp(1rem, 4vw, 1.6rem);
+
+    right: clamp(0.7rem, 3vw, 1.2rem);
+
+    width: clamp(120px, 38vw, 185px);
+  }
+
+  .lega-visual__core {
+    width: clamp(38px, 11vw, 54px);
+  }
+
+  .lega-visual__sliders {
+    right: clamp(0.75rem, 3vw, 1.2rem);
+
+    bottom: clamp(1.1rem, 5vw, 1.8rem);
+
+    width: min(82%, 210px);
+
+    gap: 0.52rem;
+  }
+
+  .lega-visual__slider {
+    height: 0.68rem;
+  }
+
+  .lega-visual__slider::before {
+    height: 1.5px;
+  }
+
+  .lega-visual__slider > span {
+    width: 0.74rem;
+    height: 0.74rem;
+
+    border-width: 1.5px;
   }
 
   /* =====================================================
-       PROJECT CONTROLS
-    ====================================================== */
+     PROJECT CONTROLS
+     ===================================================== */
 
   .project-controls {
     grid-template-columns:
@@ -1847,101 +3224,133 @@
       auto
       1fr;
 
-    gap: 0.45rem;
+    gap: 0.4rem;
 
-    margin-top: 0.8rem;
+    margin-top: 0.65rem;
   }
 
   .project-controls__button {
-    padding: 0.6rem 0.75rem;
+    min-height: 2.5rem;
 
-    font-size: 0.7rem;
+    padding: 0.52rem 0.68rem;
+
+    font-size: 0.68rem;
   }
 
   .project-controls__counter {
-    font-size: 0.7rem;
+    min-width: 3.5rem;
+
+    font-size: 0.68rem;
   }
 
   .projects__interaction-hint {
-    margin-top: 0.6rem;
+    margin-top: 0.42rem;
 
-    font-size: 0.64rem;
+    font-size: 0.61rem;
   }
 
   .scene-next--contact {
     align-self: flex-start;
 
-    margin-top: 0.9rem;
+    margin-top: 0.75rem;
   }
 
   /* =====================================================
-       CONTACT
-    ====================================================== */
+     CONTACT
+     ===================================================== */
 
   .contact {
     justify-content: flex-start;
   }
 
   .contact .scene-indicator {
-    margin-bottom: 2rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .contact__content {
+    width: 100%;
+  }
+
+  .contact__eyebrow {
+    margin-bottom: 0.8rem;
   }
 
   .contact__title {
-    font-size: clamp(3rem, 14.5vw, 5rem);
+    font-size: clamp(2.9rem, 14vw, 4.75rem);
   }
 
   .contact__description {
-    margin-top: 1.3rem;
+    max-width: 520px;
 
-    font-size: 0.98rem;
+    margin-top: 1.15rem;
+
+    font-size: clamp(0.92rem, 3.8vw, 1rem);
+
+    line-height: 1.52;
   }
 
   .contact-links {
-    margin-top: 1.9rem;
+    width: 100%;
+
+    gap: 0.45rem;
+
+    margin-top: 1.55rem;
   }
 
   .contact-link {
     grid-template-columns:
-      82px
+      74px
       minmax(0, 1fr)
       auto;
 
-    gap: 0.65rem;
+    gap: 0.6rem;
 
-    padding: 0.82rem 0.9rem;
+    padding: 0.76rem 0.82rem;
 
     border-radius: var(--radius-md);
   }
 
+  .contact-link__type {
+    font-size: 0.61rem;
+  }
+
   .contact-link__value {
-    font-size: clamp(1rem, 4.8vw, 1.35rem);
+    font-size: clamp(0.96rem, 4.5vw, 1.28rem);
   }
 
   .contact__brand {
-    right: -8%;
+    right: -9%;
     bottom: 2%;
 
-    font-size: clamp(8rem, 42vw, 12.5rem);
+    max-width: 88vw;
+
+    font-size: clamp(7.5rem, 39vw, 12rem);
   }
 
   .contact__restart {
     align-self: flex-start;
+
+    margin-top: 1.1rem;
   }
 
-  /* =====================================================
-       CONTACT SHAPES
-    ====================================================== */
+  /* -----------------------------------------------------
+     CONTACT SHAPES
+     ----------------------------------------------------- */
 
   .shape--contact-one {
-    top: 9%;
-    right: -20%;
+    top: 8%;
+    right: -22%;
 
-    width: clamp(145px, 44vw, 230px);
+    width: clamp(135px, 41vw, 215px);
+
+    opacity: 0.52;
   }
 
   .shape--contact-two {
-    right: 8%;
+    right: 6%;
     bottom: 5%;
+
+    opacity: 0.72;
   }
 
   .shape--contact-three {
@@ -1949,27 +3358,34 @@
   }
 
   /* =====================================================
-       FOOTER
-    ====================================================== */
+     FOOTER
+     ===================================================== */
 
   .site-footer {
     display: flex;
+
     flex-direction: column;
 
     align-items: flex-start;
 
-    gap: 0.5rem;
+    gap: 0.45rem;
 
-    padding: 1.3rem 0 1.6rem;
+    padding: 1.2rem 0 1.5rem;
+  }
+
+  .site-footer__message {
+    display: none;
   }
 
   .site-footer__copyright {
     justify-self: auto;
+
+    text-align: left;
   }
 }
-
 /* =========================================================
    06 — SMALL MOBILE
+
    480px AND BELOW
    ========================================================= */
 
@@ -1979,98 +3395,228 @@
   }
 
   /* =====================================================
-       HEADER
-    ====================================================== */
+     HEADER
+     ===================================================== */
 
   .settings-toggle,
   .nav-toggle {
-    width: 2.35rem;
-    height: 2.35rem;
+    width: 2.3rem;
+    height: 2.3rem;
   }
 
   .settings-toggle__icon {
-    font-size: 0.68rem;
+    font-size: 0.67rem;
+  }
+
+  .language-switcher {
+    padding: 0.24rem 0.34rem;
+  }
+
+  .language-switcher__button {
+    min-width: 1.4rem;
+
+    font-size: 0.6rem;
   }
 
   /* =====================================================
-       WELCOME
-    ====================================================== */
+     WELCOME
+     ===================================================== */
+
+  .welcome__sequence {
+    min-height: clamp(410px, 61vh, 510px);
+  }
 
   .welcome__title {
-    font-size: clamp(2.9rem, 17vw, 4.4rem);
+    font-size: clamp(2.8rem, 16.5vw, 4.25rem);
   }
 
   .welcome__statement-text {
-    font-size: clamp(2.3rem, 13.5vw, 3.6rem);
+    font-size: clamp(2.15rem, 12.8vw, 3.45rem);
   }
 
   .welcome-specialism {
-    font-size: 0.82rem;
+    min-height: clamp(52px, 7vh, 64px);
+
+    padding: 0.58rem 0.75rem;
+  }
+
+  .welcome-specialism--ui {
+    left: 27%;
+
+    width: min(70vw, 270px);
+
+    font-size: clamp(1.35rem, 7vw, 1.9rem);
+  }
+
+  .welcome-specialism--interaction {
+    left: 1%;
+
+    width: 98%;
+
+    font-size: clamp(1.55rem, 7.5vw, 2.15rem);
+  }
+
+  .welcome-specialism--frontend {
+    right: 13%;
+
+    width: min(70vw, 275px);
+
+    font-size: clamp(1.4rem, 7vw, 1.95rem);
   }
 
   /* =====================================================
-       ABOUT
-    ====================================================== */
+     ABOUT
+     ===================================================== */
 
   .about__title {
-    font-size: clamp(2.4rem, 13.5vw, 3.6rem);
+    font-size: clamp(2.3rem, 13vw, 3.45rem);
+  }
+
+  .about__story {
+    font-size: clamp(0.9rem, 4vw, 0.99rem);
   }
 
   .travel-story {
-    padding: 1rem;
+    padding: 0.9rem;
+  }
+
+  .travel-route {
+    height: clamp(110px, 29vw, 130px);
   }
 
   .travel-location--destination .travel-location__city {
-    font-size: clamp(1.2rem, 6.4vw, 1.55rem);
+    font-size: clamp(1.15rem, 6vw, 1.48rem);
   }
 
   /* =====================================================
-       SERVICES
-    ====================================================== */
+     WHAT I DO
+     ===================================================== */
 
   .services__title {
-    font-size: clamp(2.2rem, 12.5vw, 3.4rem);
+    font-size: clamp(2.05rem, 12vw, 3.2rem);
+  }
+
+  .discipline-playground,
+  .discipline-playground.has-active {
+    gap: 0.62rem;
+
+    margin-top: 1.05rem;
+  }
+
+  .discipline,
+  .discipline-playground.has-active .discipline {
+    min-height: 128px;
+  }
+
+  .discipline__trigger {
+    min-height: 128px;
+
+    padding: 0.9rem;
   }
 
   .discipline__title {
-    font-size: clamp(1.75rem, 9.5vw, 2.5rem);
+    font-size: clamp(1.6rem, 9vw, 2.3rem);
+  }
+
+  .discipline__symbol {
+    right: 0.8rem;
+    bottom: 0.8rem;
+
+    width: 1.95rem;
+    height: 1.95rem;
+  }
+
+  .discipline.is-active .discipline__trigger {
+    padding: 0.9rem 0.95rem 0.55rem;
+  }
+
+  .discipline.is-active .discipline__title {
+    font-size: clamp(1.8rem, 9.4vw, 2.55rem);
+  }
+
+  .discipline.is-active .discipline__details {
+    padding: 0 0.95rem 1rem;
+  }
+
+  .discipline.is-active .discipline__description {
+    font-size: 0.9rem;
   }
 
   /* =====================================================
-       PROJECTS
-    ====================================================== */
+     PROJECTS
+     ===================================================== */
 
   .projects__title {
-    font-size: clamp(2.2rem, 12.5vw, 3.4rem);
+    font-size: clamp(2.05rem, 12vw, 3.2rem);
   }
 
   .project-stage {
-    padding: 0.7rem;
+    padding: 0.58rem;
   }
 
-  .project-panel {
-    min-height: 450px;
+  /* -----------------------------------------------------
+     THREE PROJECT MARKERS
 
-    padding: 1.15rem 0.95rem;
+     Keep all three labels readable without making the
+     horizontal selector feel crowded.
+     ----------------------------------------------------- */
+
+  .project-progress__markers {
+    gap: 0.14rem;
+  }
+
+  .project-progress__marker {
+    min-width: 0;
+
+    padding-inline: 0.04rem;
+  }
+
+  .project-progress__label {
+    max-width: 100%;
+
+    font-size: 0.56rem;
+
+    line-height: 1.15;
+
+    overflow-wrap: anywhere;
+  }
+
+  .project-panel,
+  .project-panel__content {
+    min-height: 445px;
+  }
+
+  .project-panel__content {
+    padding: 1.05rem 0.88rem;
   }
 
   .project-panel__name {
-    font-size: clamp(2.65rem, 14.2vw, 4.1rem);
+    font-size: clamp(2.45rem, 13.5vw, 3.9rem);
   }
 
   .project-panel__disciplines {
-    gap: 0.3rem;
+    gap: 0.28rem;
   }
 
   .project-panel__disciplines li {
-    padding: 0.32rem 0.5rem;
+    padding: 0.3rem 0.46rem;
 
-    font-size: 0.64rem;
+    font-size: 0.61rem;
   }
 
   .project-preview__text {
-    font-size: 0.91rem;
+    font-size: 0.88rem;
   }
+
+  .project-read-more {
+    min-height: 2.5rem;
+
+    font-size: 0.68rem;
+  }
+
+  /* -----------------------------------------------------
+     Compact circular previous / next buttons.
+     ----------------------------------------------------- */
 
   .project-controls__button span:not([aria-hidden="true"]) {
     display: none;
@@ -2080,6 +3626,8 @@
     width: 2.4rem;
     height: 2.4rem;
 
+    min-height: 0;
+
     justify-content: center;
 
     padding: 0;
@@ -2087,25 +3635,95 @@
     border-radius: 50%;
   }
 
+  /* -----------------------------------------------------
+     PULSE — SMALL MOBILE
+     ----------------------------------------------------- */
+
+  .project-visual--pulse {
+    right: -20%;
+
+    width: 90%;
+  }
+
+  /* -----------------------------------------------------
+     LEGA — SMALL MOBILE
+
+     Push the decorative system slightly farther right and
+     scale the orb down so the copy remains the main focus.
+     ----------------------------------------------------- */
+
+  .project-visual--lega {
+    right: -12%;
+
+    width: 76%;
+
+    opacity: 0.34;
+  }
+
+  .lega-visual__orb {
+    top: 0.8rem;
+    right: 0.55rem;
+
+    width: clamp(102px, 36vw, 150px);
+  }
+
+  .lega-visual__core {
+    width: clamp(32px, 10vw, 44px);
+  }
+
+  .lega-visual__sliders {
+    right: 0.55rem;
+    bottom: 0.9rem;
+
+    width: min(84%, 175px);
+
+    gap: 0.42rem;
+  }
+
+  .lega-visual__slider {
+    height: 0.6rem;
+  }
+
+  .lega-visual__slider > span {
+    width: 0.68rem;
+    height: 0.68rem;
+  }
+
   /* =====================================================
-       CONTACT
-    ====================================================== */
+     CONTACT
+     ===================================================== */
 
   .contact__title {
-    font-size: clamp(2.8rem, 15.5vw, 4.4rem);
+    font-size: clamp(2.65rem, 15vw, 4.2rem);
+  }
+
+  .contact__description {
+    font-size: 0.92rem;
   }
 
   .contact-link {
     grid-template-columns:
-      64px
+      60px
       minmax(0, 1fr)
       auto;
 
-    padding: 0.8rem;
+    gap: 0.5rem;
+
+    padding: 0.72rem;
   }
 
   .contact-link__type {
-    font-size: 0.6rem;
+    font-size: 0.57rem;
+  }
+
+  .contact-link__value {
+    font-size: clamp(0.9rem, 4.3vw, 1.12rem);
+  }
+
+  .contact__brand {
+    right: -12%;
+
+    font-size: clamp(7rem, 42vw, 10rem);
   }
 }
 
@@ -2114,15 +3732,52 @@
    ========================================================= */
 
 @media (hover: none) and (pointer: coarse) {
+  /* =====================================================
+     CUSTOM CURSOR
+     ===================================================== */
+
   .custom-cursor {
     display: none;
   }
 
+  /* =====================================================
+     REMOVE DESKTOP-ONLY HOVER MOVEMENT
+
+     Touch devices should never depend on hover state to
+     reveal content or communicate interaction.
+     ===================================================== */
+
   .discipline:hover {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .discipline:not(.is-active):hover .discipline__symbol {
     transform: none;
   }
 
+  .discipline.is-active:hover .discipline__symbol {
+    transform: rotate(45deg);
+  }
+
   .project-panel:hover .project-panel__name {
+    transform: none;
+  }
+
+  .project-panel:hover .project-preview__text {
+    opacity: 1;
+
+    transform: none;
+  }
+
+  .project-read-more:hover {
+    transform: none;
+  }
+
+  .project-controls__button:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .project-progress__marker:hover {
     transform: none;
   }
 
@@ -2130,68 +3785,325 @@
     transform: none;
   }
 
-  .project-read-more:hover {
+  .contact-link:hover .contact-link__arrow {
+    transform: none;
+  }
+
+  .scene-next:hover,
+  .scene-progress__continue:hover,
+  .contact__restart:hover {
+    transform: none;
+  }
+
+  /* -----------------------------------------------------
+     LEGA TOUCH SAFETY
+
+     The desktop Lega visual has hover animation. Touch
+     devices keep the visual static so tapped project cards
+     cannot leave a sticky hover animation running.
+     ----------------------------------------------------- */
+
+  .project-panel--lega:hover .lega-visual__ring {
+    animation: none;
+  }
+
+  .project-panel--lega:hover .lega-visual__core {
+    transform: none;
+  }
+
+  /* -----------------------------------------------------
+     IMPORTANT PROJECT CONTENT
+
+     Descriptions remain visible without requiring hover.
+     ----------------------------------------------------- */
+
+  .project-preview__text {
+    opacity: 1;
+
     transform: none;
   }
 }
 
 /* =========================================================
    08 — SHORT LANDSCAPE SCREENS
+
+   Wide device + short viewport.
+
+   Covers:
+   - short laptops
+   - landscape tablets
+   - rotated large mobile devices
+
+   The page is allowed to become taller than the physical
+   viewport rather than crushing pinned content vertically.
    ========================================================= */
 
 @media (max-height: 620px) and (min-width: 721px) {
+  /* =====================================================
+     SCENE SAFETY
+     ===================================================== */
+
   .scene {
-    min-height: 660px;
+    min-height: 650px;
   }
 
   .scene__inner {
-    min-height: calc(660px - var(--header-height) - 2.4rem);
+    min-height: calc(650px - var(--header-height) - 2.25rem);
   }
 
-  .welcome__title {
-    font-size: clamp(3.1rem, 7vw, 5.3rem);
+  /* =====================================================
+     WELCOME
+     ===================================================== */
+
+  .welcome {
+    justify-content: center;
   }
 
-  .welcome__eyebrow {
-    margin-bottom: 0.9rem;
-  }
-
-  .discipline-playground {
-    height: 390px;
-  }
-
-  .project-stage {
+  .welcome__sequence {
     min-height: 390px;
   }
 
+  .welcome__eyebrow {
+    margin-bottom: 0.7rem;
+  }
+
+  .welcome__title {
+    font-size: clamp(3rem, 6.5vw, 5rem);
+  }
+
+  .welcome-specialism {
+    min-height: 52px;
+
+    padding: 0.55rem 0.85rem;
+  }
+
+  .welcome-specialism--ui {
+    top: 2%;
+
+    font-size: clamp(1.45rem, 2.9vw, 2.4rem);
+  }
+
+  .welcome-specialism--interaction {
+    top: 35%;
+
+    font-size: clamp(1.8rem, 3.7vw, 3rem);
+  }
+
+  .welcome-specialism--frontend {
+    bottom: 0;
+
+    font-size: clamp(1.55rem, 3.1vw, 2.5rem);
+  }
+
+  .welcome__statement-text {
+    font-size: clamp(2.55rem, 6.1vw, 4.5rem);
+  }
+
+  /* =====================================================
+     ABOUT
+     ===================================================== */
+
+  .about {
+    gap: 1rem;
+  }
+
+  .about__title {
+    font-size: clamp(2.2rem, 4.2vw, 3.5rem);
+  }
+
+  .about__story {
+    gap: 0.5rem;
+
+    margin-top: 0.75rem;
+  }
+
+  .travel-story {
+    min-height: 165px;
+
+    padding: 0.8rem;
+  }
+
+  .travel-route {
+    height: 112px;
+  }
+
+  /* =====================================================
+     WHAT I DO
+     ===================================================== */
+
+  .discipline-playground {
+    height: 355px;
+  }
+
+  .discipline__title {
+    font-size: clamp(1.35rem, 2.8vw, 2.2rem);
+  }
+
+  .discipline-playground.has-active .discipline {
+    height: min(100%, 270px);
+  }
+
+  .discipline.is-active .discipline__title {
+    font-size: clamp(1.7rem, 3.2vw, 2.7rem);
+  }
+
+  /* =====================================================
+     PROJECTS
+     ===================================================== */
+
+  .project-stage {
+    min-height: 365px;
+  }
+
   .project-panel__name {
-    font-size: clamp(2.7rem, 5vw, 4.6rem);
+    font-size: clamp(2.4rem, 4.7vw, 4.1rem);
+  }
+
+  .project-panel__content {
+    padding: 0.9rem 1.05rem;
+  }
+
+  .project-preview__text {
+    line-height: 1.35;
+  }
+
+  /* -----------------------------------------------------
+     THREE PROJECT RAIL
+     ----------------------------------------------------- */
+
+  .project-progress__markers {
+    justify-content: space-evenly;
+  }
+
+  .project-progress__marker {
+    min-height: 2.1rem;
+  }
+
+  /* -----------------------------------------------------
+     LEGA — SHORT LANDSCAPE
+
+     Keep the reflection graphic compact enough for the
+     reduced vertical space.
+     ----------------------------------------------------- */
+
+  .project-visual--lega {
+    width: 36%;
+  }
+
+  .lega-visual__orb {
+    top: 0.85rem;
+
+    right: clamp(0.9rem, 2vw, 1.4rem);
+
+    width: clamp(92px, 12vw, 138px);
+  }
+
+  .lega-visual__core {
+    width: clamp(30px, 3.8vw, 44px);
+  }
+
+  .lega-visual__sliders {
+    right: clamp(0.9rem, 2vw, 1.4rem);
+
+    bottom: 0.85rem;
+
+    width: min(74%, 185px);
+
+    gap: 0.4rem;
+  }
+
+  .lega-visual__slider {
+    height: 0.62rem;
+  }
+
+  .lega-visual__slider > span {
+    width: 0.68rem;
+    height: 0.68rem;
+  }
+
+  /* =====================================================
+     CONTACT
+     ===================================================== */
+
+  .contact__title {
+    font-size: clamp(2.85rem, 6.2vw, 4.7rem);
+  }
+
+  .contact__description {
+    margin-top: 0.8rem;
+  }
+
+  .contact-links {
+    margin-top: 1.05rem;
   }
 }
-
 /* =========================================================
-   09 — VERY SHORT MOBILE LANDSCAPE
+   09 — VERY SHORT MOBILE / TABLET LANDSCAPE
+
+   520px HEIGHT AND BELOW
    ========================================================= */
 
 @media (max-height: 520px) and (max-width: 960px) {
+  /* =====================================================
+     SCENE SAFETY
+
+     Interactive scenes are given a minimum physical canvas
+     instead of being forced into a tiny landscape viewport.
+     ===================================================== */
+
   .scene {
-    min-height: 620px;
+    min-height: 610px;
   }
+
+  .scene__inner {
+    min-height: calc(610px - var(--header-height) - 2.2rem);
+  }
+
+  /* =====================================================
+     WELCOME
+     ===================================================== */
 
   .welcome {
     justify-content: flex-start;
 
-    padding-top: 1.8rem;
+    padding-top: 1.2rem;
+  }
+
+  .welcome__sequence {
+    min-height: 400px;
   }
 
   .welcome__title {
-    font-size: clamp(2.9rem, 9.5vw, 4.5rem);
+    font-size: clamp(2.7rem, 8.5vw, 4.15rem);
   }
+
+  .welcome__statement-text {
+    font-size: clamp(2.25rem, 7.6vw, 3.75rem);
+  }
+
+  .welcome-specialism--ui {
+    top: 3%;
+  }
+
+  .welcome-specialism--interaction {
+    top: 36%;
+  }
+
+  .welcome-specialism--frontend {
+    bottom: 1%;
+  }
+
+  /* -----------------------------------------------------
+     Continue becomes part of normal layout.
+
+     This prevents it overlapping the large graphic text on
+     extremely short landscape screens.
+     ----------------------------------------------------- */
 
   .scene-progress {
     position: static;
 
-    margin-top: 2.5rem;
+    margin-top: 1.8rem;
 
     justify-items: start;
   }
@@ -2199,29 +4111,249 @@
   .scene-progress__hint {
     text-align: left;
   }
+
+  /* =====================================================
+     ABOUT
+     ===================================================== */
+
+  .about {
+    justify-content: flex-start;
+  }
+
+  /* =====================================================
+     SERVICES
+     ===================================================== */
+
+  .services {
+    justify-content: flex-start;
+  }
+
+  /* =====================================================
+     PROJECTS
+     ===================================================== */
+
+  .projects {
+    justify-content: flex-start;
+  }
+
+  /* -----------------------------------------------------
+     LEGA — VERY SHORT SAFETY
+
+     Keep the decorative visual compact enough that the
+     project copy never feels squeezed vertically.
+     ----------------------------------------------------- */
+
+  .project-visual--lega {
+    width: 34%;
+  }
+
+  .lega-visual__orb {
+    top: 0.7rem;
+
+    width: clamp(84px, 11vw, 125px);
+  }
+
+  .lega-visual__sliders {
+    bottom: 0.7rem;
+
+    width: min(72%, 165px);
+
+    gap: 0.34rem;
+  }
+
+  /* =====================================================
+     CONTACT
+     ===================================================== */
+
+  .contact {
+    justify-content: flex-start;
+  }
 }
 
 /* =========================================================
-   10 — REDUCED MOTION
+   10 — VERY NARROW MOBILE SAFETY
+
+   Prevent unusually narrow devices or enlarged browser text
+   from forcing long labels outside cards.
+   ========================================================= */
+
+@media (max-width: 380px) {
+  :root {
+    --page-padding: 0.72rem;
+  }
+
+  /* -----------------------------------------------------
+     HEADER
+     ----------------------------------------------------- */
+
+  .site-logo {
+    font-size: 0.94rem;
+  }
+
+  .header-controls {
+    gap: 0.26rem;
+  }
+
+  .language-switcher {
+    padding: 0.22rem 0.28rem;
+  }
+
+  .language-switcher__button {
+    min-width: 1.3rem;
+
+    font-size: 0.57rem;
+  }
+
+  .settings-toggle,
+  .nav-toggle {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+
+  /* -----------------------------------------------------
+     WELCOME
+     ----------------------------------------------------- */
+
+  .welcome__title {
+    font-size: clamp(2.65rem, 16vw, 3.8rem);
+  }
+
+  .welcome-specialism--interaction {
+    font-size: clamp(1.4rem, 7.2vw, 1.95rem);
+  }
+
+  .welcome-specialism--ui,
+  .welcome-specialism--frontend {
+    font-size: clamp(1.25rem, 6.5vw, 1.75rem);
+  }
+
+  /* -----------------------------------------------------
+     DISCIPLINES
+     ----------------------------------------------------- */
+
+  .discipline__title,
+  .discipline.is-active .discipline__title {
+    overflow-wrap: anywhere;
+  }
+
+  /* -----------------------------------------------------
+     PROJECTS
+     ----------------------------------------------------- */
+
+  .project-panel__name {
+    font-size: clamp(2.25rem, 13vw, 3.45rem);
+
+    overflow-wrap: anywhere;
+  }
+
+  .project-panel__disciplines li {
+    font-size: 0.58rem;
+  }
+
+  /*
+   * Three project labels now share the horizontal rail.
+   * Reduce them slightly on unusually narrow screens.
+   */
+
+  .project-progress__markers {
+    gap: 0.08rem;
+  }
+
+  .project-progress__label {
+    font-size: 0.52rem;
+
+    line-height: 1.1;
+  }
+
+  .project-progress__dot {
+    width: 0.72rem;
+    height: 0.72rem;
+  }
+
+  /* -----------------------------------------------------
+     LEGA — VERY NARROW MOBILE
+     ----------------------------------------------------- */
+
+  .project-visual--lega {
+    right: -15%;
+
+    width: 80%;
+  }
+
+  .lega-visual__orb {
+    width: clamp(92px, 34vw, 132px);
+  }
+
+  .lega-visual__sliders {
+    width: min(82%, 155px);
+  }
+
+  /* -----------------------------------------------------
+     CONTACT
+     ----------------------------------------------------- */
+
+  .contact__title {
+    font-size: clamp(2.45rem, 14vw, 3.65rem);
+  }
+
+  .contact-link {
+    grid-template-columns:
+      54px
+      minmax(0, 1fr)
+      auto;
+  }
+
+  .contact-link__value {
+    overflow-wrap: anywhere;
+  }
+}
+
+/* =========================================================
+   11 — SYSTEM REDUCED MOTION
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .shape,
   .welcome-specialism,
+  .welcome__name,
+  .welcome__statement-text,
   .travel-plane,
   .discipline,
+  .discipline__symbol,
+  .discipline__details,
   .project-panel,
+  .project-panel__name,
   .project-preview__text,
+  .project-progress__marker,
+  .project-progress__dot,
+  .project-progress__fill,
   .rhythm-line,
   .pulse-ring,
-  .lega-slider i,
+  .pulse-core,
+  .pulse-marker,
+  .lega-visual__ring,
+  .lega-visual__core,
+  .lega-visual__slider,
+  .lega-visual__slider > span,
   .contact-link,
-  .project-progress__marker,
-  .scene-progress__arrow {
+  .contact-link__arrow,
+  .contact__brand,
+  .scene-progress__arrow,
+  .scene-next,
+  .scene-progress__continue,
+  .contact__restart {
     animation: none !important;
 
     transition: none !important;
   }
+
+  /* -----------------------------------------------------
+     PROJECT CONTENT MUST REMAIN READABLE
+     ----------------------------------------------------- */
 
   .project-preview__text {
     opacity: 1;
@@ -2229,13 +4361,69 @@
     transform: none;
   }
 
-  .project-panel {
+  .project-panel,
+  .project-panel.is-active {
+    transform: none;
+  }
+
+  /* -----------------------------------------------------
+     LEGA REDUCED MOTION
+
+     Keep the visual fully static while preserving its final
+     readable decorative composition.
+     ----------------------------------------------------- */
+
+  .project-panel--lega:hover .lega-visual__ring,
+  .project-panel--lega:focus-within .lega-visual__ring {
+    animation: none !important;
+
+    transform: none;
+  }
+
+  .project-panel--lega:hover .lega-visual__core,
+  .project-panel--lega:focus-within .lega-visual__core {
+    transform: none;
+  }
+
+  /* -----------------------------------------------------
+     DISCIPLINE CONTENT
+     ----------------------------------------------------- */
+
+  .discipline:not(.is-active) {
+    transform: none;
+  }
+
+  /*
+   * Desktop/tablet active discipline centring is intentionally
+   * left to the layout breakpoint rather than globally forcing
+   * transform:none here.
+   */
+
+  /* -----------------------------------------------------
+     REMOVE HOVER MOTION
+     ----------------------------------------------------- */
+
+  .project-panel:hover .project-panel__name,
+  .project-panel:focus-within .project-panel__name {
+    transform: none;
+  }
+
+  .contact-link:hover,
+  .contact-link:focus-visible {
+    transform: none;
+  }
+
+  .project-progress__marker:hover,
+  .project-progress__marker.is-active {
     transform: none;
   }
 }
 
 /* =========================================================
-   11 — USER-SELECTED REDUCED MOTION
+   12 — USER-SELECTED REDUCED MOTION
+
+   Mirrors the system preference above when reduced motion is
+   enabled through the portfolio accessibility panel.
    ========================================================= */
 
 html[data-reduce-motion="true"] {
@@ -2244,16 +4432,92 @@ html[data-reduce-motion="true"] {
 
 html[data-reduce-motion="true"] .shape,
 html[data-reduce-motion="true"] .welcome-specialism,
+html[data-reduce-motion="true"] .welcome__name,
+html[data-reduce-motion="true"] .welcome__statement-text,
 html[data-reduce-motion="true"] .travel-plane,
 html[data-reduce-motion="true"] .discipline,
+html[data-reduce-motion="true"] .discipline__symbol,
+html[data-reduce-motion="true"] .discipline__details,
 html[data-reduce-motion="true"] .project-panel,
+html[data-reduce-motion="true"] .project-panel__name,
 html[data-reduce-motion="true"] .project-preview__text,
+html[data-reduce-motion="true"] .project-progress__marker,
+html[data-reduce-motion="true"] .project-progress__dot,
+html[data-reduce-motion="true"] .project-progress__fill,
 html[data-reduce-motion="true"] .rhythm-line,
 html[data-reduce-motion="true"] .pulse-ring,
-html[data-reduce-motion="true"] .lega-slider i,
+html[data-reduce-motion="true"] .pulse-core,
+html[data-reduce-motion="true"] .pulse-marker,
+html[data-reduce-motion="true"] .lega-visual__ring,
+html[data-reduce-motion="true"] .lega-visual__core,
+html[data-reduce-motion="true"] .lega-visual__slider,
+html[data-reduce-motion="true"] .lega-visual__slider > span,
 html[data-reduce-motion="true"] .contact-link,
-html[data-reduce-motion="true"] .project-progress__marker {
+html[data-reduce-motion="true"] .contact-link__arrow,
+html[data-reduce-motion="true"] .contact__brand,
+html[data-reduce-motion="true"] .scene-progress__arrow,
+html[data-reduce-motion="true"] .scene-next,
+html[data-reduce-motion="true"] .scene-progress__continue,
+html[data-reduce-motion="true"] .contact__restart {
   animation: none !important;
 
   transition: none !important;
+}
+
+/* ---------------------------------------------------------
+   USER REDUCED MOTION — PROJECTS
+   --------------------------------------------------------- */
+
+html[data-reduce-motion="true"] .project-preview__text {
+  opacity: 1;
+
+  transform: none;
+}
+
+html[data-reduce-motion="true"] .project-panel,
+html[data-reduce-motion="true"] .project-panel.is-active {
+  transform: none;
+}
+
+/* ---------------------------------------------------------
+   USER REDUCED MOTION — LEGA
+   --------------------------------------------------------- */
+
+html[data-reduce-motion="true"] .project-panel--lega:hover .lega-visual__ring,
+html[data-reduce-motion="true"]
+  .project-panel--lega:focus-within
+  .lega-visual__ring {
+  animation: none !important;
+
+  transform: none;
+}
+
+html[data-reduce-motion="true"] .project-panel--lega:hover .lega-visual__core,
+html[data-reduce-motion="true"]
+  .project-panel--lega:focus-within
+  .lega-visual__core {
+  transform: none;
+}
+
+/* ---------------------------------------------------------
+   USER REDUCED MOTION — CLOSED DISCIPLINES
+   --------------------------------------------------------- */
+
+html[data-reduce-motion="true"] .discipline:not(.is-active) {
+  transform: none;
+}
+
+/* ---------------------------------------------------------
+   USER REDUCED MOTION — HOVER / FOCUS
+   --------------------------------------------------------- */
+
+html[data-reduce-motion="true"] .project-panel:hover .project-panel__name,
+html[data-reduce-motion="true"]
+  .project-panel:focus-within
+  .project-panel__name,
+html[data-reduce-motion="true"] .contact-link:hover,
+html[data-reduce-motion="true"] .contact-link:focus-visible,
+html[data-reduce-motion="true"] .project-progress__marker:hover,
+html[data-reduce-motion="true"] .project-progress__marker.is-active {
+  transform: none;
 }
