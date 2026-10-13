@@ -1,12 +1,3 @@
-/* =========================================================
-   F.LIYANTO PORTFOLIO
-   MAIN STYLES
-   ========================================================= */
-
-/* =========================================================
-   01 — DESIGN SYSTEM
-   ========================================================= */
-
 :root {
   --color-background: #efe5d5;
   --color-background-deep: #e7dac8;
@@ -44,20 +35,17 @@
 
   --font-primary: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-  --font-size-xs: 0.72rem;
-  --font-size-sm: 0.86rem;
+  --font-size-xs: 0.76rem;
+  --font-size-sm: 0.9rem;
   --font-size-base: 1rem;
-  --font-size-md: 1.15rem;
-  --font-size-lg: 1.4rem;
+  --font-size-md: 1.18rem;
+  --font-size-lg: 1.45rem;
 
   --font-display-small: clamp(2.4rem, 4.5vw, 4.7rem);
-
   --font-display-medium: clamp(4rem, 7.5vw, 8.2rem);
-
   --font-display-large: clamp(5rem, 10vw, 10.5rem);
 
   --page-width: 1500px;
-
   --page-padding: clamp(1.4rem, 3.5vw, 4rem);
 
   --header-height: 86px;
@@ -69,90 +57,88 @@
   --radius-pill: 999px;
 
   --shadow-soft: 0 18px 55px rgba(57, 43, 31, 0.075);
-
   --shadow-card: 0 26px 70px rgba(57, 43, 31, 0.1);
-
   --shadow-medium: 0 30px 90px rgba(57, 43, 31, 0.14);
+  --shadow-modal: 0 40px 120px rgba(32, 29, 26, 0.22);
 
   --transition-fast: 160ms ease;
-
   --transition-base: 280ms cubic-bezier(0.22, 1, 0.36, 1);
-
   --transition-slow: 650ms cubic-bezier(0.22, 1, 0.36, 1);
 
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* =========================================================
-   02 — DOCUMENT
-   ========================================================= */
-
 html {
   background: var(--color-background);
-
   scroll-behavior: auto;
-
   text-rendering: optimizeLegibility;
-
   -webkit-font-smoothing: antialiased;
-
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   position: relative;
-
   min-height: 100vh;
-
   overflow-x: hidden;
-
   background: var(--color-background);
-
   color: var(--color-text);
-
   font-family: var(--font-primary);
-
   font-size: var(--font-size-base);
-
   line-height: 1.5;
 }
 
-body.nav-open {
+body.nav-open,
+body.modal-open {
   overflow: hidden;
 }
 
 ::selection {
   background: var(--color-coral);
-
   color: var(--color-surface);
 }
 
-/* =========================================================
-   03 — ACCESSIBILITY
-   ========================================================= */
+button,
+a,
+input,
+select,
+textarea,
+summary {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+dialog {
+  color: inherit;
+  font: inherit;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
 
 .skip-link {
   position: fixed;
-
   top: 1rem;
   left: 1rem;
-
   z-index: 9999;
-
   padding: 0.8rem 1.15rem;
-
   transform: translateY(-180%);
-
   border-radius: var(--radius-pill);
-
   background: var(--color-text);
-
   color: var(--color-background);
-
   font-size: var(--font-size-sm);
-
   font-weight: 700;
-
   transition: transform var(--transition-base);
 }
 
@@ -160,133 +146,102 @@ body.nav-open {
   transform: translateY(0);
 }
 
-/* =========================================================
-   04 — MAIN SCENE SYSTEM
-   ========================================================= */
-
 .portfolio-experience {
   position: relative;
-
   width: 100%;
 }
 
 .scene {
   position: relative;
-
   min-height: 100svh;
-
-  overflow: hidden;
-
   isolation: isolate;
+  padding: calc(var(--header-height) + 1.8rem) var(--page-padding)
+    clamp(3rem, 5vw, 5rem);
+}
 
-  padding: calc(var(--header-height) + 1.6rem) var(--page-padding) 2.2rem;
+.scene--welcome,
+.scene--about,
+.scene--contact {
+  overflow: clip;
+}
+
+.scene--services,
+.scene--projects {
+  overflow: visible;
 }
 
 .scene__inner {
   position: relative;
-
   z-index: 5;
-
   width: min(100%, var(--page-width));
-
-  min-height: calc(100svh - var(--header-height) - 3.8rem);
-
+  min-height: calc(100svh - var(--header-height) - 5rem);
   margin-inline: auto;
+}
+
+.scene--services .scene__inner,
+.scene--projects .scene__inner {
+  min-height: 0;
 }
 
 .scene-indicator {
   position: relative;
-
   z-index: 8;
-
   display: flex;
-
   width: fit-content;
-
   align-items: center;
-
   gap: 0.7rem;
-
   color: var(--color-text-soft);
-
   font-size: var(--font-size-xs);
-
   font-weight: 750;
-
   letter-spacing: 0.08em;
-
   text-transform: uppercase;
 }
 
 .scene-indicator__line {
   width: 2.4rem;
   height: 1px;
-
   background: var(--color-border-strong);
 }
 
-/* =========================================================
-   05 — DECORATIVE SCENE SHAPES
-   ========================================================= */
+.scene[data-scene-status="inactive"] {
+  pointer-events: none;
+}
+
+.scene[data-scene-status="active"] {
+  pointer-events: auto;
+}
 
 .scene-shapes {
   position: absolute;
-
   inset: 0;
-
   z-index: 1;
-
   overflow: hidden;
-
   pointer-events: none;
 }
 
 .shape {
   position: absolute;
-
   display: block;
-
   pointer-events: none;
-
   user-select: none;
-
   will-change: transform, opacity;
 }
 
-/* =========================================================
-   06 — HEADER
-   ========================================================= */
-
 .site-header {
   position: fixed;
-
   top: 0;
   left: 0;
-
   z-index: 1000;
-
   display: grid;
-
   width: 100%;
   height: var(--header-height);
-
-  grid-template-columns:
-    1fr
-    auto
-    1fr;
-
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-
   padding-inline: var(--page-padding);
-
   border-bottom: 1px solid transparent;
-
   background: rgba(239, 229, 213, 0.74);
-
   backdrop-filter: blur(20px) saturate(1.08);
-
   -webkit-backdrop-filter: blur(20px) saturate(1.08);
-
   transition:
     border-color var(--transition-base),
     background var(--transition-base),
@@ -295,102 +250,64 @@ body.nav-open {
 
 .site-header.is-scrolled {
   border-bottom-color: var(--color-border);
-
   background: rgba(239, 229, 213, 0.92);
-
   box-shadow: 0 8px 30px rgba(57, 43, 31, 0.035);
 }
 
-/* =========================================================
-   07 — F.L WORDMARK
-   ========================================================= */
-
 .site-logo {
   justify-self: start;
-
   display: inline-flex;
-
   min-width: 3.6rem;
   min-height: 3.6rem;
-
   align-items: center;
-
   color: var(--color-text);
-
   font-size: 1.15rem;
-
   font-weight: 900;
-
   letter-spacing: -0.06em;
 }
 
 .site-logo__mark {
   position: relative;
-
   display: inline-block;
 }
 
 .site-logo__mark::after {
   content: "";
-
   position: absolute;
-
   right: -0.5rem;
   bottom: 0.18rem;
-
   width: 0.38rem;
   height: 0.38rem;
-
   border-radius: 50%;
-
   background: var(--color-coral);
 }
 
-/* =========================================================
-   08 — DESKTOP NAVIGATION
-   ========================================================= */
-
 .site-nav {
   display: flex;
-
   align-items: center;
-
   gap: clamp(1.3rem, 2.4vw, 2.7rem);
 }
 
 .site-nav__link {
   position: relative;
-
   padding-block: 0.5rem;
-
   color: var(--color-text-soft);
-
   font-size: var(--font-size-sm);
-
   font-weight: 650;
-
   transition: color var(--transition-fast);
 }
 
 .site-nav__link::after {
   content: "";
-
   position: absolute;
-
   right: 0;
   bottom: 0;
   left: 0;
-
   height: 2px;
-
   transform: scaleX(0);
-
   transform-origin: right;
-
   border-radius: var(--radius-pill);
-
   background: var(--color-coral);
-
   transition: transform var(--transition-base);
 }
 
@@ -402,57 +319,33 @@ body.nav-open {
 .site-nav__link:hover::after,
 .site-nav__link[aria-current="page"]::after {
   transform: scaleX(1);
-
   transform-origin: left;
 }
 
-/* =========================================================
-   09 — HEADER CONTROLS
-   ========================================================= */
-
 .header-controls {
   justify-self: end;
-
   display: flex;
-
   align-items: center;
-
   gap: 0.75rem;
 }
 
-/* =========================================================
-   10 — LANGUAGE SWITCHER
-   ========================================================= */
-
 .language-switcher {
   display: inline-flex;
-
   align-items: center;
-
   gap: 0.25rem;
-
   padding: 0.38rem 0.65rem;
-
   border: 1px solid var(--color-border);
-
   border-radius: var(--radius-pill);
-
   background: rgba(247, 239, 227, 0.55);
 }
 
 .language-switcher__button {
   min-width: 2rem;
-
   padding: 0.15rem 0.3rem;
-
   color: var(--color-text-faint);
-
   font-size: var(--font-size-xs);
-
   font-weight: 800;
-
   letter-spacing: 0.04em;
-
   transition:
     color var(--transition-fast),
     transform var(--transition-fast);
@@ -464,34 +357,22 @@ body.nav-open {
 
 .language-switcher__button.is-active {
   color: var(--color-coral);
-
   transform: scale(1.07);
 }
 
 .language-switcher__divider {
   color: var(--color-border-strong);
-
   font-size: var(--font-size-xs);
 }
 
-/* =========================================================
-   11 — SETTINGS BUTTON
-   ========================================================= */
-
 .settings-toggle {
   display: grid;
-
   width: 2.8rem;
   height: 2.8rem;
-
   place-items: center;
-
   border: 1px solid var(--color-border);
-
   border-radius: 50%;
-
   background: rgba(247, 239, 227, 0.55);
-
   transition:
     transform var(--transition-base),
     background var(--transition-base),
@@ -500,91 +381,57 @@ body.nav-open {
 
 .settings-toggle:hover {
   transform: rotate(-5deg) scale(1.05);
-
   border-color: var(--color-border-strong);
-
   background: var(--color-yellow-soft);
 }
 
 .settings-toggle__icon {
-  font-size: 0.76rem;
-
+  font-size: 0.8rem;
   font-weight: 800;
 }
-
-/* =========================================================
-   12 — MOBILE NAV PLACEHOLDERS
-   ========================================================= */
 
 .nav-toggle,
 .mobile-nav {
   display: none;
 }
 
-/* =========================================================
-   13 — ACCESSIBILITY PANEL
-   ========================================================= */
-
 .accessibility-panel {
   position: fixed;
-
   top: calc(var(--header-height) + 1rem);
-
   right: var(--page-padding);
-
   z-index: 1100;
-
-  width: min(330px, calc(100vw - (var(--page-padding) * 2)));
-
-  padding: 1.3rem;
-
+  width: min(350px, calc(100vw - (var(--page-padding) * 2)));
+  padding: 1.4rem;
   border: 1px solid var(--color-border);
-
   border-radius: var(--radius-lg);
-
-  background: rgba(247, 239, 227, 0.97);
-
+  background: rgba(247, 239, 227, 0.98);
   box-shadow: var(--shadow-medium);
-
   backdrop-filter: blur(22px);
-
   -webkit-backdrop-filter: blur(22px);
 }
 
 .accessibility-panel__header {
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 1rem;
-
   padding-bottom: 1rem;
-
   border-bottom: 1px solid var(--color-border);
 }
 
 .accessibility-panel__title {
   font-size: var(--font-size-md);
-
   font-weight: 800;
-
   letter-spacing: -0.03em;
 }
 
 .accessibility-panel__close {
   display: grid;
-
-  width: 2rem;
-  height: 2rem;
-
+  width: 2.25rem;
+  height: 2.25rem;
   place-items: center;
-
   border-radius: 50%;
-
   font-size: 1.5rem;
-
   transition: background var(--transition-fast);
 }
 
@@ -593,44 +440,30 @@ body.nav-open {
 }
 
 .accessibility-option {
-  margin-top: 1.3rem;
+  margin-top: 1.35rem;
 }
 
 .accessibility-option__label {
-  margin-bottom: 0.75rem;
-
+  margin-bottom: 0.8rem;
   color: var(--color-text-soft);
-
   font-size: var(--font-size-sm);
-
   font-weight: 700;
 }
 
-/* =========================================================
-   14 — FONT SIZE CONTROLS
-   ========================================================= */
-
 .font-size-controls {
   display: grid;
-
   grid-template-columns: repeat(3, 1fr);
-
   gap: 0.5rem;
 }
 
 .font-size-controls button {
   display: grid;
-
-  min-height: 3rem;
-
+  min-height: 3.2rem;
   place-items: center;
-
   border: 1px solid var(--color-border);
-
   border-radius: var(--radius-md);
-
   background: var(--color-surface);
-
+  font-weight: 750;
   transition:
     transform var(--transition-base),
     background var(--transition-base),
@@ -638,91 +471,64 @@ body.nav-open {
 }
 
 .font-size-controls button:first-child {
-  font-size: 0.8rem;
+  font-size: 0.76rem;
 }
 
 .font-size-controls button:nth-child(2) {
-  font-size: 1rem;
+  font-size: 1.05rem;
 }
 
 .font-size-controls button:last-child {
-  font-size: 1.25rem;
+  font-size: 1.45rem;
 }
 
 .font-size-controls button:hover {
   transform: translateY(-2px);
-
   border-color: var(--color-border-strong);
 }
 
 .font-size-controls button.is-active {
   border-color: var(--color-yellow);
-
   background: var(--color-yellow-soft);
 }
 
-/* =========================================================
-   15 — REDUCED MOTION CONTROL
-   ========================================================= */
-
 .motion-control {
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 1rem;
-
   color: var(--color-text-soft);
-
   font-size: var(--font-size-sm);
-
   font-weight: 700;
-
   cursor: pointer;
 }
 
 .motion-control input {
   position: absolute;
-
   opacity: 0;
-
   pointer-events: none;
 }
 
 .motion-control__switch {
   position: relative;
-
   width: 3rem;
   height: 1.6rem;
-
   flex-shrink: 0;
-
   border-radius: var(--radius-pill);
-
   background: #c8bdb0;
-
   transition: background var(--transition-base);
 }
 
 .motion-control__switch::after {
   content: "";
-
   position: absolute;
-
   top: 0.18rem;
   left: 0.18rem;
-
   width: 1.24rem;
   height: 1.24rem;
-
   border-radius: 50%;
-
   background: var(--color-surface);
-
   box-shadow: 0 2px 8px rgba(32, 29, 26, 0.2);
-
   transition: transform var(--transition-base);
 }
 
@@ -734,290 +540,147 @@ body.nav-open {
   transform: translateX(1.4rem);
 }
 
-/* =========================================================
-   16 — WELCOME SCENE
-   ========================================================= */
-
 .scene--welcome {
   display: flex;
-
   align-items: stretch;
-
   background: var(--color-background);
 }
 
 .welcome {
   display: flex;
-
   flex-direction: column;
-
   justify-content: center;
 }
 
-/* ---------------------------------------------------------
-   SHARED WELCOME STAGE
-
-   Intro, specialisms and statement all occupy the same
-   deliberate stage instead of inheriting different heights.
-   --------------------------------------------------------- */
-
 .welcome__sequence {
   position: relative;
-
   z-index: 5;
-
   display: grid;
-
   width: 100%;
-
-  min-height: clamp(410px, 55vh, 600px);
-
+  min-height: clamp(390px, 55vh, 600px);
   align-items: center;
 }
-
-/* =========================================================
-   17 — WELCOME SHAPES
-   ========================================================= */
 
 .shape--welcome-one {
   top: 8%;
   right: 5%;
-
   width: clamp(220px, 24vw, 420px);
-
   aspect-ratio: 1;
-
   border-radius: 46% 54% 63% 37% / 41% 43% 57% 59%;
-
   background: var(--color-coral-soft);
-
   opacity: 0.9;
-
   transform: rotate(18deg);
 }
 
 .shape--welcome-two {
   right: 27%;
   bottom: 5%;
-
   width: clamp(130px, 13vw, 220px);
-
   aspect-ratio: 1;
-
   border-radius: 50%;
-
   background: var(--color-blue-soft);
-
   opacity: 0.92;
 }
 
 .shape--welcome-three {
   top: 17%;
   left: -3%;
-
   width: clamp(110px, 10vw, 190px);
-
   aspect-ratio: 1;
-
   border-radius: 32% 68% 45% 55% / 55% 31% 69% 45%;
-
   background: var(--color-yellow);
-
   opacity: 0.92;
 }
 
 .shape--welcome-four {
   right: -2%;
   bottom: 20%;
-
   width: clamp(100px, 8vw, 150px);
-
   height: clamp(170px, 14vw, 250px);
-
   border-radius: var(--radius-pill);
-
   background: var(--color-green-soft);
-
   transform: rotate(20deg);
 }
 
-/* =========================================================
-   18 — WELCOME INTRO
-   ========================================================= */
-
 .welcome__intro {
   position: relative;
-
   z-index: 5;
-
   grid-area: 1 / 1;
-
   align-self: center;
-
-  width: min(100%, 1200px);
-
-  will-change: transform, opacity;
-}
-
-.welcome__eyebrow {
-  margin-bottom: clamp(1.3rem, 2.6vw, 2.4rem);
-
-  color: var(--color-coral);
-
-  font-size: var(--font-size-sm);
-
-  font-weight: 800;
-
-  letter-spacing: 0.1em;
-
-  text-transform: uppercase;
-
+  width: min(100%, 1300px);
   will-change: transform, opacity;
 }
 
 .welcome__title {
   display: flex;
-
   flex-direction: column;
-
-  font-size: var(--font-display-medium);
-
+  font-size: clamp(5rem, 10vw, 10.5rem);
   font-weight: 850;
-
-  line-height: 0.86;
-
+  line-height: 0.84;
   letter-spacing: -0.075em;
-}
-
-.welcome__title-small {
-  margin-bottom: 0.35em;
-
-  color: var(--color-text-soft);
-
-  font-size: 0.32em;
-
-  font-weight: 500;
-
-  letter-spacing: -0.025em;
-
-  will-change: transform, opacity;
 }
 
 .welcome__name {
   position: relative;
-
   display: inline-block;
-
   width: fit-content;
-
   will-change: transform, opacity;
 }
 
 .welcome__name::after {
   content: "";
-
   position: absolute;
-
   right: -0.45rem;
   bottom: 0.1em;
-
   width: 0.11em;
   height: 0.11em;
-
   border-radius: 50%;
-
   background: var(--color-yellow);
 }
-/* =========================================================
-   19 — WELCOME SPECIALISMS
-
-   This is the visual replacement for the intro state.
-
-   The three disciplines are treated as large pieces of
-   graphic typography instead of small floating labels.
-   ========================================================= */
 
 .welcome__specialisms {
   position: absolute;
-
   inset: 0;
-
   z-index: 6;
-
   pointer-events: none;
 }
 
-/* ---------------------------------------------------------
-   SHARED SPECIALISM
-   --------------------------------------------------------- */
-
 .welcome-specialism {
   position: absolute;
-
   display: flex;
-
   min-height: clamp(76px, 9vh, 110px);
-
   align-items: center;
-
   padding: clamp(1rem, 1.7vw, 1.5rem) clamp(1.5rem, 2.8vw, 3rem);
-
   border: 1px solid rgba(32, 29, 26, 0.15);
-
   color: var(--color-text);
-
   font-weight: 850;
-
   line-height: 0.92;
-
   letter-spacing: -0.055em;
-
   white-space: nowrap;
-
   box-shadow: 0 22px 58px rgba(57, 43, 31, 0.085);
-
   backdrop-filter: blur(5px);
-
   -webkit-backdrop-filter: blur(5px);
-
   will-change: transform, opacity;
 }
 
 .welcome-specialism::after {
   content: "";
-
   position: absolute;
-
   width: clamp(54px, 6vw, 94px);
-
   aspect-ratio: 1;
-
   border: 1px solid rgba(32, 29, 26, 0.08);
-
   border-radius: 50%;
-
   pointer-events: none;
 }
-
-/* ---------------------------------------------------------
-   UI DESIGN
-   Upper-right
-   --------------------------------------------------------- */
 
 .welcome-specialism--ui {
   top: 7%;
   left: 58%;
-
   width: clamp(290px, 30vw, 510px);
-
   justify-content: flex-start;
-
   border-radius: 38px 66px 38px 38px;
-
   background: var(--color-blue-soft);
-
   font-size: clamp(2.1rem, 3.45vw, 4.15rem);
-
   transform: rotate(1deg);
 }
 
@@ -1026,25 +689,14 @@ body.nav-open {
   right: 7%;
 }
 
-/* ---------------------------------------------------------
-   INTERACTION DESIGN
-   Main central anchor
-   --------------------------------------------------------- */
-
 .welcome-specialism--interaction {
   top: 39%;
   left: 25%;
-
   width: clamp(500px, 49vw, 820px);
-
   justify-content: center;
-
   border-radius: 44px 74px 44px 74px;
-
   background: var(--color-yellow-soft);
-
   font-size: clamp(2.55rem, 4.45vw, 5.2rem);
-
   transform: rotate(-1.2deg);
 }
 
@@ -1053,25 +705,14 @@ body.nav-open {
   bottom: -38%;
 }
 
-/* ---------------------------------------------------------
-   FRONT-END
-   Lower-left
-   --------------------------------------------------------- */
-
 .welcome-specialism--frontend {
   left: 8%;
   bottom: 4%;
-
   width: clamp(310px, 34vw, 560px);
-
   justify-content: flex-start;
-
   border-radius: 68px 38px 38px 68px;
-
   background: var(--color-green-soft);
-
   font-size: clamp(2.2rem, 3.75vw, 4.5rem);
-
   transform: rotate(0.8deg);
 }
 
@@ -1080,90 +721,51 @@ body.nav-open {
   left: 7%;
 }
 
-/* =========================================================
-   20 — WELCOME STATEMENT
-   ========================================================= */
-
 .welcome__statement {
   position: absolute;
-
   top: 50%;
   left: 50%;
-
   z-index: 7;
-
   width: min(82vw, 1120px);
-
   transform: translate(-50%, -50%);
-
   text-align: center;
-
   pointer-events: none;
 }
 
 .welcome__statement-text {
   font-size: clamp(3rem, 7vw, 7.5rem);
-
   font-weight: 850;
-
   line-height: 0.93;
-
   letter-spacing: -0.065em;
-
   text-wrap: balance;
-
   will-change: transform, opacity;
 }
 
-/* =========================================================
-   21 — SHARED SCENE CONTROLS
-   ========================================================= */
-
 .scene-progress {
   position: absolute;
-
   right: 0;
   bottom: 0.15rem;
-
   z-index: 10;
-
   display: grid;
-
   justify-items: end;
-
   gap: 0.55rem;
 }
 
-.scene-progress__continue,
-.scene-next {
+.scene-progress__continue {
   display: inline-flex;
-
   min-height: 3.25rem;
-
   align-items: center;
-
   justify-content: center;
-
   gap: 0.8rem;
-
   padding: 0.68rem 0.8rem 0.68rem 1.15rem;
-
   border: 1px solid var(--color-border-strong);
-
   border-radius: var(--radius-pill);
-
   background: rgba(247, 239, 227, 0.72);
-
   box-shadow: 0 8px 28px rgba(57, 43, 31, 0.045);
-
   font-size: var(--font-size-sm);
-
   font-weight: 750;
-
   backdrop-filter: blur(10px);
-
   -webkit-backdrop-filter: blur(10px);
-
   transition:
     transform var(--transition-base),
     background var(--transition-base),
@@ -1171,29 +773,20 @@ body.nav-open {
     box-shadow var(--transition-base);
 }
 
-.scene-progress__continue:hover,
-.scene-next:hover {
+.scene-progress__continue:hover {
   transform: translateY(-3px);
-
   border-color: rgba(239, 118, 84, 0.7);
-
   background: var(--color-coral-soft);
-
   box-shadow: 0 12px 30px rgba(57, 43, 31, 0.08);
 }
 
 .scene-progress__arrow {
   display: grid;
-
   width: 2rem;
   height: 2rem;
-
   place-items: center;
-
   border-radius: 50%;
-
   background: var(--color-yellow);
-
   transition: transform var(--transition-base);
 }
 
@@ -1201,30 +794,19 @@ body.nav-open {
   transform: translateY(2px);
 }
 
-/* =========================================================
-   22 — WELCOME PROGRESS
-   ========================================================= */
-
 .scene-progress__steps {
   display: flex;
-
   align-items: center;
-
   gap: 0.32rem;
-
   padding-right: 0.25rem;
 }
 
 .scene-progress__steps span {
   display: block;
-
   width: 0.4rem;
   height: 0.4rem;
-
   border-radius: var(--radius-pill);
-
   background: rgba(32, 29, 26, 0.18);
-
   transition:
     width var(--transition-base),
     background var(--transition-base),
@@ -1233,73 +815,15 @@ body.nav-open {
 
 .scene-progress__steps span.is-active {
   width: 1.25rem;
-
   background: var(--color-coral);
-
   transform: scaleY(1.08);
 }
 
 .scene-progress__hint {
   color: var(--color-text-faint);
-
   font-size: var(--font-size-xs);
-
-  font-weight: 600;
+  font-weight: 650;
 }
-
-/* =========================================================
-   WELCOME — LARGE DESKTOP BALANCE
-   ========================================================= */
-
-@media (min-width: 1600px) {
-  .welcome-specialism--ui {
-    left: 61%;
-  }
-
-  .welcome-specialism--interaction {
-    left: 27%;
-  }
-
-  .welcome-specialism--frontend {
-    left: 10%;
-  }
-}
-
-/* =========================================================
-   WELCOME — SHORT DESKTOP SAFETY
-   ========================================================= */
-
-@media (min-width: 961px) and (max-height: 760px) {
-  .welcome__sequence {
-    min-height: clamp(330px, 50vh, 420px);
-  }
-
-  .welcome-specialism {
-    min-height: clamp(64px, 8vh, 82px);
-  }
-
-  .welcome-specialism--ui {
-    top: 4%;
-
-    font-size: clamp(1.8rem, 3vw, 3.2rem);
-  }
-
-  .welcome-specialism--interaction {
-    top: 37%;
-
-    font-size: clamp(2.2rem, 3.8vw, 4rem);
-  }
-
-  .welcome-specialism--frontend {
-    bottom: 1%;
-
-    font-size: clamp(1.9rem, 3.2vw, 3.4rem);
-  }
-}
-
-/* =========================================================
-   23 — ABOUT SCENE
-   ========================================================= */
 
 .scene--about {
   background: var(--color-surface);
@@ -1307,115 +831,73 @@ body.nav-open {
 
 .about {
   display: grid;
-
   grid-template-columns:
     minmax(0, 0.9fr)
     minmax(500px, 1.1fr);
-
   column-gap: clamp(3rem, 6vw, 7rem);
-
   align-items: center;
 }
 
 .about .scene-indicator {
   position: absolute;
-
   top: 0;
   left: 0;
 }
 
-/* =========================================================
-   24 — ABOUT SHAPES
-   ========================================================= */
-
 .shape--about-one {
   top: 3%;
   right: 5%;
-
   width: clamp(160px, 17vw, 290px);
-
   aspect-ratio: 1;
-
   border-radius: 50% 50% 32% 68% / 55% 38% 62% 45%;
-
   background: var(--color-blue-soft);
-
   opacity: 0.56;
-
   transform: rotate(-8deg);
 }
 
 .shape--about-two {
   left: -4%;
   bottom: 7%;
-
   width: clamp(140px, 13vw, 230px);
-
   height: clamp(74px, 6.5vw, 118px);
-
   border-radius: var(--radius-pill);
-
   background: var(--color-coral-soft);
-
   opacity: 0.75;
-
   transform: rotate(13deg);
 }
 
 .shape--about-three {
   right: 27%;
   bottom: -3%;
-
   width: clamp(90px, 9vw, 155px);
-
   aspect-ratio: 1;
-
   border-radius: 50%;
-
   background: var(--color-yellow-soft);
-
   opacity: 0.85;
 }
 
-/* =========================================================
-   25 — ABOUT CONTENT
-   ========================================================= */
-
 .about__content {
   position: relative;
-
   z-index: 6;
-
   max-width: 680px;
-
   padding-top: clamp(2rem, 5vh, 4rem);
 }
 
 .about__eyebrow {
   margin-bottom: 0.9rem;
-
   color: var(--color-coral);
-
   font-size: var(--font-size-sm);
-
   font-weight: 800;
-
   letter-spacing: 0.08em;
-
   text-transform: uppercase;
 }
 
 .about__title {
   max-width: 680px;
-
   font-size: clamp(2.8rem, 4.35vw, 4.8rem);
-
   font-weight: 850;
-
   line-height: 0.96;
-
   letter-spacing: -0.06em;
-
   text-wrap: balance;
 }
 
@@ -1425,17 +907,11 @@ body.nav-open {
 
 .about__story {
   display: grid;
-
   gap: clamp(0.85rem, 1.3vw, 1.15rem);
-
   max-width: 610px;
-
   margin-top: clamp(1.6rem, 2.8vw, 2.7rem);
-
   color: var(--color-text-soft);
-
   font-size: clamp(0.98rem, 1.2vw, 1.16rem);
-
   line-height: 1.65;
 }
 
@@ -1443,162 +919,100 @@ body.nav-open {
   max-width: 58ch;
 }
 
-/* =========================================================
-   26 — TRAVEL STORY
-   ========================================================= */
-
 .travel-story {
   position: relative;
-
   z-index: 6;
-
   display: grid;
-
   grid-template-columns:
     minmax(135px, 0.8fr)
     minmax(210px, 1.25fr)
     minmax(180px, 0.95fr);
-
   align-items: center;
-
   gap: clamp(0.8rem, 1.6vw, 1.45rem);
-
   width: 100%;
-
   min-width: 0;
-
   min-height: clamp(250px, 31vh, 340px);
-
   padding: clamp(1.5rem, 2.5vw, 2.35rem);
-
   overflow: hidden;
-
   border: 1px solid var(--color-border);
-
   border-radius: var(--radius-xl);
-
   background: linear-gradient(
     145deg,
     rgba(239, 229, 213, 0.78),
     rgba(247, 239, 227, 0.58)
   );
-
   box-shadow: var(--shadow-card);
-
   backdrop-filter: blur(8px);
-
   -webkit-backdrop-filter: blur(8px);
 }
 
 .travel-story::before {
   content: "";
-
   position: absolute;
-
   top: -20%;
   right: -10%;
-
   width: clamp(150px, 15vw, 250px);
-
   aspect-ratio: 1;
-
   border-radius: 50%;
-
   background: rgba(200, 220, 236, 0.46);
-
   pointer-events: none;
 }
 
 .travel-story::after {
   content: "";
-
   position: absolute;
-
   bottom: -25%;
   left: 35%;
-
   width: clamp(110px, 10vw, 180px);
-
   aspect-ratio: 1;
-
   border-radius: 50%;
-
   background: rgba(248, 230, 164, 0.38);
-
   pointer-events: none;
 }
 
-/* =========================================================
-   27 — TRAVEL LOCATIONS
-   ========================================================= */
-
 .travel-location {
   position: relative;
-
   z-index: 5;
-
   display: flex;
-
   min-width: 0;
-
   flex-direction: column;
-
   gap: 0.12rem;
 }
 
 .travel-location--origin {
   justify-self: start;
-
   width: min(100%, 175px);
 }
 
 .travel-location--destination {
   justify-self: end;
-
   align-items: flex-end;
-
   width: min(100%, 215px);
-
   min-width: 175px;
-
   text-align: right;
 }
 
 .travel-location__dot {
   width: 0.72rem;
   height: 0.72rem;
-
   margin-bottom: 0.7rem;
-
   flex-shrink: 0;
-
   border-radius: 50%;
-
   background: var(--color-coral);
-
   box-shadow: 0 0 0 7px rgba(239, 118, 84, 0.13);
 }
 
 .travel-location--destination .travel-location__dot {
   background: var(--color-blue);
-
   box-shadow: 0 0 0 7px rgba(143, 184, 217, 0.15);
 }
 
 .travel-location__city {
   max-width: 100%;
-
   font-size: clamp(1.35rem, 1.8vw, 2rem);
-
   font-weight: 850;
-
   line-height: 1;
-
   letter-spacing: -0.05em;
-
-  word-break: normal;
-
-  overflow-wrap: normal;
 }
 
 .travel-location--destination .travel-location__city {
@@ -1607,497 +1021,298 @@ body.nav-open {
 
 .travel-location__country {
   max-width: 100%;
-
   margin-top: 0.15rem;
-
   color: var(--color-text-soft);
-
   font-size: clamp(0.76rem, 0.9vw, 0.9rem);
-
   font-weight: 650;
-
-  word-break: normal;
-
-  overflow-wrap: normal;
 }
 
 .travel-location__caption {
   max-width: 190px;
-
   margin-top: 0.48rem;
-
   color: var(--color-text-faint);
-
   font-size: clamp(0.68rem, 0.78vw, 0.8rem);
-
   font-weight: 600;
-
   line-height: 1.35;
-
-  word-break: normal;
-
-  overflow-wrap: normal;
 }
-
-/* =========================================================
-   28 — TRAVEL ROUTE
-   ========================================================= */
 
 .travel-route {
   position: relative;
-
   z-index: 4;
-
   width: 100%;
-
   min-width: 0;
-
   height: clamp(165px, 20vh, 220px);
 }
 
 .travel-route__svg {
   position: absolute;
-
   inset: 0;
-
   width: 100%;
   height: 100%;
-
   overflow: visible;
 }
 
 .travel-route__path {
   fill: none;
-
   stroke: var(--color-text-soft);
-
   stroke-width: 2;
-
   stroke-linecap: round;
-
   opacity: 0.46;
 }
 
 .travel-plane {
   position: absolute;
-
   top: 50%;
   left: 0;
-
   z-index: 6;
-
   display: grid;
-
   width: 2.65rem;
   height: 2.65rem;
-
   place-items: center;
-
   border: 1px solid rgba(32, 29, 26, 0.1);
-
   border-radius: 50%;
-
   background: var(--color-yellow);
-
   box-shadow: 0 10px 26px rgba(57, 43, 31, 0.12);
-
   font-size: 1.05rem;
-
   transform: translate(-50%, -50%) rotate(20deg);
-
   will-change: transform, opacity;
 }
 
-/* =========================================================
-   29 — ABOUT NEXT
-   ========================================================= */
-
-.about .scene-next {
-  position: absolute;
-
-  right: 0;
-  bottom: 0.15rem;
-
-  z-index: 10;
+.scene-next {
+  position: relative;
+  z-index: 20;
+  display: inline-flex;
+  width: fit-content;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+  padding: 0.68rem 0.95rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background: rgba(247, 239, 227, 0.68);
+  box-shadow: 0 8px 24px rgba(57, 43, 31, 0.045);
+  font-size: 0.82rem;
+  font-weight: 750;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    transform var(--transition-base),
+    background var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow var(--transition-base);
 }
 
-/* =========================================================
-   30 — ABOUT SHORT DESKTOP HEIGHT
-   ========================================================= */
-
-@media (min-width: 961px) and (max-height: 800px) {
-  .about {
-    column-gap: clamp(2rem, 4vw, 4.5rem);
-  }
-
-  .about__content {
-    padding-top: 1.4rem;
-  }
-
-  .about__title {
-    font-size: clamp(2.4rem, 3.7vw, 3.9rem);
-  }
-
-  .about__story {
-    gap: 0.7rem;
-
-    margin-top: 1.25rem;
-
-    font-size: clamp(0.88rem, 1vw, 1rem);
-
-    line-height: 1.5;
-  }
-
-  .travel-story {
-    min-height: clamp(215px, 27vh, 260px);
-
-    padding: 1.3rem;
-  }
-
-  .travel-route {
-    height: clamp(140px, 17vh, 175px);
-  }
-
-  .travel-location__city {
-    font-size: clamp(1.2rem, 1.45vw, 1.6rem);
-  }
+.scene-next:hover,
+.scene-next:focus-visible {
+  transform: translateY(-3px);
+  border-color: rgba(239, 118, 84, 0.7);
+  background: var(--color-coral-soft);
+  box-shadow: 0 12px 28px rgba(57, 43, 31, 0.08);
 }
-/* =========================================================
-   31 — SERVICES / WHAT I DO SCENE
-   ========================================================= */
 
 .scene--services {
+  min-height: 100svh;
+  padding-bottom: clamp(5rem, 9vw, 8rem);
   background: var(--color-background);
 }
 
 .services {
-  display: grid;
-
-  grid-template-rows:
-    auto
-    auto
-    minmax(0, 1fr)
-    auto;
-
-  min-height: calc(100svh - var(--header-height) - 3.8rem);
+  display: block;
+  min-height: 0;
 }
 
 .services .scene-indicator {
-  margin-bottom: clamp(0.8rem, 1.5vh, 1.2rem);
+  margin-bottom: clamp(1rem, 1.6vw, 1.4rem);
 }
-
-/* =========================================================
-   32 — SERVICES DECORATIVE SHAPES
-   ========================================================= */
 
 .shape--services-one {
   top: 6%;
   left: 7%;
-
   width: clamp(95px, 8vw, 150px);
-
   aspect-ratio: 1;
-
   border-radius: 36% 64% 58% 42% / 46% 58% 42% 54%;
-
   background: var(--color-green-soft);
-
   opacity: 0.5;
 }
 
 .shape--services-two {
   right: 4%;
   bottom: 5%;
-
   width: clamp(140px, 12vw, 220px);
-
   height: clamp(72px, 6vw, 110px);
-
   border-radius: var(--radius-pill);
-
   background: var(--color-pink-soft);
-
   opacity: 0.55;
-
   transform: rotate(-10deg);
 }
 
-/* =========================================================
-   33 — SERVICES INTRO
-   ========================================================= */
-
 .services__intro {
   position: relative;
-
   z-index: 7;
-
   display: grid;
-
   grid-template-columns:
-    minmax(145px, 0.38fr)
-    minmax(0, 1.62fr);
-
-  column-gap: clamp(2rem, 4vw, 4.2rem);
-
-  row-gap: 0.4rem;
-
+    minmax(145px, 0.34fr)
+    minmax(0, 1.66fr);
+  column-gap: clamp(1.8rem, 3.2vw, 3.4rem);
+  row-gap: 0.55rem;
   align-items: start;
-
-  margin-bottom: clamp(0.8rem, 1.5vh, 1.2rem);
+  margin-bottom: clamp(1.25rem, 2vw, 1.8rem);
 }
 
 .services__eyebrow {
-  padding-top: 0.28rem;
-
+  padding-top: 0.3rem;
   color: var(--color-coral);
-
   font-size: var(--font-size-sm);
-
   font-weight: 800;
-
   line-height: 1.35;
-
   letter-spacing: 0.08em;
-
   text-transform: uppercase;
 }
 
 .services__title {
-  max-width: 900px;
-
-  font-size: clamp(2.5rem, 4.1vw, 4.5rem);
-
+  max-width: 860px;
+  font-size: clamp(2.45rem, 3.45vw, 3.9rem);
   font-weight: 850;
-
-  line-height: 0.94;
-
-  letter-spacing: -0.06em;
-
+  line-height: 0.95;
+  letter-spacing: -0.058em;
   text-wrap: balance;
 }
 
 .services__instruction {
   grid-column: 2;
-
   max-width: 620px;
-
-  margin-top: 0.2rem;
-
+  margin-top: 0.05rem;
   color: var(--color-text-faint);
-
-  font-size: var(--font-size-sm);
-
-  font-weight: 600;
-
-  line-height: 1.45;
+  font-size: clamp(0.82rem, 0.9vw, 0.92rem);
+  font-weight: 650;
+  line-height: 1.4;
 }
-
-/* =========================================================
-   34 — DISCIPLINE PLAYGROUND
-   ========================================================= */
 
 .discipline-playground {
   position: relative;
-
   z-index: 8;
-
   display: grid;
-
   grid-template-columns: repeat(2, minmax(0, 1fr));
-
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-
-  gap: clamp(0.9rem, 1.4vw, 1.4rem);
-
-  align-self: stretch;
-
+  gap: clamp(0.85rem, 1.25vw, 1.15rem);
   width: 100%;
-
-  height: clamp(340px, 45vh, 520px);
-
-  min-height: 0;
-
-  margin-top: clamp(0.25rem, 0.8vh, 0.65rem);
+  margin-top: 0;
 }
-
-/* =========================================================
-   35 — SHARED DISCIPLINE CARD
-   ========================================================= */
 
 .discipline {
   position: relative;
-
   min-width: 0;
-  min-height: 0;
-
+  min-height: clamp(175px, 13.5vw, 215px);
   overflow: hidden;
-
   border: 1px solid rgba(32, 29, 26, 0.14);
-
   box-shadow: var(--shadow-soft);
-
   isolation: isolate;
-
   transition:
+    transform var(--transition-base),
     border-color var(--transition-base),
-    box-shadow var(--transition-base),
-    opacity var(--transition-base),
-    transform var(--transition-slow),
-    width var(--transition-slow),
-    height var(--transition-slow),
-    border-radius var(--transition-slow);
+    box-shadow var(--transition-base);
 }
 
 .discipline::before {
   content: "";
-
   position: absolute;
-
   inset: 0;
-
   z-index: 0;
-
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.17),
     rgba(255, 255, 255, 0)
   );
-
   pointer-events: none;
 }
 
 .discipline::after {
   content: "";
-
   position: absolute;
-
-  top: -25%;
-  right: -10%;
-
+  top: -30%;
+  right: -8%;
   z-index: 0;
-
-  width: clamp(100px, 11vw, 190px);
-
+  width: clamp(120px, 12vw, 190px);
   aspect-ratio: 1;
-
   border: 1px solid rgba(32, 29, 26, 0.08);
-
   border-radius: 50%;
-
   opacity: 0.55;
-
   pointer-events: none;
 }
 
 .discipline:hover {
   z-index: 10;
-
-  transform: translateY(-3px);
-
+  transform: translateY(-5px);
   border-color: rgba(32, 29, 26, 0.26);
-
   box-shadow: var(--shadow-card);
 }
 
-.discipline.is-active {
-  z-index: 30;
-
-  border-color: rgba(32, 29, 26, 0.2);
-
-  box-shadow: var(--shadow-medium);
-}
-
-/* =========================================================
-   36 — DISCIPLINE TRIGGER
-   ========================================================= */
-
 .discipline__trigger {
   position: relative;
-
   z-index: 4;
-
-  display: flex;
-
+  display: grid;
   width: 100%;
   height: 100%;
-
-  min-height: 0;
-
-  flex-direction: column;
-
-  align-items: flex-start;
-
-  justify-content: space-between;
-
-  padding: clamp(1.15rem, 1.8vw, 1.75rem);
-
+  min-height: inherit;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto 1fr;
+  align-items: start;
+  gap: 0.75rem;
+  padding: clamp(1.15rem, 1.65vw, 1.55rem);
   text-align: left;
 }
 
 .discipline__number {
+  grid-column: 1;
+  grid-row: 1;
   color: var(--color-text-soft);
-
   font-size: var(--font-size-xs);
-
   font-weight: 850;
-
   letter-spacing: 0.08em;
+}
+
+.discipline__content {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: end;
+  display: grid;
+  gap: 0.35rem;
+  width: min(100%, 620px);
 }
 
 .discipline__title {
   position: relative;
-
   z-index: 2;
-
-  max-width: calc(100% - 4.5rem);
-
-  font-size: clamp(1.65rem, 2.55vw, 3rem);
-
+  max-width: calc(100% - 2rem);
+  font-size: clamp(1.85rem, 2.35vw, 2.55rem);
   font-weight: 850;
-
   line-height: 0.96;
-
-  letter-spacing: -0.055em;
-
+  letter-spacing: -0.052em;
   text-wrap: balance;
-
-  overflow-wrap: normal;
-
-  word-break: normal;
 }
 
-/* =========================================================
-   37 — DISCIPLINE PLUS CONTROL
-   ========================================================= */
+.discipline__teaser {
+  max-width: 42ch;
+  color: var(--color-text-soft);
+  font-size: clamp(0.84rem, 0.86vw, 0.94rem);
+  font-weight: 600;
+  line-height: 1.4;
+}
 
 .discipline__symbol {
-  position: absolute;
-
-  right: clamp(1rem, 1.6vw, 1.5rem);
-
-  bottom: clamp(1rem, 1.6vw, 1.45rem);
-
-  z-index: 7;
-
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: end;
   display: grid;
-
-  width: 2.4rem;
-  height: 2.4rem;
-
+  width: 2.45rem;
+  height: 2.45rem;
   place-items: center;
-
   border: 1px solid rgba(32, 29, 26, 0.2);
-
   border-radius: 50%;
-
-  background: rgba(247, 239, 227, 0.26);
-
+  background: rgba(247, 239, 227, 0.3);
   box-shadow: 0 6px 18px rgba(57, 43, 31, 0.04);
-
-  font-size: 1.1rem;
-
-  font-weight: 500;
-
+  font-size: 1.25rem;
   transition:
     transform var(--transition-base),
     background var(--transition-base),
@@ -2106,1530 +1321,663 @@ body.nav-open {
 
 .discipline:hover .discipline__symbol {
   transform: rotate(90deg);
-
-  background: rgba(247, 239, 227, 0.7);
-
-  box-shadow: 0 8px 20px rgba(57, 43, 31, 0.08);
+  background: rgba(247, 239, 227, 0.78);
 }
-
-/* =========================================================
-   38 — DISCIPLINE DETAILS
-
-   In the expanded state the information stays together:
-
-   Title
-   → Skills
-   → Description
-
-   rather than pushing the description to the bottom edge.
-   ========================================================= */
-
-.discipline__details {
-  position: absolute;
-
-  right: clamp(1.3rem, 2vw, 2rem);
-
-  bottom: clamp(1.3rem, 2vw, 2rem);
-
-  left: clamp(1.3rem, 2vw, 2rem);
-
-  z-index: 6;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 0.8rem;
-
-  max-height: calc(100% - 8.2rem);
-
-  overflow-y: auto;
-
-  opacity: 0;
-
-  transform: translateY(14px);
-
-  pointer-events: none;
-
-  transition:
-    opacity var(--transition-base),
-    transform var(--transition-base);
-}
-
-.discipline.is-active .discipline__details {
-  position: relative;
-
-  inset: auto;
-
-  width: calc(100% - clamp(2.6rem, 4vw, 4rem));
-
-  max-width: 820px;
-
-  max-height: none;
-
-  margin: 0 clamp(1.3rem, 2vw, 2rem) clamp(1.3rem, 2vw, 2rem);
-
-  overflow: visible;
-
-  opacity: 1;
-
-  transform: translateY(0);
-
-  pointer-events: auto;
-}
-
-/* ---------------------------------------------------------
-   Active title / details relationship
-   --------------------------------------------------------- */
-
-.discipline.is-active .discipline__trigger {
-  height: auto;
-
-  min-height: 0;
-
-  justify-content: flex-start;
-
-  gap: clamp(0.65rem, 1vw, 0.9rem);
-
-  padding-bottom: clamp(0.7rem, 1vw, 0.95rem);
-}
-
-.discipline.is-active .discipline__title {
-  max-width: calc(100% - 5rem);
-
-  margin-top: clamp(0.15rem, 0.4vw, 0.35rem);
-}
-
-/* ---------------------------------------------------------
-   Skill pills
-
-   HTML currently places the description before the skills.
-   Order lets the visual hierarchy become:
-   title → skills → description.
-   --------------------------------------------------------- */
-
-.discipline__skills {
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: clamp(0.38rem, 0.6vw, 0.55rem);
-}
-
-.discipline.is-active .discipline__skills {
-  order: 1;
-
-  margin-top: 0.05rem;
-}
-
-.discipline__skills li {
-  padding: 0.42rem 0.75rem;
-
-  border: 1px solid rgba(32, 29, 26, 0.16);
-
-  border-radius: var(--radius-pill);
-
-  background: rgba(247, 239, 227, 0.46);
-
-  font-size: var(--font-size-xs);
-
-  font-weight: 750;
-
-  line-height: 1.15;
-
-  white-space: nowrap;
-}
-
-/* ---------------------------------------------------------
-   Description
-   --------------------------------------------------------- */
-
-.discipline__description {
-  max-width: 620px;
-
-  color: var(--color-text-soft);
-
-  font-size: clamp(0.94rem, 1.1vw, 1.07rem);
-
-  line-height: 1.55;
-}
-
-.discipline.is-active .discipline__description {
-  order: 2;
-
-  max-width: 720px;
-
-  margin-top: clamp(0.15rem, 0.5vw, 0.35rem);
-
-  font-size: clamp(1rem, 1.2vw, 1.15rem);
-
-  line-height: 1.5;
-}
-
-/* =========================================================
-   39 — UI DESIGN CARD
-   ========================================================= */
 
 .discipline--ui {
-  grid-column: 1;
-  grid-row: 1;
-
-  margin-right: clamp(0rem, 0.8vw, 0.8rem);
-
   border-radius: 30px 58px 30px 30px;
-
   background: var(--color-blue-soft);
 }
 
-.discipline--ui::after {
-  background: rgba(143, 184, 217, 0.2);
-}
-
-/* =========================================================
-   40 — INTERACTION DESIGN CARD
-   ========================================================= */
-
 .discipline--interaction {
-  grid-column: 2;
-  grid-row: 1;
-
-  margin-left: clamp(0rem, 0.8vw, 0.8rem);
-
   border-radius: 54px 30px 30px 30px;
-
   background: var(--color-yellow-soft);
 }
 
-.discipline--interaction::after {
-  top: auto;
-  right: -7%;
-  bottom: -38%;
-
-  background: rgba(243, 207, 91, 0.18);
-}
-
-/* =========================================================
-   41 — FRONT-END CARD
-   ========================================================= */
-
 .discipline--frontend {
-  grid-column: 1;
-  grid-row: 2;
-
-  margin-left: clamp(0.8rem, 1.6vw, 1.7rem);
-
   border-radius: 30px 30px 58px 30px;
-
   background: var(--color-green-soft);
 }
 
-.discipline--frontend::after {
-  right: auto;
-  left: -11%;
-
-  background: rgba(158, 189, 145, 0.18);
-}
-
-/* =========================================================
-   42 — WEB DESIGN CARD
-   ========================================================= */
-
 .discipline--web {
-  grid-column: 2;
-  grid-row: 2;
-
-  margin-right: clamp(0.8rem, 1.6vw, 1.7rem);
-
   border-radius: 30px 30px 30px 58px;
-
   background: var(--color-pink-soft);
 }
 
-.discipline--web::after {
-  top: auto;
-  bottom: -30%;
+.services .scene-next--projects {
+  margin-top: clamp(1.8rem, 3vw, 2.8rem);
+}
+/* =========================================================
+   31 — DIALOG FOUNDATION
+   ========================================================= */
 
-  background: rgba(220, 167, 182, 0.2);
+.discipline-modal,
+.project-modal {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: clamp(1rem, 2.4vw, 2.25rem);
+  overflow: auto;
+  border: 0;
+  background: transparent;
+}
+
+.discipline-modal[open],
+.project-modal[open] {
+  display: grid;
+  place-items: center;
+}
+
+.discipline-modal::backdrop,
+.project-modal::backdrop {
+  background: rgba(32, 29, 26, 0.42);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* =========================================================
-   43 — ACTIVE DISCIPLINE MODE
-
-   Expanded cards no longer stretch through the full vertical
-   playground. They stay wide and dramatic, but use only the
-   height required to present the content comfortably.
+   32 — WHAT I DO MODAL
    ========================================================= */
 
-.discipline-playground.has-active {
-  display: block;
+.discipline-modal {
+  z-index: 3000;
 }
 
-.discipline-playground.has-active .discipline {
+.discipline-modal__surface {
+  position: relative;
+  display: grid;
+  width: min(100%, 1060px);
+  min-height: 0;
+  grid-template-columns:
+    minmax(135px, 0.28fr)
+    minmax(0, 1.72fr);
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3.2rem);
+  padding: clamp(1.8rem, 3.2vw, 3.2rem);
+  overflow: hidden;
+  border: 1px solid rgba(32, 29, 26, 0.16);
+  border-radius: clamp(28px, 3vw, 46px);
+  box-shadow: var(--shadow-modal);
+}
+
+.discipline-modal--ui .discipline-modal__surface {
+  background: var(--color-blue-soft);
+}
+
+.discipline-modal--interaction .discipline-modal__surface {
+  background: var(--color-yellow-soft);
+}
+
+.discipline-modal--frontend .discipline-modal__surface {
+  background: var(--color-green-soft);
+}
+
+.discipline-modal--web .discipline-modal__surface {
+  background: var(--color-pink-soft);
+}
+
+.discipline-modal__surface::before {
+  content: "";
   position: absolute;
-
-  top: 50%;
-  right: 0;
-  bottom: auto;
-  left: 0;
-
-  width: 100%;
-
-  height: clamp(290px, 36vh, 380px);
-
-  max-height: 100%;
-
-  margin: 0;
-
-  border-radius: var(--radius-xl);
-}
-
-.discipline-playground.has-active .discipline:not(.is-active) {
-  z-index: 1;
-
-  opacity: 0;
-
-  visibility: hidden;
-
-  transform: translateY(-50%) scale(0.96);
-
+  top: -42%;
+  right: -10%;
+  width: clamp(160px, 20vw, 300px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(32, 29, 26, 0.08);
+  border-radius: 50%;
   pointer-events: none;
 }
 
-.discipline-playground.has-active .discipline.is-active {
-  z-index: 20;
-
-  opacity: 1;
-
-  visibility: visible;
-
-  transform: translateY(-50%);
-
-  pointer-events: auto;
-}
-
-/* ---------------------------------------------------------
-   Active close control
-   --------------------------------------------------------- */
-
-.discipline.is-active .discipline__symbol {
-  top: clamp(1rem, 1.5vw, 1.35rem);
-
-  right: clamp(1rem, 1.5vw, 1.35rem);
-
-  bottom: auto;
-
-  transform: rotate(45deg);
-
-  background: var(--color-surface);
-
-  box-shadow: 0 8px 24px rgba(57, 43, 31, 0.08);
-}
-
-.discipline.is-active:hover .discipline__symbol {
-  transform: rotate(45deg);
-}
-
-/* =========================================================
-   44 — ACTIVE CARD TYPOGRAPHY
-   ========================================================= */
-
-.discipline.is-active .discipline__number {
-  color: var(--color-text-soft);
-}
-
-.discipline.is-active .discipline__title {
-  font-size: clamp(2.25rem, 3.6vw, 4.25rem);
-
-  line-height: 0.92;
-
-  letter-spacing: -0.06em;
-}
-
-/* =========================================================
-   45 — SERVICES NEXT
-   ========================================================= */
-
-.scene-next--projects {
-  position: relative;
-
+.discipline-modal__close {
+  position: absolute;
+  top: clamp(1rem, 1.6vw, 1.4rem);
+  right: clamp(1rem, 1.6vw, 1.4rem);
   z-index: 10;
+  display: grid;
+  width: 2.7rem;
+  height: 2.7rem;
+  place-items: center;
+  border: 1px solid rgba(32, 29, 26, 0.18);
+  border-radius: 50%;
+  background: rgba(247, 239, 227, 0.62);
+  font-size: 1.5rem;
+  line-height: 1;
+  transition:
+    transform var(--transition-base),
+    background var(--transition-base);
+}
 
-  justify-self: end;
+.discipline-modal__close:hover {
+  transform: rotate(8deg) scale(1.05);
+  background: var(--color-surface);
+}
 
-  align-self: end;
+.discipline-modal__number {
+  position: relative;
+  z-index: 2;
+  align-self: stretch;
+  display: flex;
+  align-items: flex-end;
+  color: rgba(32, 29, 26, 0.18);
+  font-size: clamp(4.8rem, 8vw, 8.5rem);
+  font-weight: 900;
+  line-height: 0.75;
+  letter-spacing: -0.08em;
+  user-select: none;
+}
 
-  margin-top: clamp(0.45rem, 1vh, 0.8rem);
+.discipline-modal__content {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  gap: clamp(1rem, 1.7vw, 1.4rem);
+  padding-right: clamp(0.8rem, 1.5vw, 1.5rem);
+}
 
-  margin-bottom: 0.1rem;
+.discipline-modal__title {
+  padding-right: 3.2rem;
+  font-size: clamp(2.8rem, 4.6vw, 4.9rem);
+  font-weight: 850;
+  line-height: 0.9;
+  letter-spacing: -0.062em;
+  text-wrap: balance;
+}
+
+.discipline-modal__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.48rem;
+}
+
+.discipline-modal__skills li {
+  padding: 0.5rem 0.82rem;
+  border: 1px solid rgba(32, 29, 26, 0.17);
+  border-radius: var(--radius-pill);
+  background: rgba(247, 239, 227, 0.46);
+  font-size: clamp(0.82rem, 0.86vw, 0.92rem);
+  font-weight: 750;
+}
+
+.discipline-modal__description {
+  max-width: 720px;
+  color: var(--color-text-soft);
+  font-size: clamp(1.2rem, 1.5vw, 1.5rem);
+  font-weight: 520;
+  line-height: 1.52;
 }
 
 /* =========================================================
-   46 — SERVICES SHORT DESKTOP HEIGHT
-   ========================================================= */
-
-@media (min-width: 961px) and (max-height: 800px) {
-  .services .scene-indicator {
-    margin-bottom: 0.35rem;
-  }
-
-  .services__intro {
-    row-gap: 0.2rem;
-
-    margin-bottom: 0.35rem;
-  }
-
-  .services__title {
-    font-size: clamp(2.05rem, 3.2vw, 3.35rem);
-  }
-
-  .services__instruction {
-    margin-top: 0;
-
-    font-size: 0.75rem;
-  }
-
-  .discipline-playground {
-    height: clamp(280px, 39vh, 350px);
-
-    gap: 0.75rem;
-
-    margin-top: 0;
-  }
-
-  .discipline__trigger {
-    padding: 0.95rem 1.05rem;
-  }
-
-  .discipline__title {
-    font-size: clamp(1.3rem, 2vw, 2.15rem);
-  }
-
-  .discipline__symbol {
-    right: 0.95rem;
-    bottom: 0.95rem;
-
-    width: 2rem;
-    height: 2rem;
-  }
-
-  .discipline--frontend {
-    margin-left: 0.8rem;
-  }
-
-  .discipline--web {
-    margin-right: 0.8rem;
-  }
-
-  /* -----------------------------------------------------
-     EXPANDED CARD — SHORT SCREEN
-     ----------------------------------------------------- */
-
-  .discipline-playground.has-active .discipline {
-    height: min(100%, 310px);
-  }
-
-  .discipline.is-active .discipline__trigger {
-    padding: 0.9rem 1.1rem 0.5rem;
-  }
-
-  .discipline.is-active .discipline__title {
-    font-size: clamp(1.9rem, 2.8vw, 3rem);
-  }
-
-  .discipline.is-active .discipline__details {
-    width: calc(100% - 2.2rem);
-
-    margin: 0 1.1rem 1rem;
-
-    gap: 0.58rem;
-  }
-
-  .discipline.is-active .discipline__skills {
-    gap: 0.34rem;
-  }
-
-  .discipline__skills li {
-    padding: 0.32rem 0.58rem;
-
-    font-size: 0.66rem;
-  }
-
-  .discipline.is-active .discipline__description {
-    margin-top: 0.08rem;
-
-    font-size: clamp(0.86rem, 1vw, 0.98rem);
-
-    line-height: 1.42;
-  }
-
-  .scene-next--projects {
-    margin-top: 0.25rem;
-  }
-}
-/* =========================================================
-   47 — RECENT PROJECTS SCENE
+   33 — PROJECT SCENE FOUNDATION
    ========================================================= */
 
 .scene--projects {
+  min-height: 100svh;
+  padding-bottom: clamp(5rem, 8vw, 7rem);
   background: linear-gradient(135deg, #e8d9c7 0%, #eadccf 48%, #ded7c8 100%);
 }
 
 .projects {
-  display: grid;
-
-  grid-template-rows:
-    auto
-    auto
-    minmax(0, 1fr)
-    auto
-    auto
-    auto;
-
-  min-height: calc(100svh - var(--header-height) - 3.8rem);
+  display: block;
+  min-height: 0;
 }
 
 .projects .scene-indicator {
-  margin-bottom: clamp(0.7rem, 1.4vh, 1.1rem);
+  margin-bottom: clamp(1rem, 1.6vw, 1.4rem);
 }
 
 /* =========================================================
-   48 — PROJECT SCENE SHAPES
+   34 — PROJECT SHAPES
    ========================================================= */
 
 .shape--projects-one {
   top: 5%;
   right: 4%;
-
-  width: clamp(150px, 15vw, 260px);
-
+  width: clamp(130px, 12vw, 220px);
   aspect-ratio: 1;
-
   border-radius: 63% 37% 42% 58% / 42% 58% 42% 58%;
-
   background: var(--color-purple-soft);
-
-  opacity: 0.58;
-
+  opacity: 0.5;
   transform: rotate(18deg);
 }
 
 .shape--projects-two {
   bottom: 3%;
   left: -2%;
-
-  width: clamp(125px, 11vw, 210px);
-
-  height: clamp(70px, 5.8vw, 108px);
-
+  width: clamp(110px, 9vw, 180px);
+  height: clamp(62px, 5vw, 96px);
   border-radius: var(--radius-pill);
-
   background: var(--color-yellow-soft);
-
-  opacity: 0.62;
-
+  opacity: 0.58;
   transform: rotate(-14deg);
 }
 
 /* =========================================================
-   49 — PROJECTS HEADING
+   35 — PROJECTS HEADING
    ========================================================= */
 
 .projects__heading {
   position: relative;
-
   z-index: 7;
-
   display: grid;
-
   grid-template-columns:
-    minmax(145px, 0.38fr)
-    minmax(0, 1.62fr);
-
-  column-gap: clamp(2rem, 4vw, 4.2rem);
-
-  align-items: start;
-
-  margin-bottom: clamp(0.7rem, 1.3vh, 1rem);
+    minmax(145px, 0.34fr)
+    minmax(0, 1.66fr);
+  column-gap: clamp(1.8rem, 3.2vw, 3.4rem);
+  margin-bottom: clamp(1.35rem, 2.3vw, 2rem);
 }
 
 .projects__eyebrow {
-  padding-top: 0.25rem;
-
+  padding-top: 0.3rem;
   color: var(--color-coral);
-
   font-size: var(--font-size-sm);
-
   font-weight: 800;
-
   line-height: 1.35;
-
   letter-spacing: 0.08em;
-
   text-transform: uppercase;
 }
 
 .projects__title {
-  max-width: 900px;
-
-  font-size: clamp(2.5rem, 4.1vw, 4.5rem);
-
+  max-width: 850px;
+  font-size: clamp(2.4rem, 3.35vw, 3.75rem);
   font-weight: 850;
-
-  line-height: 0.94;
-
-  letter-spacing: -0.06em;
-
+  line-height: 0.96;
+  letter-spacing: -0.058em;
   text-wrap: balance;
 }
 
 /* =========================================================
-   50 — PROJECT MASTER STAGE
+   36 — SELECTED WORK GRID
    ========================================================= */
 
-.project-stage {
+.selected-work {
   position: relative;
-
   z-index: 8;
-
   display: grid;
-
-  grid-template-columns:
-    minmax(155px, 0.27fr)
-    minmax(0, 1.73fr);
-
-  gap: clamp(1.4rem, 2.6vw, 3rem);
-
-  align-self: stretch;
-
-  min-height: clamp(330px, 45vh, 540px);
-
-  padding: clamp(1rem, 1.7vw, 1.45rem);
-
-  overflow: hidden;
-
-  border: 1px solid rgba(32, 29, 26, 0.11);
-
-  border-radius: var(--radius-xl);
-
-  background: rgba(247, 239, 227, 0.52);
-
-  box-shadow: var(--shadow-card);
-
-  backdrop-filter: blur(8px);
-
-  -webkit-backdrop-filter: blur(8px);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(0.9rem, 1.4vw, 1.3rem);
+  width: 100%;
 }
 
-/* =========================================================
-   51 — PROJECT TIMELINE
-   ========================================================= */
-
-.project-progress {
+.selected-project {
   position: relative;
-
-  z-index: 5;
-
-  display: grid;
-
-  grid-template-rows:
-    auto
-    minmax(0, 1fr)
-    auto;
-
   min-width: 0;
-  min-height: 100%;
-
-  padding: 0.35rem 0 0.25rem;
 }
 
-.project-progress__year {
-  position: relative;
-
-  z-index: 4;
-
-  padding-left: 0.05rem;
-
-  color: var(--color-text-soft);
-
-  font-size: 0.72rem;
-
-  font-weight: 850;
-
-  letter-spacing: 0.07em;
+.selected-project:nth-child(1) {
+  grid-column: 1 / -1;
 }
 
-.project-progress__year:last-child {
-  align-self: end;
+.selected-project:nth-child(2) {
+  grid-column: 1 / span 6;
+}
 
-  padding-bottom: 0.15rem;
+.selected-project:nth-child(3) {
+  grid-column: 7 / -1;
 }
 
 /* =========================================================
-   52 — PROJECT TIMELINE RAIL
+   37 — SELECTED PROJECT CARD
    ========================================================= */
 
-.project-progress__rail {
-  position: absolute;
-
-  top: 2rem;
-  bottom: 2.15rem;
-  left: 0.64rem;
-
-  z-index: 1;
-
-  width: 2px;
-
-  overflow: hidden;
-
-  border-radius: var(--radius-pill);
-
-  background: rgba(32, 29, 26, 0.12);
-}
-
-.project-progress__fill {
-  display: block;
-
-  width: 100%;
-  height: 0%;
-
-  border-radius: inherit;
-
-  background: linear-gradient(
-    to bottom,
-    var(--color-coral),
-    var(--color-purple)
-  );
-
-  transition: height 280ms var(--ease-premium);
-}
-
-/* =========================================================
-   53 — PROJECT MARKERS
-   ========================================================= */
-
-.project-progress__markers {
+.selected-project__trigger {
   position: relative;
-
-  z-index: 3;
-
-  display: flex;
-
-  min-height: 100%;
-
-  flex-direction: column;
-
-  justify-content: space-evenly;
-
-  padding-block: 0.5rem;
-}
-
-.project-progress__marker {
-  position: relative;
-
   display: grid;
-
-  grid-template-columns:
-    1.3rem
-    minmax(0, 1fr);
-
-  align-items: center;
-
-  gap: 0.6rem;
-
   width: 100%;
-
-  padding: 0.55rem 0;
-
-  color: var(--color-text-faint);
-
-  text-align: left;
-
-  transition:
-    color var(--transition-base),
-    transform var(--transition-base),
-    opacity var(--transition-base);
-}
-
-.project-progress__marker:hover {
-  color: var(--color-text);
-
-  transform: translateX(3px);
-}
-
-.project-progress__dot {
-  position: relative;
-
-  z-index: 3;
-
-  display: block;
-
-  width: 0.9rem;
-  height: 0.9rem;
-
-  border: 2px solid var(--color-border-strong);
-
-  border-radius: 50%;
-
+  min-height: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(32, 29, 26, 0.13);
+  border-radius: clamp(26px, 2.6vw, 42px);
   background: var(--color-surface);
-
-  box-shadow: 0 0 0 0 rgba(239, 118, 84, 0);
-
+  box-shadow: var(--shadow-soft);
+  text-align: left;
+  isolation: isolate;
   transition:
     transform var(--transition-base),
-    background var(--transition-base),
     border-color var(--transition-base),
     box-shadow var(--transition-base);
 }
 
-.project-progress__marker.is-active {
-  color: var(--color-text);
-
-  transform: translateX(2px);
+.selected-project:nth-child(1) .selected-project__trigger {
+  min-height: clamp(310px, 27vw, 390px);
+  grid-template-columns:
+    minmax(0, 0.94fr)
+    minmax(0, 1.06fr);
 }
 
-.project-progress__marker.is-active .project-progress__dot {
-  transform: scale(1.12);
-
-  border-color: var(--color-coral);
-
-  background: var(--color-coral);
-
-  box-shadow: 0 0 0 6px rgba(239, 118, 84, 0.13);
+.selected-project:nth-child(2) .selected-project__trigger,
+.selected-project:nth-child(3) .selected-project__trigger {
+  min-height: clamp(285px, 28vw, 350px);
+  grid-template-rows:
+    minmax(130px, 0.78fr)
+    auto;
 }
 
-.project-progress__label {
-  min-width: 0;
-
-  font-size: clamp(0.68rem, 0.78vw, 0.8rem);
-
-  font-weight: 750;
-
-  line-height: 1.25;
+.selected-project__trigger:hover,
+.selected-project__trigger:focus-visible {
+  transform: translateY(-5px);
+  border-color: rgba(32, 29, 26, 0.26);
+  box-shadow: var(--shadow-card);
 }
 
-/* =========================================================
-   54 — PROJECT DISPLAY
-
-   All projects occupy the same coordinate system.
-   ========================================================= */
-
-.project-display {
-  position: relative;
-
-  min-width: 0;
-  min-height: 100%;
-
-  isolation: isolate;
-}
-
-/* =========================================================
-   55 — PROJECT PANEL
-   ========================================================= */
-
-.project-panel {
-  position: absolute;
-
-  inset: 0;
-
-  display: flex;
-
-  min-width: 0;
-  min-height: 100%;
-
-  flex-direction: column;
-
-  justify-content: center;
-
-  overflow: hidden;
-
-  border: 1px solid rgba(32, 29, 26, 0.11);
-
-  border-radius: clamp(28px, 3vw, var(--radius-xl));
-
-  background: var(--color-surface);
-
-  box-shadow: 0 10px 35px rgba(57, 43, 31, 0.04);
-
-  opacity: 0;
-
-  visibility: hidden;
-
-  pointer-events: none;
-}
-
-.project-panel.is-active {
-  opacity: 1;
-
-  visibility: visible;
-
-  pointer-events: auto;
-}
-
-.project-panel--nada {
-  background: linear-gradient(135deg, #f4e4d7 0%, #f7efe3 100%);
-}
-
-.project-panel--pulse {
-  background: linear-gradient(135deg, #e8e0ed 0%, #f4edf5 100%);
-}
-
-.project-panel--lega {
+.selected-project--lega .selected-project__trigger {
   background: linear-gradient(135deg, #dfe8dd 0%, #eef2e8 52%, #e6ece2 100%);
 }
 
+.selected-project--pulse .selected-project__trigger {
+  background: linear-gradient(135deg, #e8e0ed 0%, #f4edf5 100%);
+}
+
+.selected-project--nada .selected-project__trigger {
+  background: linear-gradient(135deg, #f4e4d7 0%, #f7efe3 100%);
+}
+
 /* =========================================================
-   56 — PROJECT CONTENT MASTER FRAME
+   38 — SELECTED PROJECT VISUAL
    ========================================================= */
 
-.project-panel__content {
+.selected-project__visual {
   position: relative;
-
-  z-index: 5;
-
-  display: flex;
-
-  width: 100%;
-  height: 100%;
-
   min-width: 0;
-
-  flex-direction: column;
-
-  justify-content: center;
-
-  padding: clamp(1.35rem, 2.4vw, 2.7rem);
-
-  pointer-events: none;
+  min-height: 160px;
+  overflow: hidden;
 }
 
-.project-panel__content > * {
-  pointer-events: auto;
+.selected-project:nth-child(1) .selected-project__visual {
+  min-height: 100%;
+  order: 2;
+}
+
+.selected-project:nth-child(1) .selected-project__body {
+  order: 1;
+}
+
+.selected-project__visual .project-visual {
+  position: absolute;
+  inset: 0;
 }
 
 /* =========================================================
-   57 — PROJECT META
+   39 — SELECTED PROJECT BODY
    ========================================================= */
 
-.project-panel__meta {
+.selected-project__body {
   position: relative;
-
-  z-index: 6;
-
+  z-index: 4;
   display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(1.25rem, 2vw, 2rem);
+}
 
-  width: min(64%, 720px);
-
+.selected-project__meta {
+  display: flex;
   align-items: center;
-
-  flex-wrap: wrap;
-
-  gap: 0.7rem;
-
-  margin-bottom: clamp(0.55rem, 1vh, 0.85rem);
-
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: clamp(0.75rem, 1.2vw, 1.1rem);
   color: var(--color-text-soft);
-
-  font-size: 0.67rem;
-
+  font-size: var(--font-size-xs);
   font-weight: 800;
-
-  letter-spacing: 0.07em;
-
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.project-panel__number {
+.selected-project__number {
   display: grid;
-
-  width: 1.8rem;
-  height: 1.8rem;
-
-  flex-shrink: 0;
-
+  width: 2rem;
+  height: 2rem;
   place-items: center;
-
   border: 1px solid var(--color-border-strong);
-
   border-radius: 50%;
-
-  background: rgba(247, 239, 227, 0.32);
 }
 
-/* =========================================================
-   58 — PROJECT NAME
-   ========================================================= */
-
-.project-panel__name {
-  position: relative;
-
-  z-index: 6;
-
-  width: min(64%, 760px);
-
-  font-size: clamp(2.8rem, 4.8vw, 5.6rem);
-
+.selected-project__name {
+  max-width: 800px;
+  font-size: clamp(2.25rem, 3.5vw, 4.2rem);
   font-weight: 850;
-
-  line-height: 0.89;
-
-  letter-spacing: -0.07em;
-
+  line-height: 0.91;
+  letter-spacing: -0.066em;
   text-wrap: balance;
-
-  overflow-wrap: normal;
-
-  word-break: normal;
-
   transition:
     color var(--transition-base),
     transform var(--transition-base);
 }
 
-.project-panel:hover .project-panel__name,
-.project-panel:focus-within .project-panel__name {
-  color: var(--color-coral);
+.selected-project:nth-child(n + 2) .selected-project__name {
+  font-size: clamp(1.9rem, 2.55vw, 2.95rem);
+}
 
+.selected-project__trigger:hover .selected-project__name {
+  color: var(--color-coral);
   transform: translateX(4px);
 }
 
-/* =========================================================
-   59 — PROJECT DISCIPLINES
-   ========================================================= */
-
-.project-panel__disciplines {
-  position: relative;
-
-  z-index: 6;
-
+.selected-project__disciplines {
   display: flex;
-
-  width: min(64%, 720px);
-
   flex-wrap: wrap;
-
-  gap: 0.4rem;
-
-  margin-top: clamp(0.7rem, 1.15vh, 1rem);
+  gap: 0.38rem;
+  margin-top: 0.75rem;
 }
 
-.project-panel__disciplines li {
-  padding: 0.34rem 0.62rem;
-
-  border: 1px solid rgba(32, 29, 26, 0.13);
-
+.selected-project__disciplines li {
+  padding: 0.34rem 0.6rem;
+  border: 1px solid rgba(32, 29, 26, 0.14);
   border-radius: var(--radius-pill);
-
-  background: rgba(247, 239, 227, 0.48);
-
+  background: rgba(247, 239, 227, 0.44);
   color: var(--color-text-soft);
-
-  font-size: 0.65rem;
-
+  font-size: clamp(0.66rem, 0.7vw, 0.75rem);
   font-weight: 750;
 }
 
-/* =========================================================
-   60 — PROJECT PREVIEW
-   ========================================================= */
-
-.project-preview {
-  position: relative;
-
-  z-index: 6;
-
-  width: min(61%, 650px);
-
-  margin-top: clamp(0.72rem, 1.2vh, 1rem);
-}
-
-.project-preview__text {
-  display: block;
-
-  max-width: 58ch;
-
-  margin: 0;
-
+.selected-project__preview {
+  max-width: 55ch;
+  margin-top: 0.85rem;
   color: var(--color-text-soft);
-
-  font-size: clamp(0.88rem, 1vw, 1rem);
-
-  line-height: 1.48;
-
-  opacity: 0.8;
-
-  transition:
-    opacity var(--transition-base),
-    transform var(--transition-base),
-    color var(--transition-base);
+  font-size: clamp(0.86rem, 0.92vw, 0.98rem);
+  line-height: 1.5;
 }
 
-.project-panel:hover .project-preview__text,
-.project-panel:focus-within .project-preview__text {
-  opacity: 1;
-
-  color: var(--color-text);
-}
-
-/* =========================================================
-   61 — PROJECT ACTIONS
-   ========================================================= */
-
-.project-panel__actions {
-  position: relative;
-
-  z-index: 7;
-
-  width: fit-content;
-
-  flex-shrink: 0;
-
-  margin-top: clamp(0.85rem, 1.35vh, 1.15rem);
-}
-
-.project-read-more {
+.selected-project__action {
   display: inline-flex;
-
-  min-height: 2.85rem;
-
+  width: fit-content;
   align-items: center;
-
-  gap: 0.7rem;
-
-  padding: 0.65rem 0.95rem;
-
+  gap: 0.5rem;
+  margin-top: clamp(0.9rem, 1.5vw, 1.3rem);
+  padding: 0.52rem 0.78rem;
   border: 1px solid var(--color-border-strong);
-
   border-radius: var(--radius-pill);
-
-  background: rgba(247, 239, 227, 0.58);
-
-  font-size: 0.76rem;
-
+  background: rgba(247, 239, 227, 0.5);
+  font-size: clamp(0.76rem, 0.8vw, 0.84rem);
   font-weight: 800;
-
   transition:
     transform var(--transition-base),
     background var(--transition-base),
     color var(--transition-base),
-    border-color var(--transition-base),
-    box-shadow var(--transition-base);
+    border-color var(--transition-base);
 }
 
-.project-read-more:hover,
-.project-read-more:focus-visible {
+.selected-project__trigger:hover .selected-project__action {
   transform: translateY(-2px);
-
   border-color: var(--color-text);
-
   background: var(--color-text);
-
   color: var(--color-surface);
-
-  box-shadow: 0 10px 26px rgba(32, 29, 26, 0.12);
 }
 
 /* =========================================================
-   62 — NADA DISCLAIMER
-   ========================================================= */
-
-.project-disclaimer {
-  position: relative;
-
-  z-index: 7;
-
-  width: min(58%, 620px);
-
-  flex-shrink: 0;
-
-  margin-top: clamp(0.6rem, 1vh, 0.85rem);
-
-  padding-top: 0.6rem;
-
-  border-top: 1px solid var(--color-border);
-
-  color: var(--color-text-faint);
-
-  font-size: 0.62rem;
-}
-
-.project-disclaimer summary {
-  width: fit-content;
-
-  font-weight: 800;
-
-  cursor: pointer;
-}
-
-.project-disclaimer p {
-  max-width: 600px;
-
-  margin-top: 0.5rem;
-
-  line-height: 1.5;
-}
-
-/* =========================================================
-   63 — SHARED PROJECT VISUAL
+   40 — SHARED PROJECT VISUALS
    ========================================================= */
 
 .project-visual {
   position: absolute;
-
   inset: 0;
-
   z-index: 1;
-
   overflow: hidden;
-
   pointer-events: none;
 }
 
 /* =========================================================
-   64 — NADA RHYTHM VISUAL
+   41 — NADA NUSANTARA VISUAL
    ========================================================= */
 
 .project-visual--rhythm {
   display: flex;
-
   align-items: center;
-
-  justify-content: flex-end;
-
-  gap: clamp(0.45rem, 0.75vw, 0.72rem);
-
-  padding-right: clamp(2rem, 4vw, 4.5rem);
-
-  opacity: 0.95;
+  justify-content: center;
+  gap: clamp(0.4rem, 0.7vw, 0.65rem);
+  padding: clamp(1.4rem, 2.5vw, 2.7rem);
 }
 
 .rhythm-line {
   display: block;
-
-  width: clamp(8px, 0.72vw, 13px);
-
-  height: 16%;
-
+  width: clamp(8px, 0.7vw, 12px);
+  height: 18%;
   border-radius: var(--radius-pill);
-
   background: var(--color-coral);
-
-  opacity: 0.16;
-
+  opacity: 0.22;
   transform-origin: center;
-
-  transition: opacity var(--transition-base);
+  transition:
+    opacity var(--transition-base),
+    transform var(--transition-base);
 }
 
 .rhythm-line:nth-child(2) {
-  height: 29%;
+  height: 32%;
 }
 
 .rhythm-line:nth-child(3) {
-  height: 46%;
+  height: 52%;
 }
 
 .rhythm-line:nth-child(4) {
-  height: 64%;
+  height: 70%;
 }
 
 .rhythm-line:nth-child(5) {
-  height: 39%;
+  height: 44%;
 }
 
 .rhythm-line:nth-child(6) {
-  height: 23%;
+  height: 27%;
 }
 
-.project-panel--nada:hover .rhythm-line,
-.project-panel--nada:focus-within .rhythm-line {
+.selected-project--nada:hover .rhythm-line,
+.project-modal--nada .project-visual--rhythm .rhythm-line {
   animation: FLRhythmPulse 900ms ease-in-out infinite alternate;
-}
-
-.project-panel--nada:hover .rhythm-line:nth-child(2) {
-  animation-delay: 70ms;
-}
-
-.project-panel--nada:hover .rhythm-line:nth-child(3) {
-  animation-delay: 140ms;
-}
-
-.project-panel--nada:hover .rhythm-line:nth-child(4) {
-  animation-delay: 210ms;
-}
-
-.project-panel--nada:hover .rhythm-line:nth-child(5) {
-  animation-delay: 280ms;
-}
-
-.project-panel--nada:hover .rhythm-line:nth-child(6) {
-  animation-delay: 350ms;
 }
 
 @keyframes FLRhythmPulse {
   from {
-    transform: scaleY(0.72);
-
-    opacity: 0.13;
+    transform: scaleY(0.75);
+    opacity: 0.16;
   }
 
   to {
     transform: scaleY(1.12);
-
-    opacity: 0.38;
+    opacity: 0.42;
   }
 }
 
 /* =========================================================
-   65 — PULSE DIARY VISUAL
+   42 — PULSE DIARY VISUAL
    ========================================================= */
 
 .project-visual--pulse {
-  right: 0;
-  left: auto;
-
   display: grid;
-
-  width: 42%;
-
   place-items: center;
-
-  overflow: hidden;
-}
-
-.project-visual--pulse::before {
-  content: "";
-
-  position: absolute;
-
-  width: clamp(180px, 22vw, 350px);
-
-  aspect-ratio: 1;
-
-  border-radius: 50%;
-
-  background: radial-gradient(
-    circle,
-    rgba(220, 167, 182, 0.34) 0%,
-    rgba(169, 155, 201, 0.16) 40%,
-    rgba(169, 155, 201, 0) 72%
-  );
 }
 
 .pulse-ring {
   position: absolute;
-
   aspect-ratio: 1;
-
   border: 1.5px solid rgba(125, 105, 164, 0.3);
-
   border-radius: 50%;
-
-  transform-origin: center;
 }
 
 .pulse-ring--outer {
-  width: clamp(190px, 22vw, 360px);
+  width: clamp(135px, 16vw, 250px);
 }
 
 .pulse-ring--middle {
-  width: clamp(140px, 16.5vw, 270px);
-
-  opacity: 0.78;
+  width: clamp(100px, 12vw, 190px);
 }
 
 .pulse-ring--inner {
-  width: clamp(92px, 10.5vw, 170px);
-
-  opacity: 0.9;
+  width: clamp(66px, 7.5vw, 120px);
 }
 
 .pulse-core {
   position: absolute;
-
-  width: clamp(46px, 5vw, 78px);
-
+  width: clamp(42px, 4vw, 65px);
   aspect-ratio: 1;
-
   border-radius: 50%;
-
   background: radial-gradient(
     circle at 35% 30%,
-    #f3d9e2 0%,
+    #f3d9e2,
     var(--color-pink) 60%,
-    #c58aa0 100%
+    #c58aa0
   );
-
-  box-shadow: 0 16px 40px rgba(169, 155, 201, 0.24);
+  box-shadow: 0 20px 45px rgba(125, 105, 164, 0.18);
 }
-
-/* =========================================================
-   66 — PULSE MARKERS
-   ========================================================= */
 
 .pulse-marker {
   position: absolute;
-
-  z-index: 3;
-
   display: grid;
-
-  width: 2.15rem;
-  height: 2.15rem;
-
+  width: 2rem;
+  height: 2rem;
   place-items: center;
-
   border: 1px solid rgba(32, 29, 26, 0.11);
-
   border-radius: 50%;
-
-  background: rgba(247, 239, 227, 0.74);
-
-  box-shadow: 0 8px 22px rgba(57, 43, 31, 0.07);
-
-  color: var(--color-text-soft);
-
-  font-size: 0.72rem;
-
+  background: rgba(247, 239, 227, 0.78);
+  box-shadow: 0 8px 20px rgba(57, 43, 31, 0.06);
+  font-size: 0.68rem;
   font-weight: 800;
 }
 
 .pulse-marker--one {
-  top: 24%;
-  right: 18%;
+  top: 22%;
+  right: 20%;
 }
 
 .pulse-marker--two {
-  right: 10%;
+  right: 11%;
   bottom: 26%;
 }
 
 .pulse-marker--three {
-  bottom: 17%;
-  left: 18%;
-}
-
-/* ---------------------------------------------------------
-   PULSE HOVER MOTION
-   --------------------------------------------------------- */
-
-.project-panel--pulse:hover .pulse-core,
-.project-panel--pulse:focus-within .pulse-core {
-  animation: FLPulseCore 1.8s ease-in-out infinite;
-}
-
-.project-panel--pulse:hover .pulse-ring--inner,
-.project-panel--pulse:focus-within .pulse-ring--inner {
-  animation: FLPulseRing 1.8s ease-out infinite;
-}
-
-.project-panel--pulse:hover .pulse-ring--middle,
-.project-panel--pulse:focus-within .pulse-ring--middle {
-  animation: FLPulseRing 1.8s 220ms ease-out infinite;
-}
-
-.project-panel--pulse:hover .pulse-ring--outer,
-.project-panel--pulse:focus-within .pulse-ring--outer {
-  animation: FLPulseRing 1.8s 440ms ease-out infinite;
-}
-
-@keyframes FLPulseCore {
-  0%,
-  100% {
-    transform: scale(0.96);
-  }
-
-  50% {
-    transform: scale(1.06);
-  }
-}
-
-@keyframes FLPulseRing {
-  0% {
-    transform: scale(0.88);
-
-    opacity: 0.62;
-  }
-
-  100% {
-    transform: scale(1.08);
-
-    opacity: 0.08;
-  }
+  bottom: 16%;
+  left: 19%;
 }
 
 /* =========================================================
-   LEGA — REFLECTION VISUAL
-
-   A quieter visual system built from concentric reflection
-   rings and five slider tracks, echoing the interaction
-   language used inside the Lega project itself.
+   43 — LEGA VISUAL
    ========================================================= */
 
 .project-visual--lega {
-  right: 0;
-  left: auto;
-
-  display: block;
-
-  width: 42%;
-
-  overflow: hidden;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  justify-items: center;
+  padding: clamp(1.3rem, 2.4vw, 2.4rem);
 }
-
-.project-visual--lega::before {
-  content: "";
-
-  position: absolute;
-
-  top: 50%;
-  left: 50%;
-
-  width: clamp(220px, 25vw, 410px);
-
-  aspect-ratio: 1;
-
-  transform: translate(-42%, -50%);
-
-  border-radius: 50%;
-
-  background: radial-gradient(
-    circle,
-    rgba(158, 189, 145, 0.3) 0%,
-    rgba(200, 220, 236, 0.16) 42%,
-    rgba(158, 189, 145, 0) 74%
-  );
-}
-
-/* ---------------------------------------------------------
-   Reflection orb
-   --------------------------------------------------------- */
 
 .lega-visual__orb {
-  position: absolute;
-
-  top: clamp(1.8rem, 4vh, 3.4rem);
-
-  right: clamp(2rem, 4vw, 4.6rem);
-
+  position: relative;
   display: grid;
-
-  width: clamp(135px, 15vw, 240px);
-
+  width: clamp(125px, 13vw, 205px);
   aspect-ratio: 1;
-
   place-items: center;
 }
 
 .lega-visual__ring {
   position: absolute;
-
   aspect-ratio: 1;
-
   border: 1.5px solid rgba(90, 125, 88, 0.28);
-
   border-radius: 50%;
-
-  transform-origin: center;
 }
 
 .lega-visual__ring--outer {
@@ -3638,118 +1986,63 @@ body.nav-open {
 
 .lega-visual__ring--middle {
   width: 72%;
-
-  border-color: rgba(143, 184, 217, 0.32);
 }
 
 .lega-visual__ring--inner {
   width: 44%;
-
-  border-color: rgba(239, 118, 84, 0.26);
 }
 
 .lega-visual__core {
   position: relative;
-
   z-index: 4;
-
   display: grid;
-
-  width: clamp(42px, 4.6vw, 70px);
-
+  width: clamp(40px, 4vw, 62px);
   aspect-ratio: 1;
-
   place-items: center;
-
-  border: 1px solid rgba(32, 29, 26, 0.08);
-
   border-radius: 50%;
-
   background: linear-gradient(
     145deg,
     var(--color-yellow-soft),
     var(--color-green-soft)
   );
-
-  box-shadow: 0 14px 34px rgba(83, 103, 76, 0.14);
-
-  color: var(--color-text-soft);
-
-  font-size: clamp(0.9rem, 1.2vw, 1.2rem);
-
-  transition: transform var(--transition-slow);
+  box-shadow: 0 14px 34px rgba(90, 125, 88, 0.12);
 }
 
-/* ---------------------------------------------------------
-   Five reflection sliders
-   --------------------------------------------------------- */
-
 .lega-visual__sliders {
-  position: absolute;
-
-  right: clamp(2rem, 4vw, 4.6rem);
-
-  bottom: clamp(2rem, 4.6vh, 3.6rem);
-
+  position: relative;
   display: grid;
-
-  width: min(72%, 310px);
-
-  gap: clamp(0.75rem, 1.25vh, 1.05rem);
+  width: min(78%, 270px);
+  gap: 0.6rem;
 }
 
 .lega-visual__slider {
   --lega-position: 28%;
 
   position: relative;
-
   display: block;
-
-  width: 100%;
-  height: 0.9rem;
+  height: 0.72rem;
 }
 
 .lega-visual__slider::before {
   content: "";
-
   position: absolute;
-
   top: 50%;
   right: 0;
   left: 0;
-
   height: 2px;
-
-  transform: translateY(-50%);
-
-  border-radius: var(--radius-pill);
-
   background: rgba(32, 29, 26, 0.14);
 }
 
 .lega-visual__slider > span {
   position: absolute;
-
   top: 50%;
   left: var(--lega-position);
-
-  width: 0.92rem;
-  height: 0.92rem;
-
+  width: 0.78rem;
+  height: 0.78rem;
   transform: translate(-50%, -50%);
-
-  border: 2px solid rgba(247, 239, 227, 0.92);
-
   border-radius: 50%;
-
   background: var(--color-green);
-
-  box-shadow: 0 0 0 4px rgba(158, 189, 145, 0.13);
-
-  transition:
-    left 700ms var(--ease-premium),
-    transform var(--transition-base),
-    background var(--transition-base);
+  box-shadow: 0 4px 12px rgba(90, 125, 88, 0.15);
 }
 
 .lega-visual__slider--one {
@@ -3772,360 +2065,244 @@ body.nav-open {
   --lega-position: 34%;
 }
 
-.lega-visual__slider--two > span {
-  background: var(--color-blue);
-}
-
-.lega-visual__slider--three > span {
-  background: var(--color-coral);
-}
-
-.lega-visual__slider--four > span {
-  background: var(--color-purple);
-}
-
-.lega-visual__slider--five > span {
-  background: var(--color-yellow);
-}
-
-/* ---------------------------------------------------------
-   Lega hover / focus motion
-   --------------------------------------------------------- */
-
-.project-panel--lega:hover .lega-visual__slider--one,
-.project-panel--lega:focus-within .lega-visual__slider--one {
-  --lega-position: 67%;
-}
-
-.project-panel--lega:hover .lega-visual__slider--two,
-.project-panel--lega:focus-within .lega-visual__slider--two {
-  --lega-position: 38%;
-}
-
-.project-panel--lega:hover .lega-visual__slider--three,
-.project-panel--lega:focus-within .lega-visual__slider--three {
-  --lega-position: 76%;
-}
-
-.project-panel--lega:hover .lega-visual__slider--four,
-.project-panel--lega:focus-within .lega-visual__slider--four {
-  --lega-position: 48%;
-}
-
-.project-panel--lega:hover .lega-visual__slider--five,
-.project-panel--lega:focus-within .lega-visual__slider--five {
-  --lega-position: 61%;
-}
-
-.project-panel--lega:hover .lega-visual__ring--outer,
-.project-panel--lega:focus-within .lega-visual__ring--outer {
-  animation: FLLegaRing 2.4s ease-in-out infinite;
-}
-
-.project-panel--lega:hover .lega-visual__ring--middle,
-.project-panel--lega:focus-within .lega-visual__ring--middle {
-  animation: FLLegaRing 2.4s 180ms ease-in-out infinite;
-}
-
-.project-panel--lega:hover .lega-visual__ring--inner,
-.project-panel--lega:focus-within .lega-visual__ring--inner {
-  animation: FLLegaRing 2.4s 360ms ease-in-out infinite;
-}
-
-.project-panel--lega:hover .lega-visual__core,
-.project-panel--lega:focus-within .lega-visual__core {
-  transform: rotate(10deg) scale(1.05);
-}
-
-@keyframes FLLegaRing {
-  0%,
-  100% {
-    transform: scale(0.96);
-
-    opacity: 0.55;
-  }
-
-  50% {
-    transform: scale(1.04);
-
-    opacity: 1;
-  }
-}
-
 /* =========================================================
-   67 — PROJECT CONTROLS
-   ========================================================= */
-
-.project-controls {
-  position: relative;
-
-  z-index: 9;
-
-  display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr)
-    auto
-    minmax(0, 1fr);
-
-  align-items: center;
-
-  gap: 0.8rem;
-
-  min-height: 3rem;
-
-  margin-top: clamp(0.5rem, 0.95vh, 0.75rem);
-
-  padding-inline: 0.15rem;
-}
-
-.project-controls__button {
-  display: inline-flex;
-
-  width: fit-content;
-
-  min-height: 2.7rem;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 0.6rem;
-
-  padding: 0.56rem 0.82rem;
-
-  border: 1px solid var(--color-border);
-
-  border-radius: var(--radius-pill);
-
-  background: rgba(247, 239, 227, 0.52);
-
-  font-size: 0.72rem;
-
-  font-weight: 750;
-
-  transition:
-    transform var(--transition-base),
-    background var(--transition-base),
-    border-color var(--transition-base),
-    opacity var(--transition-base);
-}
-
-.project-controls__button:hover:not(:disabled) {
-  transform: translateY(-2px);
-
-  border-color: var(--color-border-strong);
-
-  background: var(--color-yellow-soft);
-}
-
-.project-controls__button:disabled {
-  opacity: 0.28;
-
-  cursor: default;
-}
-
-.project-controls__button--previous {
-  justify-self: start;
-}
-
-.project-controls__button--next {
-  justify-self: end;
-}
-
-.project-controls__counter {
-  display: flex;
-
-  min-width: 4rem;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 0.3rem;
-
-  color: var(--color-text-soft);
-
-  font-size: 0.72rem;
-
-  font-weight: 850;
-
-  letter-spacing: 0.06em;
-}
-
-/* =========================================================
-   68 — PROJECT INTERACTION HINT
+   44 — PROJECT INTERACTION HINT
    ========================================================= */
 
 .projects__interaction-hint {
   position: relative;
-
   z-index: 8;
-
-  margin-top: clamp(0.25rem, 0.5vh, 0.45rem);
-
+  margin-top: clamp(1rem, 1.6vw, 1.4rem);
   color: var(--color-text-faint);
-
-  font-size: 0.64rem;
-
-  font-weight: 600;
-
+  font-size: clamp(0.78rem, 0.82vw, 0.86rem);
+  font-weight: 650;
+  line-height: 1.4;
   text-align: center;
 }
 
+.projects .scene-next--contact {
+  margin-top: clamp(2rem, 3vw, 3rem);
+}
+
 /* =========================================================
-   69 — CONTACT NEXT BUTTON
+   45 — PROJECT MODALS
    ========================================================= */
 
-.scene-next--contact {
+.project-modal {
+  z-index: 3100;
+}
+
+.project-modal__surface {
   position: relative;
+  display: grid;
+  width: min(100%, 1080px);
+  max-height: min(760px, calc(100dvh - 2.5rem));
+  grid-template-columns:
+    minmax(260px, 0.82fr)
+    minmax(0, 1.18fr);
+  overflow: hidden;
+  border: 1px solid rgba(32, 29, 26, 0.15);
+  border-radius: clamp(28px, 3vw, 46px);
+  box-shadow: var(--shadow-modal);
+}
 
-  z-index: 10;
+.project-modal--lega .project-modal__surface {
+  background: linear-gradient(135deg, #dfe8dd 0%, #eef2e8 52%, #e6ece2 100%);
+}
 
-  justify-self: end;
+.project-modal--pulse .project-modal__surface {
+  background: linear-gradient(135deg, #e8e0ed 0%, #f4edf5 100%);
+}
 
-  align-self: end;
+.project-modal--nada .project-modal__surface {
+  background: linear-gradient(135deg, #f4e4d7 0%, #f7efe3 100%);
+}
 
-  margin-top: clamp(0.35rem, 0.7vh, 0.55rem);
+.project-modal__close {
+  position: absolute;
+  top: clamp(1rem, 1.6vw, 1.4rem);
+  right: clamp(1rem, 1.6vw, 1.4rem);
+  z-index: 20;
+  display: grid;
+  width: 2.7rem;
+  height: 2.7rem;
+  place-items: center;
+  border: 1px solid rgba(32, 29, 26, 0.18);
+  border-radius: 50%;
+  background: rgba(247, 239, 227, 0.84);
+  box-shadow: 0 8px 24px rgba(57, 43, 31, 0.06);
+  font-size: 1.5rem;
+  line-height: 1;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    transform var(--transition-base),
+    background var(--transition-base);
+}
 
-  margin-bottom: 0.1rem;
+.project-modal__close:hover {
+  transform: rotate(8deg) scale(1.05);
+  background: var(--color-surface);
+}
+
+.project-modal__visual {
+  position: relative;
+  min-height: clamp(320px, 42vh, 470px);
+  overflow: hidden;
+  border-right: 1px solid rgba(32, 29, 26, 0.09);
+}
+
+.project-modal__visual .project-visual {
+  position: absolute;
+  inset: 0;
+}
+
+.project-modal__visual .project-visual--lega {
+  padding: clamp(1.7rem, 3vw, 2.8rem);
+}
+
+.project-modal__visual .lega-visual__orb {
+  width: clamp(145px, 15vw, 225px);
+}
+
+.project-modal__visual .lega-visual__sliders {
+  width: min(76%, 260px);
+}
+
+.project-modal__visual .project-visual--pulse {
+  width: 100%;
+}
+
+.project-modal__content {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(1.8rem, 3vw, 3.1rem);
+  padding-right: clamp(4rem, 5vw, 5rem);
+}
+
+.project-modal__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: clamp(0.8rem, 1.3vw, 1.15rem);
+  color: var(--color-text-soft);
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-modal__title {
+  font-size: clamp(2.8rem, 4.5vw, 5.1rem);
+  font-weight: 850;
+  line-height: 0.9;
+  letter-spacing: -0.068em;
+  text-wrap: balance;
+}
+
+.project-modal__disciplines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+  margin-top: clamp(0.9rem, 1.4vw, 1.2rem);
+}
+
+.project-modal__disciplines li {
+  padding: 0.42rem 0.7rem;
+  border: 1px solid rgba(32, 29, 26, 0.15);
+  border-radius: var(--radius-pill);
+  background: rgba(247, 239, 227, 0.48);
+  color: var(--color-text-soft);
+  font-size: clamp(0.74rem, 0.78vw, 0.84rem);
+  font-weight: 750;
+}
+
+.project-modal__description {
+  max-width: 56ch;
+  margin-top: clamp(1rem, 1.7vw, 1.45rem);
+  color: var(--color-text-soft);
+  font-size: clamp(1rem, 1.15vw, 1.18rem);
+  line-height: 1.55;
+}
+
+.project-modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: clamp(1.2rem, 2vw, 1.7rem);
+}
+
+.project-modal__link {
+  display: inline-flex;
+  min-height: 2.8rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.62rem 0.9rem;
+  border: 1px solid var(--color-text);
+  border-radius: var(--radius-pill);
+  background: var(--color-text);
+  color: var(--color-surface);
+  font-size: clamp(0.78rem, 0.82vw, 0.86rem);
+  font-weight: 800;
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.project-modal__link:hover,
+.project-modal__link:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(32, 29, 26, 0.16);
 }
 
 /* =========================================================
-   70 — PROJECT SHORT-HEIGHT SAFETY
+   46 — PROJECT DISCLAIMER
    ========================================================= */
 
-@media (min-width: 961px) and (max-height: 800px) {
-  .projects .scene-indicator {
-    margin-bottom: 0.35rem;
-  }
+.project-disclaimer {
+  width: min(100%, 700px);
+  margin-top: 1.1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-faint);
+  font-size: var(--font-size-xs);
+}
 
-  .projects__heading {
-    margin-bottom: 0.35rem;
-  }
+.project-disclaimer summary {
+  width: fit-content;
+  list-style: none;
+  font-weight: 800;
+  cursor: pointer;
+}
 
-  .projects__title {
-    font-size: clamp(2.05rem, 3.2vw, 3.3rem);
-  }
+.project-disclaimer summary::-webkit-details-marker {
+  display: none;
+}
 
-  .project-stage {
-    min-height: clamp(285px, 39vh, 360px);
+.project-disclaimer summary::after {
+  content: " +";
+  display: inline-block;
+  margin-left: 0.2rem;
+  color: var(--color-coral);
+}
 
-    gap: 1.15rem;
+.project-disclaimer[open] summary::after {
+  content: " −";
+}
 
-    padding: 0.7rem;
-
-    border-radius: 30px;
-  }
-
-  .project-progress__rail {
-    top: 1.85rem;
-    bottom: 1.9rem;
-  }
-
-  .project-progress__markers {
-    padding-block: 0.2rem;
-  }
-
-  .project-progress__marker {
-    padding: 0.3rem 0;
-  }
-
-  .project-panel__content {
-    padding: 0.95rem 1.2rem;
-  }
-
-  .project-panel__meta {
-    margin-bottom: 0.32rem;
-  }
-
-  .project-panel__name {
-    font-size: clamp(2.25rem, 4vw, 4.25rem);
-  }
-
-  .project-panel__disciplines {
-    margin-top: 0.42rem;
-  }
-
-  .project-preview {
-    margin-top: 0.42rem;
-  }
-
-  .project-preview__text {
-    font-size: clamp(0.76rem, 0.86vw, 0.88rem);
-
-    line-height: 1.38;
-  }
-
-  .project-panel__actions {
-    margin-top: 0.52rem;
-  }
-
-  .project-read-more {
-    min-height: 2.35rem;
-
-    padding: 0.48rem 0.72rem;
-
-    font-size: 0.68rem;
-  }
-
-  .project-disclaimer {
-    margin-top: 0.38rem;
-
-    padding-top: 0.38rem;
-
-    font-size: 0.58rem;
-  }
-
-  .project-controls {
-    min-height: 2.6rem;
-
-    margin-top: 0.2rem;
-  }
-
-  .projects__interaction-hint {
-    margin-top: 0.1rem;
-  }
-
-  .scene-next--contact {
-    margin-top: 0.15rem;
-  }
-
-  .project-visual--pulse,
-  .project-visual--lega {
-    width: 40%;
-  }
-
-  .lega-visual__orb {
-    top: 1.2rem;
-    right: 1.8rem;
-
-    width: clamp(110px, 13vw, 180px);
-  }
-
-  .lega-visual__sliders {
-    right: 1.8rem;
-    bottom: 1.4rem;
-
-    width: min(72%, 250px);
-
-    gap: 0.55rem;
-  }
-
-  .pulse-ring--outer {
-    width: clamp(165px, 20vw, 280px);
-  }
-
-  .pulse-ring--middle {
-    width: clamp(125px, 15vw, 215px);
-  }
-
-  .pulse-ring--inner {
-    width: clamp(80px, 9.5vw, 140px);
-  }
+.project-disclaimer p {
+  max-width: 68ch;
+  margin-top: 0.6rem;
+  line-height: 1.55;
 }
 /* =========================================================
-   71 — CONTACT SCENE
+   47 — CONTACT SCENE
    ========================================================= */
 
 .scene--contact {
@@ -4134,176 +2311,120 @@ body.nav-open {
 
 .contact {
   display: flex;
-
-  min-height: calc(100svh - var(--header-height) - 3.8rem);
-
+  min-height: calc(100svh - var(--header-height) - 5rem);
   flex-direction: column;
-
   justify-content: center;
 }
 
 .contact .scene-indicator {
   position: absolute;
-
   top: 0;
   left: 0;
 }
 
 /* =========================================================
-   72 — CONTACT DECORATIVE SHAPES
+   48 — CONTACT SHAPES
    ========================================================= */
 
 .shape--contact-one {
   top: 8%;
   right: 4%;
-
-  width: clamp(165px, 17vw, 300px);
-
+  width: clamp(150px, 15vw, 260px);
   aspect-ratio: 1;
-
   border-radius: 50%;
-
   background: var(--color-blue-soft);
-
   opacity: 0.65;
 }
 
 .shape--contact-two {
   right: 27%;
   bottom: 3%;
-
-  width: clamp(115px, 11vw, 195px);
-
-  height: clamp(70px, 6.5vw, 120px);
-
+  width: clamp(105px, 10vw, 180px);
+  height: clamp(65px, 5.8vw, 110px);
   border-radius: var(--radius-pill);
-
   background: var(--color-yellow);
-
   opacity: 0.84;
-
   transform: rotate(12deg);
 }
 
 .shape--contact-three {
   bottom: 11%;
   left: -2%;
-
-  width: clamp(140px, 13vw, 235px);
-
+  width: clamp(125px, 12vw, 210px);
   aspect-ratio: 1;
-
   border-radius: 58% 42% 33% 67% / 45% 54% 46% 55%;
-
   background: var(--color-coral-soft);
-
   opacity: 0.78;
-
   transform: rotate(-14deg);
 }
 
 /* =========================================================
-   73 — CONTACT CONTENT
+   49 — CONTACT CONTENT
    ========================================================= */
 
 .contact__content {
   position: relative;
-
   z-index: 7;
-
-  width: min(100%, 1000px);
-
+  width: min(100%, 950px);
   padding-top: clamp(2rem, 5vh, 4rem);
 }
 
 .contact__eyebrow {
-  margin-bottom: 1rem;
-
+  margin-bottom: 0.85rem;
   color: var(--color-coral);
-
   font-size: var(--font-size-sm);
-
   font-weight: 800;
-
   letter-spacing: 0.08em;
-
   text-transform: uppercase;
 }
 
 .contact__title {
-  max-width: 980px;
-
-  font-size: clamp(3.8rem, 7.1vw, 8rem);
-
+  max-width: 900px;
+  font-size: clamp(3.2rem, 5.7vw, 6.6rem);
   font-weight: 850;
-
-  line-height: 0.9;
-
-  letter-spacing: -0.07em;
-
+  line-height: 0.91;
+  letter-spacing: -0.068em;
   text-wrap: balance;
 }
 
 .contact__description {
-  max-width: 650px;
-
-  margin-top: clamp(1.35rem, 2.3vw, 2.25rem);
-
+  max-width: 620px;
+  margin-top: clamp(1.15rem, 2vw, 1.8rem);
   color: var(--color-text-soft);
-
-  font-size: clamp(0.98rem, 1.3vw, 1.2rem);
-
+  font-size: clamp(0.95rem, 1.12vw, 1.1rem);
   line-height: 1.6;
 }
 
 /* =========================================================
-   74 — CONTACT LINKS
+   50 — CONTACT LINKS
    ========================================================= */
 
 .contact-links {
   position: relative;
-
   z-index: 8;
-
   display: grid;
-
-  gap: 0.55rem;
-
-  width: min(100%, 760px);
-
-  margin-top: clamp(1.9rem, 3.3vw, 3.4rem);
+  gap: 0.5rem;
+  width: min(100%, 780px);
+  margin-top: clamp(1.6rem, 2.8vw, 2.7rem);
 }
 
 .contact-link {
   position: relative;
-
   display: grid;
-
   grid-template-columns:
-    minmax(92px, 120px)
+    minmax(86px, 110px)
     minmax(0, 1fr)
     auto;
-
   align-items: center;
-
-  gap: clamp(0.75rem, 1.3vw, 1.1rem);
-
+  gap: clamp(0.7rem, 1.2vw, 1rem);
   min-width: 0;
-
-  padding: 0.9rem 1.1rem;
-
+  padding: 0.85rem 1rem;
   overflow: hidden;
-
   border: 1px solid var(--color-border);
-
   border-radius: var(--radius-lg);
-
   background: rgba(247, 239, 227, 0.52);
-
   backdrop-filter: blur(8px);
-
   -webkit-backdrop-filter: blur(8px);
-
   transition:
     transform var(--transition-base),
     background var(--transition-base),
@@ -4313,89 +2434,57 @@ body.nav-open {
 
 .contact-link::before {
   content: "";
-
   position: absolute;
-
   top: 0;
   bottom: 0;
   left: 0;
-
   width: 4px;
-
   transform: scaleY(0);
-
   transform-origin: bottom;
-
   border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
-
   background: var(--color-coral);
-
   transition: transform var(--transition-base);
 }
 
 .contact-link:hover,
 .contact-link:focus-visible {
   transform: translateX(6px);
-
   border-color: var(--color-border-strong);
-
   background: rgba(247, 239, 227, 0.9);
-
   box-shadow: 0 12px 30px rgba(57, 43, 31, 0.07);
 }
 
 .contact-link:hover::before,
 .contact-link:focus-visible::before {
   transform: scaleY(1);
-
   transform-origin: top;
 }
 
-/* =========================================================
-   75 — CONTACT LINK TYPOGRAPHY
-   ========================================================= */
-
 .contact-link__type {
   position: relative;
-
   z-index: 2;
-
   color: var(--color-text-faint);
-
   font-size: var(--font-size-xs);
-
   font-weight: 800;
-
   letter-spacing: 0.08em;
-
   text-transform: uppercase;
 }
 
 .contact-link__value {
   position: relative;
-
   z-index: 2;
-
   min-width: 0;
-
-  font-size: clamp(1.08rem, 1.65vw, 1.6rem);
-
+  font-size: clamp(1rem, 1.4vw, 1.4rem);
   font-weight: 800;
-
   line-height: 1.15;
-
   letter-spacing: -0.03em;
-
   overflow-wrap: anywhere;
 }
 
 .contact-link__arrow {
   position: relative;
-
   z-index: 2;
-
-  font-size: 1.1rem;
-
+  font-size: 1.05rem;
   transition: transform var(--transition-base);
 }
 
@@ -4405,78 +2494,49 @@ body.nav-open {
 }
 
 /* =========================================================
-   76 — LARGE CONTACT F.L MARK
+   51 — CONTACT LARGE BRAND
    ========================================================= */
 
 .contact__brand {
   position: absolute;
-
   right: -1%;
   bottom: -1%;
-
   z-index: 2;
-
   max-width: 65vw;
-
   color: rgba(32, 29, 26, 0.055);
-
-  font-size: clamp(10rem, 24vw, 25rem);
-
+  font-size: clamp(9rem, 21vw, 22rem);
   font-weight: 900;
-
   line-height: 0.7;
-
   letter-spacing: -0.1em;
-
   white-space: nowrap;
-
   pointer-events: none;
-
   user-select: none;
-
   will-change: transform, opacity;
 }
 
 /* =========================================================
-   77 — CONTACT RESTART
+   52 — CONTACT RESTART
    ========================================================= */
 
 .contact__restart {
   position: absolute;
-
   right: 0;
   bottom: 0.15rem;
-
   z-index: 10;
-
   display: inline-flex;
-
   min-height: 3rem;
-
   align-items: center;
-
   justify-content: center;
-
   gap: 0.7rem;
-
   padding: 0.68rem 0.95rem;
-
   border: 1px solid var(--color-border-strong);
-
   border-radius: var(--radius-pill);
-
   background: rgba(247, 239, 227, 0.68);
-
   box-shadow: 0 8px 24px rgba(57, 43, 31, 0.045);
-
   font-size: 0.78rem;
-
   font-weight: 750;
-
   backdrop-filter: blur(10px);
-
   -webkit-backdrop-filter: blur(10px);
-
   transition:
     transform var(--transition-base),
     background var(--transition-base),
@@ -4484,97 +2544,34 @@ body.nav-open {
     box-shadow var(--transition-base);
 }
 
-.contact__restart:hover {
+.contact__restart:hover,
+.contact__restart:focus-visible {
   transform: translateY(-3px);
-
   border-color: rgba(243, 207, 91, 0.85);
-
   background: var(--color-yellow-soft);
-
-  box-shadow: 0 12px 28px rgba(57, 43, 31, 0.07);
 }
 
 /* =========================================================
-   78 — CONTACT SHORT-HEIGHT SAFETY
-   ========================================================= */
-
-@media (min-width: 961px) and (max-height: 800px) {
-  .contact__content {
-    padding-top: 1.3rem;
-  }
-
-  .contact__eyebrow {
-    margin-bottom: 0.65rem;
-  }
-
-  .contact__title {
-    font-size: clamp(3.1rem, 5.9vw, 6.3rem);
-  }
-
-  .contact__description {
-    max-width: 590px;
-
-    margin-top: 1rem;
-
-    font-size: clamp(0.88rem, 1vw, 1rem);
-
-    line-height: 1.5;
-  }
-
-  .contact-links {
-    gap: 0.4rem;
-
-    margin-top: 1.35rem;
-  }
-
-  .contact-link {
-    padding: 0.68rem 0.9rem;
-  }
-
-  .contact-link__value {
-    font-size: clamp(1rem, 1.3vw, 1.25rem);
-  }
-
-  .contact__restart {
-    min-height: 2.6rem;
-
-    padding: 0.55rem 0.8rem;
-  }
-}
-
-/* =========================================================
-   79 — FOOTER
+   53 — FOOTER
    ========================================================= */
 
 .site-footer {
   position: relative;
-
   z-index: 20;
-
   display: grid;
-
   width: min(calc(100% - (var(--page-padding) * 2)), var(--page-width));
-
   grid-template-columns: repeat(3, minmax(0, 1fr));
-
   align-items: center;
-
   gap: 1rem;
-
   margin-inline: auto;
-
   padding: 1.45rem 0 1.8rem;
-
   border-top: 1px solid var(--color-border);
-
   color: var(--color-text-soft);
-
   font-size: var(--font-size-xs);
 }
 
 .site-footer__identity {
   color: var(--color-text);
-
   font-weight: 850;
 }
 
@@ -4584,88 +2581,64 @@ body.nav-open {
 
 .site-footer__copyright {
   justify-self: end;
-
   text-align: right;
 }
 
 /* =========================================================
-   80 — CUSTOM CURSOR
+   54 — CUSTOM CURSOR
    ========================================================= */
 
 .custom-cursor {
   position: fixed;
-
   top: 0;
   left: 0;
-
   z-index: 5000;
-
   display: grid;
-
   width: 2.8rem;
   height: 2.8rem;
-
   place-items: center;
-
   transform: translate(-50%, -50%);
-
   border: 1px solid rgba(32, 29, 26, 0.35);
-
   border-radius: 50%;
-
   background: rgba(239, 229, 213, 0.12);
-
   opacity: 0;
-
+  visibility: hidden;
   pointer-events: none;
-
   backdrop-filter: blur(4px);
-
   -webkit-backdrop-filter: blur(4px);
-
-  will-change: transform;
-
   transition:
     width var(--transition-base),
     height var(--transition-base),
     border-color var(--transition-base),
     background var(--transition-base),
-    opacity var(--transition-fast);
+    opacity var(--transition-fast),
+    visibility var(--transition-fast);
+}
+
+body:has(.scene--welcome[data-scene-status="active"])
+  .custom-cursor.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.custom-cursor.is-interactive {
+  width: 4.25rem;
+  height: 4.25rem;
+  background: rgba(247, 239, 227, 0.44);
 }
 
 .custom-cursor__label {
+  max-width: 3.4rem;
   font-size: 0.55rem;
-
   font-weight: 850;
-
+  line-height: 1;
   letter-spacing: 0.06em;
-
+  text-align: center;
   text-transform: uppercase;
-
-  pointer-events: none;
 }
 
 /* =========================================================
-   81 — CLICKABLE SCENE SUPPORT
-   ========================================================= */
-
-.scene[data-click-advance="true"] {
-  cursor: pointer;
-}
-
-.scene[data-click-advance="true"] a,
-.scene[data-click-advance="true"] button,
-.scene[data-click-advance="true"] summary,
-.scene[data-click-advance="true"] input,
-.scene[data-click-advance="true"] select,
-.scene[data-click-advance="true"] textarea,
-.scene[data-click-advance="true"] .discipline,
-.scene[data-click-advance="true"] .project-panel {
-  cursor: auto;
-}
-
-/* =========================================================
-   82 — GENERAL FOCUS STATES
+   55 — FOCUS STATES
    ========================================================= */
 
 a:focus-visible,
@@ -4675,12 +2648,16 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
   outline: 2px solid var(--color-coral);
-
   outline-offset: 4px;
 }
 
+.discipline__trigger:focus-visible,
+.selected-project__trigger:focus-visible {
+  outline-offset: -5px;
+}
+
 /* =========================================================
-   83 — DISABLED CONTROLS
+   56 — DISABLED CONTROLS
    ========================================================= */
 
 button:disabled,
@@ -4690,24 +2667,11 @@ button:disabled,
 
 a[aria-disabled="true"] {
   opacity: 0.45;
-
   pointer-events: none;
 }
 
 /* =========================================================
-   84 — ACTIVE SCENE SUPPORT
-   ========================================================= */
-
-.scene[data-scene-status="inactive"] {
-  pointer-events: none;
-}
-
-.scene[data-scene-status="active"] {
-  pointer-events: auto;
-}
-
-/* =========================================================
-   85 — HIDDEN CONTENT
+   57 — HIDDEN CONTENT
    ========================================================= */
 
 [hidden] {
@@ -4715,7 +2679,7 @@ a[aria-disabled="true"] {
 }
 
 /* =========================================================
-   86 — FONT SIZE SETTINGS
+   58 — FONT SIZE SETTINGS
    ========================================================= */
 
 html[data-font-size="small"] {
@@ -4727,37 +2691,429 @@ html[data-font-size="default"] {
 }
 
 html[data-font-size="large"] {
-  font-size: 19px;
+  font-size: 21px;
 }
 
 /* =========================================================
-   87 — REDUCED MOTION
+   59 — LARGE TEXT SAFETY
    ========================================================= */
 
-html[data-reduce-motion="true"] {
-  scroll-behavior: auto;
+html[data-font-size="large"] .services__title {
+  max-width: 21ch;
+  font-size: clamp(2.35rem, 3vw, 3.55rem);
 }
 
-html[data-reduce-motion="true"] *,
-html[data-reduce-motion="true"] *::before,
-html[data-reduce-motion="true"] *::after {
-  animation-duration: 0.01ms !important;
-
-  animation-delay: 0ms !important;
-
-  animation-iteration-count: 1 !important;
-
-  transition-duration: 0.01ms !important;
-
-  scroll-behavior: auto !important;
+html[data-font-size="large"] .projects__title {
+  max-width: 21ch;
+  font-size: clamp(2.3rem, 2.95vw, 3.45rem);
 }
 
-html[data-reduce-motion="true"] .custom-cursor {
-  display: none;
+html[data-font-size="large"] .discipline {
+  min-height: clamp(190px, 14vw, 230px);
+}
+
+html[data-font-size="large"] .discipline__title {
+  font-size: clamp(1.75rem, 2.1vw, 2.35rem);
+}
+
+html[data-font-size="large"] .discipline__teaser {
+  max-width: 36ch;
+  font-size: 0.9rem;
+}
+
+html[data-font-size="large"] .discipline-modal__surface {
+  width: min(100%, 1120px);
+}
+
+html[data-font-size="large"] .discipline-modal__title {
+  font-size: clamp(2.6rem, 3.8vw, 4.2rem);
+}
+
+html[data-font-size="large"] .discipline-modal__description {
+  max-width: 44ch;
+  font-size: clamp(1.3rem, 1.45vw, 1.5rem);
+}
+
+html[data-font-size="large"] .discipline-modal__skills li {
+  padding: 0.58rem 0.92rem;
+  font-size: 0.88rem;
+}
+
+html[data-font-size="large"]
+  .selected-project:nth-child(1)
+  .selected-project__trigger {
+  min-height: clamp(340px, 29vw, 410px);
+}
+
+html[data-font-size="large"]
+  .selected-project:nth-child(2)
+  .selected-project__trigger,
+html[data-font-size="large"]
+  .selected-project:nth-child(3)
+  .selected-project__trigger {
+  min-height: clamp(310px, 29vw, 370px);
+}
+
+html[data-font-size="large"] .selected-project__name {
+  font-size: clamp(2.15rem, 3vw, 3.7rem);
+}
+
+html[data-font-size="large"]
+  .selected-project:nth-child(n + 2)
+  .selected-project__name {
+  font-size: clamp(1.8rem, 2.2vw, 2.6rem);
+}
+
+html[data-font-size="large"] .selected-project__preview {
+  max-width: 48ch;
+  font-size: 0.9rem;
+}
+
+html[data-font-size="large"] .project-modal__description {
+  max-width: 44ch;
+  font-size: clamp(1.08rem, 1.2vw, 1.25rem);
+}
+
+html[data-font-size="large"] .project-modal__surface {
+  max-height: calc(100dvh - 2rem);
+}
+
+html[data-font-size="large"] .project-modal__title {
+  font-size: clamp(2.65rem, 4vw, 4.5rem);
+}
+
+html[data-font-size="large"] .contact-link {
+  grid-template-columns:
+    minmax(105px, 135px)
+    minmax(0, 1fr)
+    auto;
 }
 
 /* =========================================================
-   88 — HOVER-FREE DEVICES
+   60 — SHORT DESKTOP SAFETY
+
+   Designed specifically so normal fullscreen desktop
+   windows around 700–820px tall remain comfortably usable.
+   ========================================================= */
+
+@media (min-width: 961px) and (max-height: 820px) {
+  .scene {
+    padding-top: calc(var(--header-height) + 1.05rem);
+    padding-bottom: 3.5rem;
+  }
+
+  .scene--services,
+  .scene--projects {
+    min-height: auto;
+    padding-bottom: 4rem;
+  }
+
+  .welcome__sequence {
+    min-height: clamp(320px, 49vh, 410px);
+  }
+
+  .welcome__title {
+    font-size: clamp(4.3rem, 8.5vw, 8rem);
+  }
+
+  .welcome-specialism {
+    min-height: clamp(62px, 8vh, 82px);
+  }
+
+  .welcome-specialism--ui {
+    top: 3%;
+    font-size: clamp(1.8rem, 3vw, 3.2rem);
+  }
+
+  .welcome-specialism--interaction {
+    top: 37%;
+    font-size: clamp(2.15rem, 3.8vw, 4rem);
+  }
+
+  .welcome-specialism--frontend {
+    bottom: 1%;
+    font-size: clamp(1.9rem, 3.2vw, 3.4rem);
+  }
+
+  .about {
+    column-gap: clamp(2rem, 4vw, 4.5rem);
+  }
+
+  .about__content {
+    padding-top: 1.2rem;
+  }
+
+  .about__title {
+    font-size: clamp(2.3rem, 3.45vw, 3.6rem);
+  }
+
+  .about__story {
+    gap: 0.62rem;
+    margin-top: 1.1rem;
+    font-size: clamp(0.86rem, 0.94vw, 0.96rem);
+    line-height: 1.48;
+  }
+
+  .travel-story {
+    min-height: clamp(205px, 25vh, 240px);
+    padding: 1.2rem;
+  }
+
+  .travel-route {
+    height: clamp(125px, 16vh, 160px);
+  }
+
+  .services .scene-indicator,
+  .projects .scene-indicator {
+    margin-bottom: 0.8rem;
+  }
+
+  .services__intro,
+  .projects__heading {
+    margin-bottom: 1.15rem;
+  }
+
+  .services__title {
+    max-width: 820px;
+    font-size: clamp(2.2rem, 3vw, 3.2rem);
+  }
+
+  .projects__title {
+    max-width: 820px;
+    font-size: clamp(2.15rem, 2.9vw, 3.1rem);
+  }
+
+  .services__instruction {
+    font-size: 0.8rem;
+  }
+
+  .discipline-playground {
+    gap: 0.8rem;
+  }
+
+  .discipline {
+    min-height: 165px;
+  }
+
+  .discipline__trigger {
+    padding: 1.05rem 1.15rem;
+  }
+
+  .discipline__title {
+    font-size: clamp(1.55rem, 1.95vw, 2.1rem);
+  }
+
+  .discipline__teaser {
+    font-size: 0.82rem;
+    line-height: 1.35;
+  }
+
+  .discipline__symbol {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .selected-work {
+    gap: 0.85rem;
+  }
+
+  .selected-project:nth-child(1) .selected-project__trigger {
+    min-height: 300px;
+  }
+
+  .selected-project:nth-child(2) .selected-project__trigger,
+  .selected-project:nth-child(3) .selected-project__trigger {
+    min-height: 270px;
+  }
+
+  .selected-project__body {
+    padding: 1.15rem 1.35rem;
+  }
+
+  .selected-project__meta {
+    margin-bottom: 0.65rem;
+  }
+
+  .selected-project__name {
+    font-size: clamp(2rem, 3vw, 3.3rem);
+  }
+
+  .selected-project:nth-child(n + 2) .selected-project__name {
+    font-size: clamp(1.7rem, 2.2vw, 2.35rem);
+  }
+
+  .selected-project__disciplines {
+    margin-top: 0.55rem;
+  }
+
+  .selected-project__preview {
+    margin-top: 0.65rem;
+    font-size: 0.82rem;
+    line-height: 1.42;
+  }
+
+  .selected-project__action {
+    margin-top: 0.75rem;
+  }
+
+  .project-modal__surface {
+    max-height: calc(100dvh - 1.5rem);
+  }
+
+  .project-modal__visual {
+    min-height: 310px;
+  }
+
+  .project-modal__content {
+    padding-top: 1.7rem;
+    padding-bottom: 1.7rem;
+  }
+
+  .project-modal__title {
+    font-size: clamp(2.6rem, 4vw, 4.4rem);
+  }
+
+  .project-modal__description {
+    margin-top: 0.9rem;
+    font-size: 1rem;
+  }
+
+  .contact__content {
+    padding-top: 1.2rem;
+  }
+
+  .contact__title {
+    font-size: clamp(2.9rem, 5vw, 5.5rem);
+  }
+
+  .contact__description {
+    margin-top: 0.9rem;
+    font-size: clamp(0.86rem, 0.95vw, 0.96rem);
+  }
+
+  .contact-links {
+    margin-top: 1.2rem;
+  }
+
+  .contact-link {
+    padding: 0.68rem 0.85rem;
+  }
+}
+
+/* =========================================================
+   61 — VERY SHORT DESKTOP
+   ========================================================= */
+
+@media (min-width: 961px) and (max-height: 690px) {
+  .scene--services,
+  .scene--projects {
+    padding-top: calc(var(--header-height) + 0.8rem);
+  }
+
+  .services__title,
+  .projects__title {
+    font-size: clamp(2rem, 2.7vw, 2.85rem);
+  }
+
+  .services__intro,
+  .projects__heading {
+    margin-bottom: 0.95rem;
+  }
+
+  .discipline {
+    min-height: 155px;
+  }
+
+  .discipline__title {
+    font-size: clamp(1.45rem, 1.8vw, 1.95rem);
+  }
+
+  .selected-project:nth-child(1) .selected-project__trigger {
+    min-height: 280px;
+  }
+
+  .selected-project:nth-child(2) .selected-project__trigger,
+  .selected-project:nth-child(3) .selected-project__trigger {
+    min-height: 255px;
+  }
+}
+
+/* =========================================================
+   62 — LARGE DESKTOP HEIGHT
+
+   More vertical space should improve breathing room,
+   not inflate the typography/cards back to billboard size.
+   ========================================================= */
+
+@media (min-height: 900px) and (min-width: 1200px) {
+  .services__title {
+    font-size: clamp(2.55rem, 3.35vw, 3.9rem);
+  }
+
+  .projects__title {
+    font-size: clamp(2.5rem, 3.25vw, 3.75rem);
+  }
+
+  .discipline {
+    min-height: clamp(185px, 13vw, 220px);
+  }
+
+  .selected-project:nth-child(1) .selected-project__trigger {
+    min-height: clamp(330px, 26vw, 400px);
+  }
+
+  .selected-project:nth-child(2) .selected-project__trigger,
+  .selected-project:nth-child(3) .selected-project__trigger {
+    min-height: clamp(300px, 25vw, 360px);
+  }
+
+  .travel-story {
+    min-height: clamp(270px, 29vh, 330px);
+  }
+}
+
+/* =========================================================
+   63 — VERY LARGE SCREENS
+   ========================================================= */
+
+@media (min-width: 1900px) {
+  :root {
+    --page-width: 1700px;
+  }
+
+  .welcome__intro {
+    width: min(100%, 1450px);
+  }
+
+  .welcome__sequence {
+    max-width: 1700px;
+    margin-inline: auto;
+  }
+
+  .about__content {
+    max-width: 760px;
+  }
+
+  .services__title,
+  .projects__title {
+    max-width: 900px;
+  }
+
+  .discipline-modal__surface {
+    max-width: 1180px;
+  }
+
+  .project-modal__surface {
+    max-width: 1200px;
+  }
+
+  .contact__content {
+    max-width: 1050px;
+  }
+}
+
+/* =========================================================
+   64 — HOVER-FREE DEVICES
    ========================================================= */
 
 @media (hover: none) {
@@ -4765,49 +3121,34 @@ html[data-reduce-motion="true"] .custom-cursor {
     display: none;
   }
 
-  /* -----------------------------------------------------
-     PROJECTS
-
-     Hover-only presentation changes should never be required
-     for touch users.
-     ----------------------------------------------------- */
-
-  .project-preview__text {
-    opacity: 1;
-
+  .discipline:hover,
+  .selected-project__trigger:hover {
     transform: none;
   }
-
-  .project-panel:hover .project-panel__name {
-    color: var(--color-text);
-
-    transform: none;
-  }
-
-  /* -----------------------------------------------------
-     DISCIPLINES
-
-     Preserve the × rotation when a discipline is open.
-     Only neutralise hover movement on closed cards.
-     ----------------------------------------------------- */
 
   .discipline:hover {
-    transform: none;
-
     box-shadow: var(--shadow-soft);
   }
 
-  .discipline:not(.is-active):hover .discipline__symbol {
+  .discipline:hover .discipline__symbol {
     transform: none;
   }
 
-  .discipline.is-active:hover .discipline__symbol {
-    transform: rotate(45deg);
+  .selected-project__trigger:hover .selected-project__name {
+    color: var(--color-text);
+    transform: none;
   }
 
-  /* -----------------------------------------------------
-     CONTACT
-     ----------------------------------------------------- */
+  .selected-project__trigger:hover .selected-project__action {
+    transform: none;
+    border-color: var(--color-border-strong);
+    background: rgba(247, 239, 227, 0.5);
+    color: var(--color-text);
+  }
+
+  .selected-project--nada:hover .rhythm-line {
+    animation: none;
+  }
 
   .contact-link:hover {
     transform: none;
@@ -4819,109 +3160,155 @@ html[data-reduce-motion="true"] .custom-cursor {
 }
 
 /* =========================================================
-   89 — LARGE DESKTOP HEIGHT OPTIMISATION
+   65 — REDUCED MOTION
    ========================================================= */
 
-@media (min-height: 900px) and (min-width: 1200px) {
-  .services__title,
-  .projects__title {
-    font-size: clamp(3rem, 4.5vw, 4.8rem);
+html[data-reduce-motion="true"] {
+  scroll-behavior: auto;
+}
+
+html[data-reduce-motion="true"] *,
+html[data-reduce-motion="true"] *::before,
+html[data-reduce-motion="true"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+html[data-reduce-motion="true"] .custom-cursor {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rhythm-line {
+    animation: none !important;
   }
 
-  .discipline-playground {
-    height: clamp(380px, 44vh, 560px);
-  }
-
-  /* Keep expanded What I Do cards intentionally compact
-     even when the display has lots of vertical room. */
-
-  .discipline-playground.has-active .discipline {
-    height: clamp(320px, 35vh, 400px);
-  }
-
-  .project-stage {
-    min-height: clamp(390px, 47vh, 580px);
-  }
-
-  .travel-story {
-    min-height: clamp(280px, 31vh, 350px);
+  .custom-cursor {
+    display: none;
   }
 }
 
 /* =========================================================
-   90 — VERY LARGE SCREENS
+   66 — DIALOG VIEWPORT SAFETY
    ========================================================= */
 
-@media (min-width: 1900px) {
-  :root {
-    --page-width: 1700px;
+@supports (height: 100dvh) {
+  .discipline-modal,
+  .project-modal {
+    min-height: 100dvh;
   }
 
-  /* -----------------------------------------------------
-     WELCOME
-     ----------------------------------------------------- */
+  .project-modal__surface {
+    max-height: calc(100dvh - 2.5rem);
+  }
+}
 
-  .welcome__intro {
-    width: min(100%, 1400px);
+/* =========================================================
+   67 — NORMAL DESKTOP HEIGHT TARGET
+   ========================================================= */
+
+@media (min-width: 1200px) and (min-height: 700px) and (max-height: 899px) {
+  .services__title {
+    font-size: clamp(2.35rem, 3.15vw, 3.55rem);
   }
 
-  .welcome__sequence {
-    max-width: 1700px;
-
-    margin-inline: auto;
+  .projects__title {
+    font-size: clamp(2.3rem, 3vw, 3.45rem);
   }
 
-  /* -----------------------------------------------------
-     ABOUT
-     ----------------------------------------------------- */
-
-  .about__content {
-    max-width: 760px;
+  .discipline {
+    min-height: clamp(170px, 12.5vw, 205px);
   }
 
-  .travel-location--origin {
-    width: min(100%, 190px);
+  .selected-project:nth-child(1) .selected-project__trigger {
+    min-height: clamp(300px, 25vw, 365px);
   }
 
-  .travel-location--destination {
-    width: min(100%, 225px);
+  .selected-project:nth-child(2) .selected-project__trigger,
+  .selected-project:nth-child(3) .selected-project__trigger {
+    min-height: clamp(275px, 24vw, 330px);
+  }
+}
+
+/* =========================================================
+   68 — FORCED COLORS
+   ========================================================= */
+
+@media (forced-colors: active) {
+  .motion-control__switch,
+  .selected-project__number,
+  .scene-progress__arrow {
+    forced-color-adjust: auto;
   }
 
-  /* -----------------------------------------------------
-     WHAT I DO
-     ----------------------------------------------------- */
+  .discipline,
+  .selected-project__trigger,
+  .discipline-modal__surface,
+  .project-modal__surface,
+  .contact-link {
+    border: 1px solid CanvasText;
+  }
+}
 
-  .discipline-playground {
-    max-height: 580px;
+/* =========================================================
+   69 — PRINT
+   ========================================================= */
+
+@media print {
+  .site-header,
+  .custom-cursor,
+  .scene-progress,
+  .scene-next,
+  .scene-shapes,
+  .projects__interaction-hint,
+  .contact__restart {
+    display: none !important;
   }
 
-  .discipline-playground.has-active .discipline {
-    max-width: 1600px;
-
-    margin-inline: auto;
+  body,
+  body.modal-open {
+    overflow: visible;
+    background: #ffffff;
+    color: #000000;
   }
 
-  .discipline.is-active .discipline__details {
-    max-width: 900px;
+  .scene {
+    min-height: auto;
+    overflow: visible;
+    padding: 2rem;
+    break-inside: avoid;
   }
 
-  /* -----------------------------------------------------
-     PROJECTS
-     ----------------------------------------------------- */
-
-  .project-stage {
-    max-height: 640px;
+  .scene__inner {
+    min-height: auto;
   }
 
-  .project-panel__content {
-    padding: clamp(2rem, 2.5vw, 3rem);
+  .discipline-playground,
+  .selected-work {
+    display: block;
   }
 
-  /* -----------------------------------------------------
-     CONTACT
-     ----------------------------------------------------- */
+  .discipline,
+  .selected-project {
+    margin-bottom: 1.5rem;
+    break-inside: avoid;
+  }
 
-  .contact__content {
-    max-width: 1120px;
+  .discipline__trigger,
+  .selected-project__trigger {
+    min-height: 0;
+    box-shadow: none;
+  }
+
+  .discipline-modal,
+  .project-modal {
+    display: none !important;
+  }
+
+  .site-footer {
+    padding-top: 1rem;
   }
 }
