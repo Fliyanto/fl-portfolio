@@ -188,6 +188,9 @@ const FLTranslations = {
           "LEGA is an emotional reflection tool built around a simple idea: reflection should not require someone to perfectly name an emotion before they can begin. The experience combines flexible input, visual feedback and repeatable everyday use.",
         preview:
           "LEGA is an emotional reflection tool designed for people who find traditional journaling difficult. It uses sliders, emojis and visual timelines to make checking in feel quicker, calmer and less demanding.",
+        imageAlt: "Screenshot of the LEGA emotional reflection interface",
+        closeLabel: "Close LEGA project",
+        disciplinesLabel: "LEGA project disciplines",
 
         problemLabel: "The problem I kept noticing",
         problem:
@@ -210,6 +213,10 @@ const FLTranslations = {
           "Pulse Diary is an experimental digital journaling project exploring how motion, visual feedback and responsive interface behaviour can make personal reflection feel more expressive than a conventional text-based diary.",
         preview:
           "Pulse Diary explores how visual feedback, movement and small interactions can make digital journaling feel more expressive. The interface turns personal reflection into something more visual, responsive and enjoyable to revisit.",
+        imageAlt:
+          "Screenshot of the Pulse Diary interactive journaling interface",
+        closeLabel: "Close Pulse Diary project",
+        disciplinesLabel: "Pulse Diary project disciplines",
 
         originLabel: "The thought behind it",
         origin:
@@ -232,6 +239,10 @@ const FLTranslations = {
           "Nada Nusantara is an interactive web experience that explores Indonesian music and culture through sound, movement and digital storytelling. The project treats cultural discovery as something to interact with rather than simply read about.",
         preview:
           "Nada Nusantara is an interactive web experience celebrating Indonesian music and culture through digital storytelling. Sound, movement and playful interactions work together to make cultural exploration feel lively and approachable.",
+        imageAlt:
+          "Screenshot of the Nada Nusantara interactive music experience",
+        closeLabel: "Close Nada Nusantara project",
+        disciplinesLabel: "Nada Nusantara project disciplines",
 
         originLabel: "Where it began",
         origin:
@@ -456,6 +467,9 @@ const FLTranslations = {
           "LEGA adalah alat refleksi emosi yang dibangun dari satu gagasan sederhana: seseorang seharusnya tidak perlu mengetahui nama tepat dari emosinya sebelum bisa mulai merefleksikan apa yang sedang dirasakan. Pengalamannya menggabungkan input yang fleksibel, feedback visual, dan penggunaan yang dapat diulang dalam keseharian.",
         preview:
           "LEGA membuat proses refleksi terasa lebih ringan melalui slider, emoji, dan timeline visual, tanpa meminta pengguna langsung memberi nama pada emosinya.",
+        imageAlt: "Screenshot antarmuka refleksi emosi LEGA",
+        closeLabel: "Tutup proyek LEGA",
+        disciplinesLabel: "Bidang desain dalam proyek LEGA",
 
         problemLabel: "Masalah yang terus saya temukan",
         problem:
@@ -478,6 +492,9 @@ const FLTranslations = {
           "Pulse Diary adalah eksperimen digital journaling yang mengeksplorasi bagaimana motion, visual feedback, dan responsive interface behaviour dapat membuat refleksi pribadi terasa lebih ekspresif dibanding diary digital yang hanya berfokus pada teks.",
         preview:
           "Pulse Diary mengeksplorasi journaling digital yang lebih visual dan ekspresif melalui motion, feedback, dan interaksi kecil yang membuat proses refleksi terasa lebih hidup.",
+        imageAlt: "Screenshot antarmuka journaling interaktif Pulse Diary",
+        closeLabel: "Tutup proyek Pulse Diary",
+        disciplinesLabel: "Bidang desain dalam proyek Pulse Diary",
 
         originLabel: "Gagasan di baliknya",
         origin:
@@ -500,6 +517,9 @@ const FLTranslations = {
           "Nada Nusantara adalah pengalaman web interaktif yang mengeksplorasi musik dan budaya Indonesia melalui suara, gerakan, dan digital storytelling. Proyek ini memperlakukan penjelajahan budaya sebagai sesuatu yang dapat dialami dan diinteraksikan, bukan hanya dibaca.",
         preview:
           "Nada Nusantara menggabungkan musik, budaya Indonesia, dan interaksi digital dalam pengalaman web yang playful dan eksploratif.",
+        imageAlt: "Screenshot pengalaman musik interaktif Nada Nusantara",
+        closeLabel: "Tutup proyek Nada Nusantara",
+        disciplinesLabel: "Bidang desain dalam proyek Nada Nusantara",
 
         originLabel: "Dari mana ide ini berawal",
         origin:

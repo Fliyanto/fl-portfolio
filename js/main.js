@@ -259,6 +259,17 @@
       }
     });
 
+    document.querySelectorAll("[data-i18n-alt]").forEach((element) => {
+      const translation = FLGetTranslation(
+        safeLanguage,
+        element.dataset.i18nAlt,
+      );
+
+      if (translation !== null) {
+        element.setAttribute("alt", translation);
+      }
+    });
+
     FLDom.languageButtons.forEach((button) => {
       const active = button.dataset.language === safeLanguage;
 
@@ -771,6 +782,7 @@
       });
     }
   }
+
   function FLGoToScene(sceneName, options = {}) {
     if (!SCENE_ORDER.includes(sceneName)) {
       return false;
@@ -886,7 +898,6 @@
       updateHash: true,
     });
   }
-
   function FLHandleSceneTargetClick(event) {
     const control = event.currentTarget;
     const target = control.dataset.sceneTarget;
@@ -1577,9 +1588,14 @@
     }
 
     const surface = modal.querySelector(".project-modal__surface");
+    const content = modal.querySelector(".project-modal__content");
 
     if (surface) {
       surface.scrollTop = 0;
+    }
+
+    if (content) {
+      content.scrollTop = 0;
     }
 
     FLUpdateModalLock();
@@ -1792,7 +1808,6 @@
 
     return FLChangeProject(nextId);
   }
-
   function FLShowPreviousProject() {
     const currentId = FLState.openProjectModal;
 
@@ -1873,6 +1888,7 @@
 
     return false;
   }
+
   function FLMakePlaceholderLinkInert(link) {
     if (!link) {
       return false;
