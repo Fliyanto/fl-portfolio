@@ -185,17 +185,20 @@ const FLTranslations = {
         role: "UI · Interaction · Front-End",
         type: "Emotional Reflection Tool",
         description:
-          "LEGA is an emotional reflection tool designed for people who find traditional journaling difficult. It uses sliders, emojis and visual timelines to make checking in feel quicker, calmer and less demanding.",
+          "LEGA is an emotional reflection tool built around a simple idea: reflection should not require someone to perfectly name an emotion before they can begin. The experience combines flexible input, visual feedback and repeatable everyday use.",
         preview:
           "LEGA is an emotional reflection tool designed for people who find traditional journaling difficult. It uses sliders, emojis and visual timelines to make checking in feel quicker, calmer and less demanding.",
+
         problemLabel: "The problem I kept noticing",
         problem:
-          "Emotional reflection can become difficult when the first thing someone is asked to do is name exactly what they feel. LEGA explores whether reflection can begin somewhere simpler, using interaction before asking for precise language.",
+          "A lot of emotional reflection begins with a surprisingly difficult question: “What are you feeling?” That works when someone already has the words, but it can create friction when they only know that something feels heavy, tense, intense or overwhelming. I wanted LEGA to begin before that point. Instead of demanding a precise emotional label, the experience lets someone describe different qualities of a moment first and build an understanding from there.",
+
         ideaLabel: "Reflection without forcing a label",
-        idea: "The experience uses sliders, optional notes, emojis, templates and visual timelines to let people describe different qualities of a moment without first choosing a named emotion.",
+        idea: "LEGA uses five sliders for intensity, heaviness, tension, energy and overwhelm, supported by optional notes, emojis and reusable templates. The interface is designed so someone can make a quick entry when they have little time or energy, but still add more detail when they want to. Visual summaries and the timeline then turn individual check-ins into something that can be revisited, compared and understood over time without reducing the experience to a single named emotion.",
+
         buildLabel: "Building a lower-pressure experience",
         build:
-          "LEGA developed ideas first explored through Pulse Diary into a more practical experience focused on repeated use, accessibility, responsive behaviour and flexible ways to begin a reflection.",
+          "The project changed considerably through testing. Entry creation became more focused, slider groups were reorganised into collapsible categories, navigation and button behaviour were made more consistent, and drafts, summaries and previous entries became easier to understand. Accessibility also shaped the final direction through larger interaction targets, clearer instructions, light and dark themes, and feedback that uses colour together with icons and text. LEGA ultimately became less about adding features and more about making reflection easier to start, return to and understand.",
       },
 
       pulse: {
@@ -204,17 +207,20 @@ const FLTranslations = {
         role: "UI · Interaction",
         type: "Interactive Digital Diary",
         description:
-          "Pulse Diary explores how visual feedback, movement and small interactions can make digital journaling feel more expressive. The interface turns personal reflection into something more visual, responsive and enjoyable to revisit.",
+          "Pulse Diary is an experimental digital journaling project exploring how motion, visual feedback and responsive interface behaviour can make personal reflection feel more expressive than a conventional text-based diary.",
         preview:
           "Pulse Diary explores how visual feedback, movement and small interactions can make digital journaling feel more expressive. The interface turns personal reflection into something more visual, responsive and enjoyable to revisit.",
+
         originLabel: "The thought behind it",
         origin:
-          "Pulse Diary started as an experiment in making digital reflection feel more expressive. I was interested in what could happen when a diary behaved less like a text document and more like an interactive visual experience.",
+          "Pulse Diary started from a simple experiment: what would a digital diary feel like if it behaved less like a document and more like an interactive space? Traditional journaling usually centres on writing, so I wanted to explore whether movement, visual responses and interface behaviour could become part of the reflection itself. The project was less about replacing writing and more about seeing how interaction could change the mood and personality of a familiar activity.",
+
         experienceLabel: "Making reflection feel engaging",
         experience:
-          "I focused on interface behaviour, feedback and visual movement as ways to make reflection feel less passive and more responsive.",
+          "The design focused heavily on feedback. Small changes in the interface respond to what the user does so the experience feels active rather than static. Motion, visual rhythm and responsive states were treated as functional parts of the interface, helping communicate that an action had happened while also giving the diary its own personality. This became an important exercise in balancing expressive interaction with enough clarity that the interface still felt understandable rather than decorative for its own sake.",
+
         nextLabel: "Where the idea went next",
-        next: "Pulse Diary became an early conceptual foundation for LEGA, helping shape a more practical reflection experience designed for repeated everyday use.",
+        next: "Pulse Diary became an important conceptual step toward LEGA. Building it showed me that making reflection more engaging was only part of the challenge; the experience also needed to be easy to begin, flexible enough for different situations and practical to return to repeatedly. Those lessons later shaped LEGA’s emphasis on lower-pressure input, clearer structure, accessibility and everyday use. Pulse Diary remains the more experimental project, while LEGA develops many of its ideas into a more focused reflection tool.",
       },
 
       nada: {
@@ -223,18 +229,22 @@ const FLTranslations = {
         role: "Web · Interaction · Front-End",
         type: "Interactive Web Experience",
         description:
-          "Nada Nusantara is an interactive web experience celebrating Indonesian music and culture through digital storytelling. Sound, movement and playful interactions work together to make cultural exploration feel lively and approachable.",
+          "Nada Nusantara is an interactive web experience that explores Indonesian music and culture through sound, movement and digital storytelling. The project treats cultural discovery as something to interact with rather than simply read about.",
         preview:
           "Nada Nusantara is an interactive web experience celebrating Indonesian music and culture through digital storytelling. Sound, movement and playful interactions work together to make cultural exploration feel lively and approachable.",
+
         originLabel: "Where it began",
         origin:
-          "Nada Nusantara began from my interest in combining Indonesian culture with the kind of digital interaction I enjoy designing.",
+          "Nada Nusantara began from my interest in combining Indonesian culture with the kind of interactive digital work I enjoy creating. Rather than designing a conventional informational website, I wanted the project to feel closer to an experience someone could explore. Music became the starting point because it already carries rhythm, identity and atmosphere, which gave me an opportunity to translate those qualities into the behaviour and visual language of the website itself.",
+
         experienceLabel: "What I wanted people to experience",
         experience:
-          "The goal was to make discovery feel active, using sound, movement and visual responses to encourage curiosity rather than presenting culture as static information.",
+          "The goal was to make cultural discovery feel active and inviting. Instead of presenting music and culture as a collection of static information, the interface encourages people to move through it, listen, trigger responses and discover content through interaction. I wanted sound, motion and visual feedback to create curiosity and give each section a sense of energy, while still keeping the experience understandable enough that the interaction supports the content rather than competing with it.",
+
         processLabel: "Turning sound into interaction",
         process:
-          "I focused on rhythm, motion and responsive feedback so movement, interaction and audio could work together as one digital experience.",
+          "Rhythm became an important part of the design process. I used movement, responsive feedback and front-end interaction to connect what users could see with what they could hear and do. The challenge was making those elements feel like one system rather than separate effects layered onto a webpage. Nada Nusantara became an early example of the kind of work I enjoy most: combining visual design, interaction and code to make digital content feel more immediate, playful and alive.",
+
         disclaimerLabel: "Educational use disclaimer",
         disclaimer:
           "Nada Nusantara was created solely for educational and non-commercial purposes. Any third-party music, audio, imagery or other copyrighted material used within the project remains the property of its respective copyright holders. No ownership of third-party material is claimed.",
@@ -257,7 +267,6 @@ const FLTranslations = {
       message: "Designed & developed with curiosity.",
     },
   },
-
   id: {
     meta: {
       title: "F.Liyanto — UI, Interaction & Front-End Designer",
@@ -444,17 +453,20 @@ const FLTranslations = {
         role: "UI · Interaction · Front-End",
         type: "Alat Refleksi Emosi",
         description:
-          "LEGA adalah alat refleksi emosi untuk orang yang merasa journaling tradisional sulit dimulai atau terlalu menuntut. Slider, emoji, dan timeline visual membantu proses check-in terasa lebih cepat, tenang, dan ringan.",
+          "LEGA adalah alat refleksi emosi yang dibangun dari satu gagasan sederhana: seseorang seharusnya tidak perlu mengetahui nama tepat dari emosinya sebelum bisa mulai merefleksikan apa yang sedang dirasakan. Pengalamannya menggabungkan input yang fleksibel, feedback visual, dan penggunaan yang dapat diulang dalam keseharian.",
         preview:
           "LEGA membuat proses refleksi terasa lebih ringan melalui slider, emoji, dan timeline visual, tanpa meminta pengguna langsung memberi nama pada emosinya.",
+
         problemLabel: "Masalah yang terus saya temukan",
         problem:
-          "Refleksi dapat menjadi lebih sulit ketika langkah pertama yang diminta adalah memberi nama tepat pada apa yang sedang dirasakan. LEGA mengeksplorasi pendekatan yang lebih sederhana: mulai dari interaksi terlebih dahulu, lalu menggunakan kata-kata jika memang diperlukan.",
+          "Banyak proses refleksi emosi dimulai dengan pertanyaan yang sebenarnya cukup sulit: “Apa yang sedang kamu rasakan?” Pertanyaan itu terasa sederhana ketika seseorang sudah memiliki kata-kata yang tepat, tetapi dapat menjadi hambatan ketika mereka hanya tahu bahwa sesuatu terasa berat, tegang, intens, atau terlalu penuh. Saya ingin LEGA dapat dimulai sebelum seseorang sampai pada tahap memberi nama pada emosinya. Karena itu, pengguna lebih dulu menggambarkan kualitas dari sebuah momen, lalu perlahan membangun pemahaman dari sana.",
+
         ideaLabel: "Refleksi tanpa terburu-buru memberi label",
-        idea: "LEGA menggunakan slider, catatan opsional, emoji, template, dan timeline visual agar pengguna dapat menggambarkan kualitas sebuah momen tanpa harus langsung memilih satu nama emosi.",
+        idea: "LEGA menggunakan lima slider untuk intensity, heaviness, tension, energy, dan overwhelm, lalu dilengkapi catatan opsional, emoji, dan template yang dapat digunakan kembali. Pengalaman ini dirancang agar pengguna bisa membuat check-in singkat ketika waktu atau energinya terbatas, tetapi tetap memiliki ruang untuk menambahkan detail ketika mereka membutuhkannya. Ringkasan visual dan timeline kemudian membantu setiap check-in menjadi sesuatu yang dapat dilihat kembali, dibandingkan, dan dipahami dari waktu ke waktu tanpa harus mereduksi pengalaman tersebut menjadi satu nama emosi.",
+
         buildLabel: "Membangun pengalaman yang lebih ringan",
         build:
-          "LEGA mengembangkan ide yang sebelumnya saya eksplor melalui Pulse Diary menjadi pengalaman yang lebih praktis untuk penggunaan berulang. Fokusnya kemudian berkembang ke aksesibilitas, responsive behaviour, dan beberapa cara berbeda untuk memulai refleksi sesuai kondisi pengguna.",
+          "LEGA berubah cukup banyak melalui proses testing. Pembuatan entry dibuat lebih fokus, kelompok slider disusun ulang menjadi kategori yang dapat dibuka dan ditutup, perilaku navigasi dan tombol dibuat lebih konsisten, serta draft, summary, dan previous entries dibuat lebih mudah dipahami. Aksesibilitas juga ikut membentuk arah desain akhirnya melalui interaction target yang lebih besar, instruksi yang lebih jelas, pilihan light dan dark theme, serta feedback yang menggabungkan warna dengan ikon dan teks. Pada akhirnya, LEGA bukan berkembang dengan terus menambahkan fitur, tetapi dengan menyederhanakan pengalaman agar refleksi lebih mudah dimulai, dikunjungi kembali, dan dipahami.",
       },
 
       pulse: {
@@ -463,17 +475,20 @@ const FLTranslations = {
         role: "UI · Interaction",
         type: "Diary Digital Interaktif",
         description:
-          "Pulse Diary mengeksplorasi bagaimana feedback visual, gerakan, dan interaksi kecil dapat membuat journaling digital terasa lebih ekspresif. Refleksi pribadi tidak hanya hadir sebagai teks, tetapi ikut terasa hidup melalui respons visual dan interaksi.",
+          "Pulse Diary adalah eksperimen digital journaling yang mengeksplorasi bagaimana motion, visual feedback, dan responsive interface behaviour dapat membuat refleksi pribadi terasa lebih ekspresif dibanding diary digital yang hanya berfokus pada teks.",
         preview:
           "Pulse Diary mengeksplorasi journaling digital yang lebih visual dan ekspresif melalui motion, feedback, dan interaksi kecil yang membuat proses refleksi terasa lebih hidup.",
+
         originLabel: "Gagasan di baliknya",
         origin:
-          "Pulse Diary berawal dari satu pertanyaan: bagaimana jika diary digital tidak terasa seperti dokumen teks biasa? Saya ingin mengeksplorasi pengalaman refleksi yang lebih visual, responsif, dan memberi lebih banyak ruang untuk berinteraksi.",
+          "Pulse Diary berawal dari sebuah eksperimen sederhana: bagaimana rasanya jika diary digital berperilaku bukan seperti dokumen, tetapi seperti sebuah ruang interaktif? Journaling tradisional biasanya berpusat pada tulisan, jadi saya ingin mengeksplorasi apakah gerakan, respons visual, dan behaviour dari interface juga dapat menjadi bagian dari proses refleksi itu sendiri. Tujuannya bukan untuk menggantikan tulisan, tetapi untuk melihat bagaimana interaksi dapat mengubah suasana dan karakter dari aktivitas yang sebenarnya sudah sangat familiar.",
+
         experienceLabel: "Membuat refleksi terasa lebih aktif",
         experience:
-          "Saya berfokus pada interface behaviour, visual feedback, dan motion agar proses refleksi terasa lebih aktif. Pengguna tidak hanya mengisi sesuatu, tetapi juga mendapat respons dari interface ketika mereka berinteraksi.",
+          "Desain Pulse Diary banyak berfokus pada feedback. Perubahan-perubahan kecil pada interface merespons tindakan pengguna agar pengalaman terasa aktif, bukan statis. Motion, ritme visual, dan interaction states diperlakukan sebagai bagian fungsional dari interface, membantu menunjukkan bahwa sebuah tindakan sudah terjadi sekaligus memberi karakter pada diary tersebut. Proyek ini menjadi latihan penting untuk mencari keseimbangan antara interaksi yang ekspresif dan interface yang tetap cukup jelas untuk dipahami, tanpa membuat motion terasa seperti dekorasi semata.",
+
         nextLabel: "Ke mana ide ini berkembang",
-        next: "Pulse Diary kemudian menjadi salah satu fondasi awal untuk LEGA. Banyak ide dari proyek ini berkembang menjadi pengalaman refleksi yang lebih praktis, fleksibel, dan dirancang untuk penggunaan sehari-hari.",
+        next: "Pulse Diary kemudian menjadi salah satu langkah konseptual penting menuju LEGA. Dari proses pembuatannya, saya menyadari bahwa membuat refleksi terasa lebih menarik hanyalah satu bagian dari masalah. Pengalaman tersebut juga harus mudah dimulai, fleksibel untuk berbagai situasi, dan cukup praktis untuk digunakan berulang kali. Pembelajaran itu kemudian membentuk fokus LEGA pada input yang lebih ringan, struktur yang lebih jelas, aksesibilitas, dan penggunaan sehari-hari. Pulse Diary tetap menjadi proyek yang lebih eksperimental, sementara LEGA membawa banyak gagasan darinya ke arah yang lebih terfokus.",
       },
 
       nada: {
@@ -482,18 +497,22 @@ const FLTranslations = {
         role: "Web · Interaction · Front-End",
         type: "Pengalaman Web Interaktif",
         description:
-          "Nada Nusantara adalah pengalaman web interaktif yang membawa musik dan budaya Indonesia ke dalam digital storytelling. Suara, gerakan, dan interaksi playful bekerja bersama agar proses menjelajah budaya terasa hidup, menarik, dan mudah didekati.",
+          "Nada Nusantara adalah pengalaman web interaktif yang mengeksplorasi musik dan budaya Indonesia melalui suara, gerakan, dan digital storytelling. Proyek ini memperlakukan penjelajahan budaya sebagai sesuatu yang dapat dialami dan diinteraksikan, bukan hanya dibaca.",
         preview:
           "Nada Nusantara menggabungkan musik, budaya Indonesia, dan interaksi digital dalam pengalaman web yang playful dan eksploratif.",
+
         originLabel: "Dari mana ide ini berawal",
         origin:
-          "Nada Nusantara berawal dari keinginan saya untuk menggabungkan dua hal yang saya sukai: budaya Indonesia dan interactive design. Saya ingin melihat bagaimana elemen budaya dapat dibawa ke dunia digital tanpa kehilangan energi dan karakternya.",
+          "Nada Nusantara berawal dari ketertarikan saya untuk menggabungkan budaya Indonesia dengan jenis pengalaman digital interaktif yang saya senang buat. Daripada merancang website informasional yang konvensional, saya ingin proyek ini terasa seperti sebuah pengalaman yang dapat dijelajahi. Musik menjadi titik awal karena di dalamnya sudah terdapat ritme, identitas, dan suasana. Hal tersebut memberi saya kesempatan untuk menerjemahkan karakter-karakter itu ke dalam behaviour dan bahasa visual dari website itu sendiri.",
+
         experienceLabel: "Pengalaman yang ingin saya ciptakan",
         experience:
-          "Saya ingin proses menemukan musik dan budaya terasa aktif, bukan seperti membaca arsip atau halaman informasi biasa. Karena itu, suara, motion, dan respons visual digunakan untuk membangun rasa penasaran dan mendorong orang untuk terus menjelajah.",
+          "Tujuan utamanya adalah membuat proses menemukan musik dan budaya terasa aktif dan mengundang rasa penasaran. Daripada menyajikan informasi sebagai kumpulan teks statis, interface mendorong pengguna untuk bergerak, mendengarkan, memicu respons, dan menemukan konten melalui interaksi. Saya ingin suara, motion, dan visual feedback memberi energi pada setiap bagian sambil tetap menjaga pengalaman cukup jelas untuk dipahami, sehingga interaksi mendukung konten dan bukan justru bersaing dengannya.",
+
         processLabel: "Menerjemahkan suara menjadi interaksi",
         process:
-          "Fokus saya ada pada ritme, motion, dan responsive feedback agar audio, gerakan, dan interaksi tidak terasa seperti elemen terpisah, tetapi bekerja bersama sebagai satu pengalaman digital.",
+          "Ritme menjadi bagian penting dari proses desain. Saya menggunakan gerakan, responsive feedback, dan front-end interaction untuk menghubungkan apa yang dilihat pengguna dengan apa yang mereka dengar dan lakukan. Tantangannya adalah membuat semua elemen tersebut terasa sebagai satu sistem, bukan sekadar efek-efek terpisah yang ditempelkan ke sebuah webpage. Nada Nusantara akhirnya menjadi salah satu contoh awal dari jenis proyek yang paling saya nikmati: menggabungkan visual design, interaction, dan code untuk membuat konten digital terasa lebih langsung, playful, dan hidup.",
+
         disclaimerLabel: "Catatan penggunaan materi",
         disclaimer:
           "Nada Nusantara dibuat khusus untuk keperluan pendidikan dan bukan untuk tujuan komersial. Musik, audio, gambar, dan materi berhak cipta milik pihak ketiga yang digunakan dalam proyek ini tetap menjadi milik pemegang hak cipta masing-masing. Saya tidak mengklaim kepemilikan atas materi tersebut.",
