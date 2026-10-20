@@ -1,14 +1,5 @@
-/* =========================================================
-   F.LIYANTO PORTFOLIO
-   MAIN INTERACTION CONTROLLER
-   ========================================================= */
-
 (() => {
   "use strict";
-
-  /* =====================================================
-     01 — CORE CONSTANTS
-     ===================================================== */
 
   const SCENE_ORDER = ["welcome", "about", "services", "projects", "contact"];
 
@@ -16,17 +7,26 @@
     language: "flPortfolio.language",
     fontSize: "flPortfolio.fontSize",
     reducedMotion: "flPortfolio.reducedMotion",
+    theme: "fl-theme",
+    legacyTheme: "flPortfolio.theme",
   };
 
   const DEFAULTS = {
     language: "en",
     fontSize: "default",
     reducedMotion: false,
+    theme: "light",
   };
 
   const VALID_LANGUAGES = ["en", "id"];
-
   const VALID_FONT_SIZES = ["small", "default", "large"];
+  const VALID_THEMES = ["light", "dark", "contrast"];
+
+  const THEME_META_COLOURS = {
+    light: "#eee7dd",
+    dark: "#171715",
+    contrast: "#000000",
+  };
 
   const SCENE_HASHES = {
     welcome: "#welcome",
@@ -47,148 +47,102 @@
     "#contact": "contact",
   };
 
-  /* =====================================================
-     02 — SITE STATE
-     ===================================================== */
+  const INTERACTIVE_SELECTOR = [
+    "a",
+    "button",
+    "input",
+    "select",
+    "textarea",
+    "summary",
+    "details",
+    "label",
+    "dialog",
+    "[role='button']",
+    "[contenteditable='true']",
+    "[data-settings-panel]",
+    "[data-mobile-nav]",
+    "[data-no-scene-advance]",
+    "[data-discipline-trigger]",
+    "[data-project-open]",
+    "[data-discipline-modal]",
+    "[data-project-modal]",
+    ".contact-link",
+  ].join(", ");
 
   const FLState = {
     language: DEFAULTS.language,
-
     fontSize: DEFAULTS.fontSize,
-
     reducedMotion: DEFAULTS.reducedMotion,
-
+    theme: DEFAULTS.theme,
     currentScene: "welcome",
-
     settingsOpen: false,
-
     mobileNavOpen: false,
-
     openDisciplineModal: null,
-
     openProjectModal: null,
-
     disciplineReturnFocus: null,
-
     projectReturnFocus: null,
-
     sceneObserver: null,
-
     historyNavigationPending: false,
-
     sceneNavigationPending: false,
-
+    sceneNavigationTimer: null,
     initialised: false,
   };
-
-  /* =====================================================
-     03 — DOM CACHE
-     ===================================================== */
 
   const FLDom = {};
 
   function FLCacheDOM() {
     FLDom.root = document.documentElement;
-
     FLDom.body = document.body;
-
     FLDom.header = document.querySelector("[data-header]");
-
     FLDom.metaDescription = document.querySelector('meta[name="description"]');
-
+    FLDom.metaThemeColour = document.querySelector('meta[name="theme-color"]');
     FLDom.liveRegion = document.querySelector("[data-live-region]");
-
-    /* -------------------------------------------------
-       SETTINGS
-       ------------------------------------------------- */
-
     FLDom.settingsToggle = document.querySelector("[data-settings-toggle]");
-
     FLDom.settingsPanel = document.querySelector("[data-settings-panel]");
-
     FLDom.settingsClose = document.querySelector("[data-settings-close]");
-
-    /* -------------------------------------------------
-       MOBILE NAVIGATION
-       ------------------------------------------------- */
-
     FLDom.navToggle = document.querySelector("[data-nav-toggle]");
-
     FLDom.mobileNav = document.querySelector("[data-mobile-nav]");
-
-    /* -------------------------------------------------
-       SCENES
-       ------------------------------------------------- */
-
     FLDom.scenes = Array.from(document.querySelectorAll("[data-scene]"));
-
     FLDom.sceneTargets = Array.from(
       document.querySelectorAll("[data-scene-target]"),
     );
-
-    /* -------------------------------------------------
-       LANGUAGE + ACCESSIBILITY
-       ------------------------------------------------- */
-
     FLDom.languageButtons = Array.from(
       document.querySelectorAll("[data-language]"),
     );
-
     FLDom.fontSizeButtons = Array.from(
       document.querySelectorAll("[data-font-size]"),
     );
-
     FLDom.reduceMotion = document.querySelector("[data-reduce-motion]");
-
-    /* -------------------------------------------------
-       DISCIPLINE MODALS
-       ------------------------------------------------- */
-
+    FLDom.themeControls = document.querySelector("[data-theme-controls]");
+    FLDom.themeButtons = Array.from(
+      document.querySelectorAll("[data-theme-option]"),
+    );
     FLDom.disciplineTriggers = Array.from(
       document.querySelectorAll("[data-discipline-trigger]"),
     );
-
     FLDom.disciplineModals = Array.from(
       document.querySelectorAll("[data-discipline-modal]"),
     );
-
     FLDom.disciplineCloseButtons = Array.from(
       document.querySelectorAll("[data-discipline-close]"),
     );
-
-    /* -------------------------------------------------
-       PROJECT MODALS
-       ------------------------------------------------- */
-
     FLDom.projectTriggers = Array.from(
       document.querySelectorAll("[data-project-open]"),
     );
-
     FLDom.projectModals = Array.from(
       document.querySelectorAll("[data-project-modal]"),
     );
-
     FLDom.projectCloseButtons = Array.from(
       document.querySelectorAll("[data-project-close]"),
     );
-
-    /* -------------------------------------------------
-       CONTACT
-       ------------------------------------------------- */
-
     FLDom.contactLinks = Array.from(
       document.querySelectorAll("[data-contact]"),
     );
   }
 
-  /* =====================================================
-     04 — SAFE LOCAL STORAGE
-     ===================================================== */
-
   function FLReadStorage(key, fallback = null) {
     try {
       const value = window.localStorage.getItem(key);
-
       return value === null ? fallback : value;
     } catch {
       return fallback;
@@ -198,16 +152,20 @@
   function FLWriteStorage(key, value) {
     try {
       window.localStorage.setItem(key, String(value));
-
       return true;
     } catch {
       return false;
     }
   }
 
-  /* =====================================================
-     05 — LIVE REGION
-     ===================================================== */
+  function FLRemoveStorage(key) {
+    try {
+      window.localStorage.removeItem(key);
+      return true;
+    } catch {
+      return false;
+    }
+  }
 
   function FLAnnounce(message) {
     if (!FLDom.liveRegion || !message) {
@@ -221,10 +179,6 @@
     });
   }
 
-  /* =====================================================
-     06 — TRANSLATION HELPER
-     ===================================================== */
-
   function FLGetTranslation(language, key) {
     const dictionary = window.FLTranslations?.[language];
 
@@ -233,23 +187,21 @@
     }
 
     if (Object.prototype.hasOwnProperty.call(dictionary, key)) {
-      const value = dictionary[key];
+      const directValue = dictionary[key];
 
-      return typeof value === "string" ? value : null;
+      return typeof directValue === "string" ? directValue : null;
     }
 
     const value = key.split(".").reduce((current, segment) => {
-      return current && typeof current === "object"
-        ? current[segment]
-        : undefined;
+      if (!current || typeof current !== "object") {
+        return undefined;
+      }
+
+      return current[segment];
     }, dictionary);
 
     return typeof value === "string" ? value : null;
   }
-
-  /* =====================================================
-     07 — LANGUAGE
-     ===================================================== */
 
   function FLApplyLanguage(language, options = {}) {
     const { persist = true, dispatch = true, announce = false } = options;
@@ -259,14 +211,8 @@
       : DEFAULTS.language;
 
     FLState.language = safeLanguage;
-
     FLDom.root.lang = safeLanguage === "id" ? "id" : "en";
-
     FLDom.root.dataset.language = safeLanguage;
-
-    /* -------------------------------------------------
-       META
-       ------------------------------------------------- */
 
     const translatedTitle = FLGetTranslation(safeLanguage, "meta.title");
 
@@ -283,59 +229,44 @@
       FLDom.metaDescription.setAttribute("content", translatedDescription);
     }
 
-    /* -------------------------------------------------
-       TEXT
-       ------------------------------------------------- */
-
     document.querySelectorAll("[data-i18n]").forEach((element) => {
-      const key = element.dataset.i18n;
-
-      const translation = FLGetTranslation(safeLanguage, key);
+      const translation = FLGetTranslation(safeLanguage, element.dataset.i18n);
 
       if (translation !== null) {
         element.textContent = translation;
       }
     });
 
-    /* -------------------------------------------------
-       PLACEHOLDERS
-       ------------------------------------------------- */
-
     document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
-      const key = element.dataset.i18nPlaceholder;
-
-      const translation = FLGetTranslation(safeLanguage, key);
+      const translation = FLGetTranslation(
+        safeLanguage,
+        element.dataset.i18nPlaceholder,
+      );
 
       if (translation !== null) {
         element.setAttribute("placeholder", translation);
       }
     });
 
-    /* -------------------------------------------------
-       ACCESSIBLE LABELS
-       ------------------------------------------------- */
-
     document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
-      const key = element.dataset.i18nAriaLabel;
-
-      const translation = FLGetTranslation(safeLanguage, key);
+      const translation = FLGetTranslation(
+        safeLanguage,
+        element.dataset.i18nAriaLabel,
+      );
 
       if (translation !== null) {
         element.setAttribute("aria-label", translation);
       }
     });
 
-    /* -------------------------------------------------
-       LANGUAGE CONTROLS
-       ------------------------------------------------- */
-
     FLDom.languageButtons.forEach((button) => {
       const active = button.dataset.language === safeLanguage;
 
       button.classList.toggle("is-active", active);
-
       button.setAttribute("aria-pressed", String(active));
     });
+
+    FLUpdateNavigationToggleLabel();
 
     if (persist) {
       FLWriteStorage(STORAGE_KEYS.language, safeLanguage);
@@ -362,24 +293,18 @@
     return safeLanguage;
   }
 
-  /* =====================================================
-     08 — FONT SIZE
-     ===================================================== */
-
   function FLApplyFontSize(size, options = {}) {
     const { persist = true, dispatch = true, announce = false } = options;
 
     const safeSize = VALID_FONT_SIZES.includes(size) ? size : DEFAULTS.fontSize;
 
     FLState.fontSize = safeSize;
-
     FLDom.root.dataset.fontSize = safeSize;
 
     FLDom.fontSizeButtons.forEach((button) => {
       const active = button.dataset.fontSize === safeSize;
 
       button.classList.toggle("is-active", active);
-
       button.setAttribute("aria-pressed", String(active));
     });
 
@@ -388,13 +313,20 @@
     }
 
     if (announce) {
-      const sizeLabels = {
-        small: "Small text selected.",
-        default: "Default text selected.",
-        large: "Large text selected.",
-      };
+      const labels =
+        FLState.language === "id"
+          ? {
+              small: "Ukuran teks kecil dipilih.",
+              default: "Ukuran teks normal dipilih.",
+              large: "Ukuran teks besar dipilih.",
+            }
+          : {
+              small: "Small text selected.",
+              default: "Default text selected.",
+              large: "Large text selected.",
+            };
 
-      FLAnnounce(sizeLabels[safeSize]);
+      FLAnnounce(labels[safeSize]);
     }
 
     if (dispatch) {
@@ -410,17 +342,12 @@
     return safeSize;
   }
 
-  /* =====================================================
-     09 — REDUCED MOTION
-     ===================================================== */
-
   function FLApplyReducedMotion(enabled, options = {}) {
     const { persist = true, dispatch = true, announce = false } = options;
 
     const reduceMotion = Boolean(enabled);
 
     FLState.reducedMotion = reduceMotion;
-
     FLDom.root.dataset.reduceMotion = String(reduceMotion);
 
     if (FLDom.reduceMotion) {
@@ -433,7 +360,13 @@
 
     if (announce) {
       FLAnnounce(
-        reduceMotion ? "Reduced motion enabled." : "Reduced motion disabled.",
+        FLState.language === "id"
+          ? reduceMotion
+            ? "Gerakan dikurangi."
+            : "Gerakan normal diaktifkan."
+          : reduceMotion
+            ? "Reduced motion enabled."
+            : "Reduced motion disabled.",
       );
     }
 
@@ -454,22 +387,87 @@
     return FLState.reducedMotion || FLDom.root.dataset.reduceMotion === "true";
   }
 
-  /* =====================================================
-     10 — LOAD SAVED PREFERENCES
-     ===================================================== */
+  function FLGetThemeLabel(theme, language = FLState.language) {
+    const labels = {
+      en: {
+        light: "Light theme selected.",
+        dark: "Dark theme selected.",
+        contrast: "High contrast mode selected.",
+      },
+      id: {
+        light: "Tema terang dipilih.",
+        dark: "Tema gelap dipilih.",
+        contrast: "Mode kontras tinggi dipilih.",
+      },
+    };
+
+    return (labels[language] || labels.en)[theme] || labels.en.light;
+  }
+
+  function FLApplyTheme(theme, options = {}) {
+    const { persist = true, dispatch = true, announce = false } = options;
+
+    const safeTheme = VALID_THEMES.includes(theme) ? theme : DEFAULTS.theme;
+
+    FLState.theme = safeTheme;
+    FLDom.root.dataset.theme = safeTheme;
+    FLDom.root.dataset.highContrast = String(safeTheme === "contrast");
+
+    FLDom.themeButtons.forEach((button) => {
+      const active = button.dataset.themeOption === safeTheme;
+
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+
+    FLDom.metaThemeColour?.setAttribute(
+      "content",
+      THEME_META_COLOURS[safeTheme] || THEME_META_COLOURS.light,
+    );
+
+    if (persist) {
+      FLWriteStorage(STORAGE_KEYS.theme, safeTheme);
+      FLRemoveStorage(STORAGE_KEYS.legacyTheme);
+    }
+
+    if (announce) {
+      FLAnnounce(FLGetThemeLabel(safeTheme));
+    }
+
+    if (dispatch) {
+      window.dispatchEvent(
+        new CustomEvent("flThemeChange", {
+          detail: {
+            theme: safeTheme,
+            highContrast: safeTheme === "contrast",
+          },
+        }),
+      );
+    }
+
+    return safeTheme;
+  }
+
+  function FLGetTheme() {
+    return FLState.theme;
+  }
 
   function FLLoadPreferences() {
     const savedLanguage = FLReadStorage(
       STORAGE_KEYS.language,
       DEFAULTS.language,
     );
-
     const savedFontSize = FLReadStorage(
       STORAGE_KEYS.fontSize,
       DEFAULTS.fontSize,
     );
-
     const savedMotion = FLReadStorage(STORAGE_KEYS.reducedMotion, null);
+
+    const savedTheme =
+      FLReadStorage(STORAGE_KEYS.theme, null) ||
+      FLReadStorage(STORAGE_KEYS.legacyTheme, null) ||
+      FLDom.root.dataset.theme ||
+      DEFAULTS.theme;
 
     let reducedMotion = DEFAULTS.reducedMotion;
 
@@ -497,11 +495,34 @@
       persist: false,
       dispatch: false,
     });
+
+    FLApplyTheme(savedTheme, {
+      persist: false,
+      dispatch: false,
+    });
   }
 
-  /* =====================================================
-     11 — SETTINGS PANEL
-     ===================================================== */
+  function FLIsFinePointer() {
+    return Boolean(
+      window.matchMedia?.("(hover: hover) and (pointer: fine)")?.matches,
+    );
+  }
+
+  function FLIsMobileLayout() {
+    return window.innerWidth <= 960;
+  }
+
+  function FLGetNavigationToggleLabel() {
+    if (FLState.language === "id") {
+      return FLState.mobileNavOpen ? "Tutup navigasi" : "Buka navigasi";
+    }
+
+    return FLState.mobileNavOpen ? "Close navigation" : "Open navigation";
+  }
+
+  function FLUpdateNavigationToggleLabel() {
+    FLDom.navToggle?.setAttribute("aria-label", FLGetNavigationToggleLabel());
+  }
 
   function FLOpenSettings() {
     if (!FLDom.settingsPanel || FLState.settingsOpen) {
@@ -511,9 +532,8 @@
     FLCloseMobileNav();
 
     FLState.settingsOpen = true;
-
     FLDom.settingsPanel.hidden = false;
-
+    FLDom.settingsPanel.setAttribute("aria-hidden", "false");
     FLDom.settingsPanel.classList.add("is-open");
 
     FLDom.settingsToggle?.setAttribute("aria-expanded", "true");
@@ -533,10 +553,9 @@
     }
 
     FLState.settingsOpen = false;
-
     FLDom.settingsPanel.classList.remove("is-open");
-
     FLDom.settingsPanel.hidden = true;
+    FLDom.settingsPanel.setAttribute("aria-hidden", "true");
 
     FLDom.settingsToggle?.setAttribute("aria-expanded", "false");
 
@@ -548,18 +567,12 @@
   }
 
   function FLToggleSettings() {
-    if (FLState.settingsOpen) {
-      return FLCloseSettings({
-        returnFocus: true,
-      });
-    }
-
-    return FLOpenSettings();
+    return FLState.settingsOpen
+      ? FLCloseSettings({
+          returnFocus: true,
+        })
+      : FLOpenSettings();
   }
-
-  /* =====================================================
-     12 — MOBILE NAVIGATION
-     ===================================================== */
 
   function FLOpenMobileNav() {
     if (!FLDom.mobileNav || FLState.mobileNavOpen) {
@@ -569,18 +582,21 @@
     FLCloseSettings();
 
     FLState.mobileNavOpen = true;
-
     FLDom.mobileNav.hidden = false;
-
+    FLDom.mobileNav.setAttribute("aria-hidden", "false");
     FLDom.mobileNav.classList.add("is-open");
 
     FLDom.navToggle?.classList.add("is-open");
-
     FLDom.navToggle?.setAttribute("aria-expanded", "true");
 
-    FLDom.navToggle?.setAttribute("aria-label", "Close navigation");
-
     FLDom.body.classList.add("nav-open");
+    FLDom.root.dataset.navOpen = "true";
+
+    FLUpdateNavigationToggleLabel();
+
+    window.requestAnimationFrame(() => {
+      FLDom.mobileNav?.querySelector("[data-scene-target]")?.focus?.();
+    });
 
     return true;
   }
@@ -593,18 +609,17 @@
     }
 
     FLState.mobileNavOpen = false;
-
     FLDom.mobileNav.classList.remove("is-open");
-
     FLDom.mobileNav.hidden = true;
+    FLDom.mobileNav.setAttribute("aria-hidden", "true");
 
     FLDom.navToggle?.classList.remove("is-open");
-
     FLDom.navToggle?.setAttribute("aria-expanded", "false");
 
-    FLDom.navToggle?.setAttribute("aria-label", "Open navigation");
-
     FLDom.body.classList.remove("nav-open");
+    FLDom.root.dataset.navOpen = "false";
+
+    FLUpdateNavigationToggleLabel();
 
     if (returnFocus) {
       FLDom.navToggle?.focus?.();
@@ -614,28 +629,17 @@
   }
 
   function FLToggleMobileNav() {
-    if (FLState.mobileNavOpen) {
-      return FLCloseMobileNav({
-        returnFocus: true,
-      });
-    }
-
-    return FLOpenMobileNav();
+    return FLState.mobileNavOpen
+      ? FLCloseMobileNav({
+          returnFocus: true,
+        })
+      : FLOpenMobileNav();
   }
-
-  /* =====================================================
-     13 — FLOATING UI
-     ===================================================== */
 
   function FLCloseFloatingUI() {
     FLCloseSettings();
-
     FLCloseMobileNav();
   }
-
-  /* =====================================================
-     14 — SCENE HELPERS
-     ===================================================== */
 
   function FLGetSceneElement(sceneName) {
     if (!sceneName) {
@@ -652,26 +656,16 @@
   function FLGetNextSceneName(sceneName = FLState.currentScene) {
     const index = FLGetSceneIndex(sceneName);
 
-    if (index < 0 || index >= SCENE_ORDER.length - 1) {
-      return null;
-    }
-
-    return SCENE_ORDER[index + 1];
+    return index >= 0 && index < SCENE_ORDER.length - 1
+      ? SCENE_ORDER[index + 1]
+      : null;
   }
 
   function FLGetPreviousSceneName(sceneName = FLState.currentScene) {
     const index = FLGetSceneIndex(sceneName);
 
-    if (index <= 0) {
-      return null;
-    }
-
-    return SCENE_ORDER[index - 1];
+    return index > 0 ? SCENE_ORDER[index - 1] : null;
   }
-
-  /* =====================================================
-     15 — ACTIVE SCENE
-     ===================================================== */
 
   function FLSetActiveScene(sceneName, options = {}) {
     if (!SCENE_ORDER.includes(sceneName)) {
@@ -679,7 +673,6 @@
     }
 
     const { forceDispatch = false } = options;
-
     const previousScene = FLState.currentScene;
 
     FLState.currentScene = sceneName;
@@ -697,17 +690,15 @@
     });
 
     FLDom.sceneTargets.forEach((control) => {
-      const target = control.dataset.sceneTarget;
-
-      const navigationControl = Boolean(
-        control.closest([".site-nav", "[data-mobile-nav]"].join(", ")),
-      );
-
-      if (!navigationControl) {
+      if (!control.closest(".site-nav, [data-mobile-nav]")) {
         return;
       }
 
-      if (target === sceneName) {
+      const active = control.dataset.sceneTarget === sceneName;
+
+      control.classList.toggle("is-active", active);
+
+      if (active) {
         control.setAttribute("aria-current", "page");
       } else {
         control.removeAttribute("aria-current");
@@ -728,10 +719,6 @@
     return true;
   }
 
-  /* =====================================================
-     16 — HASH HELPERS
-     ===================================================== */
-
   function FLSceneToHash(sceneName) {
     return SCENE_HASHES[sceneName] || "#welcome";
   }
@@ -750,7 +737,6 @@
     }
 
     const { replace = false } = options;
-
     const hash = FLSceneToHash(sceneName);
 
     if (window.location.hash === hash) {
@@ -770,10 +756,21 @@
     }
   }
 
-  /* =====================================================
-     17 — SCENE NAVIGATION
-     ===================================================== */
+  function FLFinishSceneNavigation(sceneName, options = {}) {
+    const { updateHash = false, replaceHash = false } = options;
 
+    window.clearTimeout(FLState.sceneNavigationTimer);
+    FLState.sceneNavigationTimer = null;
+    FLState.sceneNavigationPending = false;
+
+    FLSetActiveScene(sceneName);
+
+    if (updateHash) {
+      FLUpdateHash(sceneName, {
+        replace: replaceHash,
+      });
+    }
+  }
   function FLGoToScene(sceneName, options = {}) {
     if (!SCENE_ORDER.includes(sceneName)) {
       return false;
@@ -781,13 +778,9 @@
 
     const {
       landing = sceneName === "welcome" ? "intro" : "ready",
-
       immediate = false,
-
       updateHash = false,
-
       replaceHash = false,
-
       closeModals = true,
     } = options;
 
@@ -801,25 +794,39 @@
 
     FLState.sceneNavigationPending = true;
 
+    window.clearTimeout(FLState.sceneNavigationTimer);
+
+    if (updateHash) {
+      FLUpdateHash(sceneName, {
+        replace: replaceHash,
+      });
+    }
+
     if (window.FLAnimations?.goToScene) {
       const handled = window.FLAnimations.goToScene(sceneName, {
         landing,
-
         immediate: immediate || FLIsReducedMotion(),
+        onComplete() {
+          FLFinishSceneNavigation(sceneName, {
+            updateHash: false,
+            replaceHash: true,
+          });
+        },
       });
 
       if (handled !== false) {
-        if (updateHash) {
-          FLUpdateHash(sceneName, {
-            replace: replaceHash,
-          });
-        }
-
-        window.setTimeout(
+        FLState.sceneNavigationTimer = window.setTimeout(
           () => {
-            FLState.sceneNavigationPending = false;
+            if (!FLState.sceneNavigationPending) {
+              return;
+            }
+
+            FLFinishSceneNavigation(sceneName, {
+              updateHash: false,
+              replaceHash: true,
+            });
           },
-          FLIsReducedMotion() ? 0 : 700,
+          FLIsReducedMotion() ? 0 : 1600,
         );
 
         return true;
@@ -830,29 +837,22 @@
 
     if (!scene) {
       FLState.sceneNavigationPending = false;
-
       return false;
     }
 
     scene.scrollIntoView({
       behavior: immediate || FLIsReducedMotion() ? "auto" : "smooth",
-
       block: "start",
     });
 
-    FLSetActiveScene(sceneName);
-
-    if (updateHash) {
-      FLUpdateHash(sceneName, {
-        replace: replaceHash,
-      });
-    }
-
-    window.setTimeout(
+    FLState.sceneNavigationTimer = window.setTimeout(
       () => {
-        FLState.sceneNavigationPending = false;
+        FLFinishSceneNavigation(sceneName, {
+          updateHash: false,
+          replaceHash: true,
+        });
       },
-      FLIsReducedMotion() ? 0 : 500,
+      immediate || FLIsReducedMotion() ? 0 : 550,
     );
 
     return true;
@@ -887,13 +887,8 @@
     });
   }
 
-  /* =====================================================
-     18 — SCENE TARGET CLICKS
-     ===================================================== */
-
   function FLHandleSceneTargetClick(event) {
     const control = event.currentTarget;
-
     const target = control.dataset.sceneTarget;
 
     if (!target || !SCENE_ORDER.includes(target)) {
@@ -901,19 +896,115 @@
     }
 
     event.preventDefault();
-
     event.stopPropagation();
 
     FLGoToScene(target, {
       landing: target === "welcome" ? "intro" : "ready",
-
       updateHash: true,
     });
   }
 
-  /* =====================================================
-     19 — HISTORY NAVIGATION
-     ===================================================== */
+  function FLHasTextSelection() {
+    return String(window.getSelection?.() || "").trim().length > 0;
+  }
+
+  function FLIsWelcomeSequenceRunning() {
+    const welcomeScene = FLGetSceneElement("welcome");
+    const animationState = window.FLAnimations?.getState?.();
+
+    return Boolean(
+      FLState.sceneNavigationPending ||
+      welcomeScene?.dataset.welcomeRunning === "true" ||
+      animationState?.welcomeSequenceActive ||
+      animationState?.welcomeBridgeActive,
+    );
+  }
+
+  function FLHandleWelcomeClickAdvance(event) {
+    if (FLState.currentScene !== "welcome" || !FLIsFinePointer()) {
+      return;
+    }
+
+    if (
+      FLState.settingsOpen ||
+      FLState.mobileNavOpen ||
+      FLState.openDisciplineModal ||
+      FLState.openProjectModal ||
+      FLIsWelcomeSequenceRunning()
+    ) {
+      return;
+    }
+
+    if (!(event.target instanceof Element)) {
+      return;
+    }
+
+    if (event.target.closest(INTERACTIVE_SELECTOR) || FLHasTextSelection()) {
+      return;
+    }
+
+    FLAdvanceScene("welcome");
+  }
+
+  function FLInitialiseWelcomeClickAdvance() {
+    const welcomeScene = FLGetSceneElement("welcome");
+
+    if (!welcomeScene || welcomeScene.dataset.clickAdvance === "true") {
+      return false;
+    }
+
+    welcomeScene.dataset.clickAdvance = "true";
+    welcomeScene.dataset.welcomeRunning ||= "false";
+
+    welcomeScene.addEventListener("click", FLHandleWelcomeClickAdvance);
+
+    return true;
+  }
+
+  function FLHandleBackgroundSceneAdvance(event, sceneName) {
+    if (!FLIsFinePointer() || FLIsMobileLayout()) {
+      return;
+    }
+
+    if (FLState.currentScene !== sceneName) {
+      return;
+    }
+
+    if (
+      FLState.openDisciplineModal ||
+      FLState.openProjectModal ||
+      FLState.settingsOpen ||
+      FLState.mobileNavOpen
+    ) {
+      return;
+    }
+
+    if (!(event.target instanceof Element)) {
+      return;
+    }
+
+    if (event.target.closest(INTERACTIVE_SELECTOR) || FLHasTextSelection()) {
+      return;
+    }
+
+    FLAdvanceScene(sceneName);
+  }
+
+  function FLInitialiseBackgroundAdvance() {
+    ["services", "projects"].forEach((sceneName) => {
+      const scene = FLGetSceneElement(sceneName);
+
+      if (!scene || scene.dataset.backgroundAdvance === "true") {
+        return;
+      }
+
+      scene.dataset.backgroundAdvance = "true";
+
+      scene.addEventListener("click", (event) => {
+        FLHandleBackgroundSceneAdvance(event, sceneName);
+      });
+    });
+  }
 
   function FLHandleHistoryNavigation() {
     if (FLState.historyNavigationPending) {
@@ -930,57 +1021,35 @@
 
     FLGoToScene(target, {
       landing: target === "welcome" ? "intro" : "ready",
-
       immediate: FLIsReducedMotion(),
-
       updateHash: false,
     });
 
-    window.requestAnimationFrame(() => {
-      FLState.historyNavigationPending = false;
-    });
+    window.setTimeout(
+      () => {
+        FLState.historyNavigationPending = false;
+      },
+      FLIsReducedMotion() ? 0 : 80,
+    );
   }
 
   function FLInitialiseHistoryEvents() {
     window.addEventListener("popstate", FLHandleHistoryNavigation);
-
     window.addEventListener("hashchange", FLHandleHistoryNavigation);
   }
 
-  /* =====================================================
-     20 — INITIAL SCENE STATE
-     ===================================================== */
-
   function FLInitialiseSceneState() {
     const hashScene = FLHashToScene();
-
     const initialScene = hashScene || "welcome";
 
-    FLSetActiveScene(initialScene, {
-      forceDispatch: false,
-    });
+    FLSetActiveScene(initialScene);
 
     if (!hashScene) {
       FLUpdateHash("welcome", {
         replace: true,
       });
-
-      return;
     }
-
-    window.requestAnimationFrame(() => {
-      const scene = FLGetSceneElement(initialScene);
-
-      scene?.scrollIntoView({
-        behavior: "auto",
-        block: "start",
-      });
-    });
   }
-
-  /* =====================================================
-     21 — SCROLL SCENE OBSERVER
-     ===================================================== */
 
   function FLInitialiseSceneObserver() {
     if (!("IntersectionObserver" in window) || !FLDom.scenes.length) {
@@ -995,6 +1064,15 @@
           FLState.sceneNavigationPending ||
           FLState.openDisciplineModal ||
           FLState.openProjectModal
+        ) {
+          return;
+        }
+
+        const animationState = window.FLAnimations?.getState?.();
+
+        if (
+          animationState?.welcomeBridgeActive ||
+          animationState?.welcomeSequenceActive
         ) {
           return;
         }
@@ -1021,9 +1099,7 @@
       },
       {
         root: null,
-
         rootMargin: "-18% 0px -56% 0px",
-
         threshold: [0, 0.15, 0.35, 0.55],
       },
     );
@@ -1034,10 +1110,6 @@
 
     return true;
   }
-
-  /* =====================================================
-     22 — DIALOG HELPERS
-     ===================================================== */
 
   function FLIsDialogOpen(dialog) {
     if (!dialog) {
@@ -1066,7 +1138,6 @@
       return true;
     } catch {
       dialog.setAttribute("open", "");
-
       return true;
     }
   }
@@ -1090,7 +1161,6 @@
       return true;
     } catch {
       dialog.removeAttribute("open");
-
       return true;
     }
   }
@@ -1101,7 +1171,6 @@
     );
 
     FLDom.body.classList.toggle("modal-open", anyModalOpen);
-
     FLDom.root.dataset.modalOpen = String(anyModalOpen);
   }
 
@@ -1118,11 +1187,24 @@
           "input:not([disabled])",
           "select:not([disabled])",
           "textarea:not([disabled])",
+          "summary",
           "[tabindex]:not([tabindex='-1'])",
         ].join(","),
       ),
     ).filter((element) => {
-      return !element.hasAttribute("hidden");
+      if (
+        element.hasAttribute("hidden") ||
+        element.getAttribute("aria-hidden") === "true" ||
+        element.getAttribute("aria-disabled") === "true" ||
+        element.hasAttribute("inert") ||
+        element.closest("[inert]")
+      ) {
+        return false;
+      }
+
+      const styles = window.getComputedStyle(element);
+
+      return styles.display !== "none" && styles.visibility !== "hidden";
     });
   }
 
@@ -1134,13 +1216,18 @@
     window.requestAnimationFrame(() => {
       const focusable = FLGetFocusableElements(dialog);
 
-      focusable[0]?.focus?.();
+      if (focusable.length) {
+        focusable[0].focus?.();
+        return;
+      }
+
+      if (!dialog.hasAttribute("tabindex")) {
+        dialog.setAttribute("tabindex", "-1");
+      }
+
+      dialog.focus?.();
     });
   }
-
-  /* =====================================================
-     23 — DISCIPLINE MODAL HELPERS
-     ===================================================== */
 
   function FLGetDisciplineModal(disciplineId) {
     if (!disciplineId) {
@@ -1176,15 +1263,10 @@
     trigger.setAttribute("aria-expanded", String(expanded));
   }
 
-  /* =====================================================
-     24 — OPEN DISCIPLINE MODAL
-     ===================================================== */
-
   function FLOpenDiscipline(disciplineId, options = {}) {
     const { returnFocusElement = null } = options;
 
     const modal = FLGetDisciplineModal(disciplineId);
-
     const trigger = FLGetDisciplineTrigger(disciplineId);
 
     if (!modal) {
@@ -1196,16 +1278,19 @@
     }
 
     FLCloseSettings();
-
     FLCloseMobileNav();
 
-    FLCloseProjectModal(null, {
-      returnFocus: false,
-    });
+    if (FLState.openProjectModal) {
+      FLCloseProjectModal(FLState.openProjectModal, {
+        returnFocus: false,
+        dispatch: false,
+      });
+    }
 
     if (FLState.openDisciplineModal) {
       FLCloseActiveDiscipline({
         returnFocus: false,
+        dispatch: false,
       });
     }
 
@@ -1218,21 +1303,24 @@
 
     if (!FLShowDialog(modal)) {
       FLState.openDisciplineModal = null;
-
       FLSetDisciplineTriggerState(disciplineId, false);
 
       return false;
     }
 
-    FLUpdateModalLock();
+    const surface = modal.querySelector(".discipline-modal__surface");
 
+    if (surface) {
+      surface.scrollTop = 0;
+    }
+
+    FLUpdateModalLock();
     FLFocusFirstInDialog(modal);
 
     window.dispatchEvent(
       new CustomEvent("flDisciplineModalChange", {
         detail: {
           discipline: disciplineId,
-
           open: true,
         },
       }),
@@ -1241,13 +1329,8 @@
     return true;
   }
 
-  /* =====================================================
-     25 — CLOSE DISCIPLINE MODAL
-     ===================================================== */
-
   function FLCloseActiveDiscipline(options = {}) {
     const { returnFocus = true, dispatch = true } = options;
-
     const disciplineId = FLState.openDisciplineModal;
 
     if (!disciplineId) {
@@ -1255,20 +1338,21 @@
     }
 
     const modal = FLGetDisciplineModal(disciplineId);
+    const focusTarget = FLState.disciplineReturnFocus;
 
     FLSetDisciplineTriggerState(disciplineId, false);
 
     FLState.openDisciplineModal = null;
-
-    FLCloseDialog(modal);
-
-    FLUpdateModalLock();
-
-    const focusTarget = FLState.disciplineReturnFocus;
-
     FLState.disciplineReturnFocus = null;
 
-    if (returnFocus && focusTarget instanceof HTMLElement) {
+    FLCloseDialog(modal);
+    FLUpdateModalLock();
+
+    if (
+      returnFocus &&
+      focusTarget instanceof HTMLElement &&
+      focusTarget.isConnected
+    ) {
       window.requestAnimationFrame(() => {
         focusTarget.focus?.();
       });
@@ -1279,7 +1363,6 @@
         new CustomEvent("flDisciplineModalChange", {
           detail: {
             discipline: disciplineId,
-
             open: false,
           },
         }),
@@ -1289,17 +1372,11 @@
     return true;
   }
 
-  /* =====================================================
-     26 — DISCIPLINE TRIGGER
-     ===================================================== */
-
   function FLHandleDisciplineTrigger(event) {
     event.preventDefault();
-
     event.stopPropagation();
 
     const trigger = event.currentTarget;
-
     const disciplineId = trigger.dataset.disciplineTrigger;
 
     if (!disciplineId) {
@@ -1313,7 +1390,6 @@
 
   function FLHandleDisciplineClose(event) {
     event.preventDefault();
-
     event.stopPropagation();
 
     FLCloseActiveDiscipline({
@@ -1321,14 +1397,9 @@
     });
   }
 
-  /* =====================================================
-     27 — DISCIPLINE DIALOG EVENTS
-     ===================================================== */
-
   function FLInitialiseDisciplineDialogEvents() {
     FLDom.disciplineTriggers.forEach((trigger) => {
       trigger.setAttribute("aria-expanded", "false");
-
       trigger.addEventListener("click", FLHandleDisciplineTrigger);
     });
 
@@ -1360,22 +1431,17 @@
 
         if (FLState.openDisciplineModal === disciplineId) {
           FLState.openDisciplineModal = null;
+          FLState.disciplineReturnFocus = null;
 
           FLSetDisciplineTriggerState(disciplineId, false);
-
           FLUpdateModalLock();
         }
       });
     });
   }
 
-  /* =====================================================
-     28 — INITIAL DISCIPLINE STATE
-     ===================================================== */
-
   function FLInitialiseDisciplineState() {
     FLState.openDisciplineModal = null;
-
     FLState.disciplineReturnFocus = null;
 
     FLDom.disciplineTriggers.forEach((trigger) => {
@@ -1388,10 +1454,6 @@
       }
     });
   }
-
-  /* =====================================================
-     29 — PROJECT MODAL LOOKUP
-     ===================================================== */
 
   function FLGetProjectModal(projectId) {
     if (!projectId) {
@@ -1427,11 +1489,17 @@
     trigger.setAttribute("aria-expanded", String(expanded));
   }
 
-  /* =====================================================
-     30 — PROJECT ORDER
-     ===================================================== */
-
   function FLGetProjectOrder() {
+    const configuredOrder = Array.isArray(window.FLProjectOrder)
+      ? window.FLProjectOrder.filter((projectId) =>
+          FLGetProjectModal(projectId),
+        )
+      : [];
+
+    if (configuredOrder.length) {
+      return configuredOrder;
+    }
+
     return FLDom.projectTriggers
       .map((trigger) => trigger.dataset.projectOpen)
       .filter(Boolean);
@@ -1443,7 +1511,6 @@
 
   function FLGetNextProjectId(projectId) {
     const order = FLGetProjectOrder();
-
     const index = order.indexOf(projectId);
 
     if (index < 0 || index >= order.length - 1) {
@@ -1455,7 +1522,6 @@
 
   function FLGetPreviousProjectId(projectId) {
     const order = FLGetProjectOrder();
-
     const index = order.indexOf(projectId);
 
     if (index <= 0) {
@@ -1464,15 +1530,11 @@
 
     return order[index - 1];
   }
-  /* =====================================================
-     31 — OPEN PROJECT MODAL
-     ===================================================== */
 
   function FLOpenProjectModal(projectId, options = {}) {
     const { returnFocusElement = null } = options;
 
     const modal = FLGetProjectModal(projectId);
-
     const trigger = FLGetProjectTrigger(projectId);
 
     if (!modal) {
@@ -1484,12 +1546,14 @@
     }
 
     FLCloseSettings();
-
     FLCloseMobileNav();
 
-    FLCloseActiveDiscipline({
-      returnFocus: false,
-    });
+    if (FLState.openDisciplineModal) {
+      FLCloseActiveDiscipline({
+        returnFocus: false,
+        dispatch: false,
+      });
+    }
 
     if (FLState.openProjectModal) {
       FLCloseProjectModal(FLState.openProjectModal, {
@@ -1507,14 +1571,18 @@
 
     if (!FLShowDialog(modal)) {
       FLState.openProjectModal = null;
-
       FLSetProjectTriggerState(projectId, false);
 
       return false;
     }
 
-    FLUpdateModalLock();
+    const surface = modal.querySelector(".project-modal__surface");
 
+    if (surface) {
+      surface.scrollTop = 0;
+    }
+
+    FLUpdateModalLock();
     FLFocusFirstInDialog(modal);
 
     window.dispatchEvent(
@@ -1529,10 +1597,6 @@
     return true;
   }
 
-  /* =====================================================
-     32 — CLOSE PROJECT MODAL
-     ===================================================== */
-
   function FLCloseProjectModal(
     projectId = FLState.openProjectModal,
     options = {},
@@ -1544,6 +1608,7 @@
     }
 
     const modal = FLGetProjectModal(projectId);
+    const focusTarget = FLState.projectReturnFocus;
 
     FLSetProjectTriggerState(projectId, false);
 
@@ -1551,15 +1616,16 @@
       FLState.openProjectModal = null;
     }
 
-    FLCloseDialog(modal);
-
-    FLUpdateModalLock();
-
-    const focusTarget = FLState.projectReturnFocus;
-
     FLState.projectReturnFocus = null;
 
-    if (returnFocus && focusTarget instanceof HTMLElement) {
+    FLCloseDialog(modal);
+    FLUpdateModalLock();
+
+    if (
+      returnFocus &&
+      focusTarget instanceof HTMLElement &&
+      focusTarget.isConnected
+    ) {
       window.requestAnimationFrame(() => {
         focusTarget.focus?.();
       });
@@ -1578,10 +1644,6 @@
 
     return true;
   }
-
-  /* =====================================================
-     33 — CLOSE ALL MODALS
-     ===================================================== */
 
   function FLCloseAllModals(options = {}) {
     const { returnFocus = false } = options;
@@ -1609,17 +1671,11 @@
     return closed;
   }
 
-  /* =====================================================
-     34 — PROJECT TRIGGER
-     ===================================================== */
-
   function FLHandleProjectOpen(event) {
     event.preventDefault();
-
     event.stopPropagation();
 
     const trigger = event.currentTarget;
-
     const projectId = trigger.dataset.projectOpen;
 
     if (!projectId) {
@@ -1633,7 +1689,6 @@
 
   function FLHandleProjectClose(event) {
     event.preventDefault();
-
     event.stopPropagation();
 
     FLCloseProjectModal(FLState.openProjectModal, {
@@ -1641,14 +1696,9 @@
     });
   }
 
-  /* =====================================================
-     35 — PROJECT DIALOG EVENTS
-     ===================================================== */
-
   function FLInitialiseProjectDialogEvents() {
     FLDom.projectTriggers.forEach((trigger) => {
       trigger.setAttribute("aria-expanded", "false");
-
       trigger.addEventListener("click", FLHandleProjectOpen);
     });
 
@@ -1680,22 +1730,17 @@
 
         if (FLState.openProjectModal === projectId) {
           FLState.openProjectModal = null;
+          FLState.projectReturnFocus = null;
 
           FLSetProjectTriggerState(projectId, false);
-
           FLUpdateModalLock();
         }
       });
     });
   }
 
-  /* =====================================================
-     36 — INITIAL PROJECT STATE
-     ===================================================== */
-
   function FLInitialiseProjectState() {
     FLState.openProjectModal = null;
-
     FLState.projectReturnFocus = null;
 
     FLDom.projectTriggers.forEach((trigger) => {
@@ -1709,18 +1754,8 @@
     });
   }
 
-  /* =====================================================
-     37 — CHANGE PROJECT MODAL
-     ===================================================== */
-
   function FLChangeProject(projectId) {
-    if (!projectId) {
-      return false;
-    }
-
-    const modal = FLGetProjectModal(projectId);
-
-    if (!modal) {
+    if (!projectId || !FLGetProjectModal(projectId)) {
       return false;
     }
 
@@ -1741,10 +1776,6 @@
       returnFocusElement: FLGetProjectTrigger(projectId),
     });
   }
-
-  /* =====================================================
-     38 — NEXT / PREVIOUS PROJECT
-     ===================================================== */
 
   function FLShowNextProject() {
     const currentId = FLState.openProjectModal;
@@ -1790,10 +1821,6 @@
     return false;
   }
 
-  /* =====================================================
-     39 — ACTIVE DIALOG
-     ===================================================== */
-
   function FLGetActiveDialog() {
     if (FLState.openProjectModal) {
       return FLGetProjectModal(FLState.openProjectModal);
@@ -1805,10 +1832,6 @@
 
     return null;
   }
-
-  /* =====================================================
-     40 — FALLBACK FOCUS TRAP
-     ===================================================== */
 
   function FLTrapDialogFocus(event) {
     if (event.key !== "Tab") {
@@ -1825,27 +1848,24 @@
 
     if (!focusable.length) {
       event.preventDefault();
+      dialog.focus?.();
 
       return true;
     }
 
     const first = focusable[0];
-
     const last = focusable[focusable.length - 1];
-
     const active = document.activeElement;
 
-    if (event.shiftKey && active === first) {
+    if (event.shiftKey && (active === first || !dialog.contains(active))) {
       event.preventDefault();
-
       last.focus();
 
       return true;
     }
 
-    if (!event.shiftKey && active === last) {
+    if (!event.shiftKey && (active === last || !dialog.contains(active))) {
       event.preventDefault();
-
       first.focus();
 
       return true;
@@ -1853,11 +1873,6 @@
 
     return false;
   }
-
-  /* =====================================================
-     41 — PLACEHOLDER LINKS
-     ===================================================== */
-
   function FLMakePlaceholderLinkInert(link) {
     if (!link) {
       return false;
@@ -1867,7 +1882,6 @@
 
     if (href && href !== "#") {
       link.removeAttribute("aria-disabled");
-
       return false;
     }
 
@@ -1875,7 +1889,6 @@
 
     link.addEventListener("click", (event) => {
       event.preventDefault();
-
       event.stopPropagation();
     });
 
@@ -1888,120 +1901,9 @@
     });
   }
 
-  /* =====================================================
-     42 — HEADER SCROLL STATE
-     ===================================================== */
-
   function FLUpdateHeaderState() {
     FLDom.header?.classList.toggle("is-scrolled", window.scrollY > 12);
   }
-
-  /* =====================================================
-     43 — INTERACTIVE TARGET CHECK
-     ===================================================== */
-
-  const FLInteractiveSelector = [
-    "a",
-    "button",
-    "input",
-    "select",
-    "textarea",
-    "summary",
-    "details",
-    "label",
-    "dialog",
-    "[role='button']",
-    "[contenteditable='true']",
-    "[data-settings-panel]",
-    "[data-mobile-nav]",
-    "[data-no-scene-advance]",
-    "[data-discipline-trigger]",
-    "[data-project-open]",
-    "[data-discipline-modal]",
-    "[data-project-modal]",
-    ".contact-link",
-  ].join(",");
-
-  function FLIsInteractiveTarget(target) {
-    if (!(target instanceof Element)) {
-      return false;
-    }
-
-    return Boolean(target.closest(FLInteractiveSelector));
-  }
-
-  function FLHasTextSelection() {
-    const selection = window.getSelection?.()?.toString()?.trim();
-
-    return Boolean(selection);
-  }
-
-  /* =====================================================
-     44 — WELCOME CLICK-ANYWHERE
-
-     Click-anywhere behaviour now belongs ONLY to the first
-     landing experience. It no longer follows users through
-     the rest of the portfolio.
-     ===================================================== */
-
-  function FLHandleWelcomeClickAdvance(event) {
-    const scene = event.currentTarget;
-
-    if (scene.dataset.scene !== "welcome") {
-      return;
-    }
-
-    if (scene.dataset.sceneStatus !== "active") {
-      return;
-    }
-
-    if (event.defaultPrevented || event.button !== 0) {
-      return;
-    }
-
-    if (
-      FLState.settingsOpen ||
-      FLState.mobileNavOpen ||
-      FLState.openDisciplineModal ||
-      FLState.openProjectModal
-    ) {
-      return;
-    }
-
-    if (FLIsInteractiveTarget(event.target)) {
-      return;
-    }
-
-    if (FLHasTextSelection()) {
-      return;
-    }
-
-    FLAdvanceScene("welcome");
-  }
-
-  function FLInitialiseWelcomeClickAdvance() {
-    const welcomeScene = FLGetSceneElement("welcome");
-
-    if (!welcomeScene) {
-      return false;
-    }
-
-    welcomeScene.dataset.clickAdvance = "true";
-
-    welcomeScene.addEventListener("click", FLHandleWelcomeClickAdvance);
-
-    FLDom.scenes
-      .filter((scene) => scene !== welcomeScene)
-      .forEach((scene) => {
-        scene.dataset.clickAdvance = "false";
-      });
-
-    return true;
-  }
-
-  /* =====================================================
-     45 — ESCAPE KEY ROUTING
-     ===================================================== */
 
   function FLHandleEscape() {
     if (FLState.openProjectModal) {
@@ -2039,17 +1941,12 @@
     return false;
   }
 
-  /* =====================================================
-     46 — KEYBOARD NAVIGATION
-     ===================================================== */
-
   function FLHandleKeyboard(event) {
     const target = event.target;
 
     const typing =
       target instanceof HTMLElement &&
-      (target.matches(["input", "textarea", "select"].join(", ")) ||
-        target.isContentEditable);
+      (target.matches("input, textarea, select") || target.isContentEditable);
 
     if (typing) {
       return;
@@ -2096,10 +1993,6 @@
       return;
     }
 
-    /* -------------------------------------------------
-       PAGE DOWN / ALT + DOWN
-       ------------------------------------------------- */
-
     if (
       event.key === "PageDown" ||
       (event.key === "ArrowDown" && event.altKey)
@@ -2110,10 +2003,6 @@
 
       return;
     }
-
-    /* -------------------------------------------------
-       PAGE UP / ALT + UP
-       ------------------------------------------------- */
 
     if (event.key === "PageUp" || (event.key === "ArrowUp" && event.altKey)) {
       const previous = FLGetPreviousSceneName(FLState.currentScene);
@@ -2126,20 +2015,14 @@
 
       FLGoToScene(previous, {
         landing: previous === "welcome" ? "intro" : "ready",
-
         updateHash: true,
       });
     }
   }
 
-  /* =====================================================
-     47 — HEADER EVENTS
-     ===================================================== */
-
   function FLInitialiseHeaderEvents() {
     FLDom.settingsToggle?.addEventListener("click", (event) => {
       event.preventDefault();
-
       event.stopPropagation();
 
       FLToggleSettings();
@@ -2147,7 +2030,6 @@
 
     FLDom.settingsClose?.addEventListener("click", (event) => {
       event.preventDefault();
-
       event.stopPropagation();
 
       FLCloseSettings({
@@ -2157,7 +2039,6 @@
 
     FLDom.navToggle?.addEventListener("click", (event) => {
       event.preventDefault();
-
       event.stopPropagation();
 
       FLToggleMobileNav();
@@ -2192,10 +2073,6 @@
     FLUpdateHeaderState();
   }
 
-  /* =====================================================
-     48 — LANGUAGE + ACCESSIBILITY EVENTS
-     ===================================================== */
-
   function FLInitialisePreferenceEvents() {
     FLDom.languageButtons.forEach((button) => {
       button.addEventListener("click", () => {
@@ -2218,11 +2095,15 @@
         announce: true,
       });
     });
-  }
 
-  /* =====================================================
-     49 — SCENE EVENTS
-     ===================================================== */
+    FLDom.themeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        FLApplyTheme(button.dataset.themeOption, {
+          announce: true,
+        });
+      });
+    });
+  }
 
   function FLInitialiseSceneEvents() {
     FLDom.sceneTargets.forEach((control) => {
@@ -2230,13 +2111,9 @@
     });
 
     FLInitialiseWelcomeClickAdvance();
-
+    FLInitialiseBackgroundAdvance();
     FLInitialiseSceneObserver();
   }
-
-  /* =====================================================
-     50 — SCENE CHANGE CLEANUP
-     ===================================================== */
 
   function FLHandleSceneChange(event) {
     const sceneName = event.detail?.scene;
@@ -2264,13 +2141,21 @@
     window.addEventListener("flSceneChange", FLHandleSceneChange);
   }
 
-  /* =====================================================
-     51 — VIEWPORT CHANGE CLEANUP
-     ===================================================== */
-
   function FLHandleViewportChange() {
     if (window.innerWidth > 960 && FLState.mobileNavOpen) {
       FLCloseMobileNav();
+    }
+
+    if (FLIsMobileLayout()) {
+      const welcomeScene = FLGetSceneElement("welcome");
+
+      if (
+        welcomeScene &&
+        welcomeScene.dataset.welcomeRunning === "true" &&
+        !window.FLAnimations?.getState?.()?.welcomeSequenceActive
+      ) {
+        welcomeScene.dataset.welcomeRunning = "false";
+      }
     }
 
     FLUpdateHeaderState();
@@ -2288,7 +2173,6 @@
 
         resizeFrame = window.requestAnimationFrame(() => {
           resizeFrame = null;
-
           FLHandleViewportChange();
         });
       },
@@ -2298,18 +2182,13 @@
     );
   }
 
-  /* =====================================================
-     52 — NORMALISE FLOATING UI
-     ===================================================== */
-
   function FLInitialiseFloatingUIState() {
     FLState.settingsOpen = false;
-
     FLState.mobileNavOpen = false;
 
     if (FLDom.settingsPanel) {
       FLDom.settingsPanel.hidden = true;
-
+      FLDom.settingsPanel.setAttribute("aria-hidden", "true");
       FLDom.settingsPanel.classList.remove("is-open");
     }
 
@@ -2317,42 +2196,27 @@
 
     if (FLDom.mobileNav) {
       FLDom.mobileNav.hidden = true;
-
+      FLDom.mobileNav.setAttribute("aria-hidden", "true");
       FLDom.mobileNav.classList.remove("is-open");
     }
 
     FLDom.navToggle?.classList.remove("is-open");
-
     FLDom.navToggle?.setAttribute("aria-expanded", "false");
 
-    FLDom.navToggle?.setAttribute("aria-label", "Open navigation");
+    FLDom.body.classList.remove("nav-open", "modal-open");
 
-    FLDom.body.classList.remove("nav-open");
-
-    FLDom.body.classList.remove("modal-open");
-
+    FLDom.root.dataset.navOpen = "false";
     FLDom.root.dataset.modalOpen = "false";
-  }
 
-  /* =====================================================
-     53 — MODAL INITIALISATION
-     ===================================================== */
+    FLUpdateNavigationToggleLabel();
+  }
 
   function FLInitialiseModalEvents() {
     FLInitialiseDisciplineDialogEvents();
-
     FLInitialiseProjectDialogEvents();
   }
 
-  /* =====================================================
-     54 — PUBLIC SITE API
-     ===================================================== */
-
   window.FLSite = {
-    /* -------------------------------------------------
-       LANGUAGE
-       ------------------------------------------------- */
-
     getLanguage() {
       return FLState.language;
     },
@@ -2360,10 +2224,6 @@
     applyLanguage(language, options = {}) {
       return FLApplyLanguage(language, options);
     },
-
-    /* -------------------------------------------------
-       FONT SIZE
-       ------------------------------------------------- */
 
     getFontSize() {
       return FLState.fontSize;
@@ -2373,10 +2233,6 @@
       return FLApplyFontSize(size, options);
     },
 
-    /* -------------------------------------------------
-       REDUCED MOTION
-       ------------------------------------------------- */
-
     isReducedMotion() {
       return FLIsReducedMotion();
     },
@@ -2385,11 +2241,19 @@
       return FLApplyReducedMotion(enabled, options);
     },
 
-    /* -------------------------------------------------
-       SCENES
-       ------------------------------------------------- */
+    getTheme() {
+      return FLGetTheme();
+    },
+
+    applyTheme(theme, options = {}) {
+      return FLApplyTheme(theme, options);
+    },
 
     getCurrentScene() {
+      return FLState.currentScene;
+    },
+
+    getActiveScene() {
       return FLState.currentScene;
     },
 
@@ -2413,10 +2277,6 @@
       return FLGetPreviousSceneName(sceneName);
     },
 
-    /* -------------------------------------------------
-       DISCIPLINES
-       ------------------------------------------------- */
-
     getActiveDiscipline() {
       return FLState.openDisciplineModal;
     },
@@ -2432,10 +2292,6 @@
     closeActiveDiscipline(options = {}) {
       return FLCloseActiveDiscipline(options);
     },
-
-    /* -------------------------------------------------
-       PROJECTS
-       ------------------------------------------------- */
 
     getProjectOrder() {
       return FLGetProjectOrder();
@@ -2473,14 +2329,6 @@
       return FLNavigateProjectDirection(direction);
     },
 
-    /* -------------------------------------------------
-       LEGACY PROJECT API
-
-       Kept temporarily so animations.js / projects.js from
-       the previous build do not immediately throw errors.
-       These now map to the new project dialog system.
-       ------------------------------------------------- */
-
     getOpenProjectStory() {
       return FLState.openProjectModal;
     },
@@ -2497,17 +2345,9 @@
       return Boolean(FLState.openProjectModal);
     },
 
-    /* -------------------------------------------------
-       MODALS
-       ------------------------------------------------- */
-
     closeAllModals(options = {}) {
       return FLCloseAllModals(options);
     },
-
-    /* -------------------------------------------------
-       UI
-       ------------------------------------------------- */
 
     closeFloatingUI() {
       FLCloseFloatingUI();
@@ -2516,11 +2356,22 @@
     announce(message) {
       FLAnnounce(message);
     },
-  };
 
-  /* =====================================================
-     55 — INITIALISE SITE
-     ===================================================== */
+    getState() {
+      return {
+        language: FLState.language,
+        fontSize: FLState.fontSize,
+        reducedMotion: FLState.reducedMotion,
+        theme: FLState.theme,
+        currentScene: FLState.currentScene,
+        settingsOpen: FLState.settingsOpen,
+        mobileNavOpen: FLState.mobileNavOpen,
+        sceneNavigationPending: FLState.sceneNavigationPending,
+        openDisciplineModal: FLState.openDisciplineModal,
+        openProjectModal: FLState.openProjectModal,
+      };
+    },
+  };
 
   function FLInitialiseSite() {
     if (FLState.initialised) {
@@ -2530,79 +2381,45 @@
     FLState.initialised = true;
 
     FLCacheDOM();
-
     FLInitialiseFloatingUIState();
-
     FLLoadPreferences();
-
     FLInitialiseSceneState();
-
     FLInitialiseDisciplineState();
-
     FLInitialiseProjectState();
 
-    /* -------------------------------------------------
-       EVENTS
-       ------------------------------------------------- */
-
     FLInitialiseHeaderEvents();
-
     FLInitialisePreferenceEvents();
-
     FLInitialiseSceneEvents();
-
     FLInitialiseModalEvents();
-
     FLInitialiseContactPlaceholders();
-
     FLInitialiseHistoryEvents();
-
     FLInitialiseGlobalSiteEvents();
-
     FLInitialiseViewportEvents();
 
     document.addEventListener("keydown", FLHandleKeyboard);
 
-    /* -------------------------------------------------
-       FINAL SYNCHRONISATION
-       ------------------------------------------------- */
-
     FLUpdateHeaderState();
-
     FLUpdateModalLock();
 
-    /* -------------------------------------------------
-       SITE READY
-       ------------------------------------------------- */
+    FLDom.root.dataset.siteReady = "true";
 
     window.dispatchEvent(
       new CustomEvent("flSiteReady", {
         detail: {
           scene: FLState.currentScene,
-
           language: FLState.language,
-
           fontSize: FLState.fontSize,
-
           reducedMotion: FLState.reducedMotion,
-
+          theme: FLState.theme,
+          highContrast: FLState.theme === "contrast",
           openDisciplineModal: FLState.openDisciplineModal,
-
           openProjectModal: FLState.openProjectModal,
-
-          /* Legacy compatibility */
-
           openProjectStory: FLState.openProjectModal,
-
           projectReadingMode: Boolean(FLState.openProjectModal),
         },
       }),
     );
   }
-
-  /* =====================================================
-     56 — RUN
-     ===================================================== */
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", FLInitialiseSite, {

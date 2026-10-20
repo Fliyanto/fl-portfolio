@@ -1,937 +1,521 @@
-/* =========================================================
-   F.LIYANTO PORTFOLIO
-   TRANSLATION CONTENT
-
-   Languages:
-   - English          → en
-   - Bahasa Indonesia → id
-
-   Language switching is handled by main.js.
-   ========================================================= */
-
 const FLTranslations = {
-  /* =====================================================
-     ENGLISH
-     ===================================================== */
-
   en: {
-    /* -------------------------------------------------
-       META
-       ------------------------------------------------- */
-
     meta: {
       title: "F.Liyanto — UI, Interaction & Front-End Designer",
-
       description:
         "Portfolio of F.Liyanto — an Indonesian digital designer working across UI design, interaction design, responsive web experiences and creative front-end development.",
     },
 
-    /* -------------------------------------------------
-       NAVIGATION
-       ------------------------------------------------- */
-
     nav: {
       about: "About",
-
       whatIDo: "What I Do",
-
       projects: "Selected Work",
-
       contact: "Contact",
     },
-
-    /* -------------------------------------------------
-       SCENE LABELS
-       ------------------------------------------------- */
 
     scene: {
       welcome: "Welcome",
-
       about: "About",
-
       services: "What I Do",
-
       projects: "Selected Work",
-
       contact: "Contact",
     },
 
-    /* -------------------------------------------------
-       GENERAL CONTROLS
-       ------------------------------------------------- */
-
     controls: {
       continue: "Continue",
-
       scrollOrClick: "Scroll or click to explore",
-
       explore: "Explore",
-
       next: "Explore what I do",
-
       aboutToServices: "Explore what I do",
-
       projects: "Explore selected work",
-
       previousProject: "Previous project",
-
       nextProject: "Next project",
-
       contact: "Let's connect",
-
       restart: "Back to the beginning",
-
       close: "Close",
-
       viewProject: "View project",
-
       visitLive: "Visit live project",
     },
 
-    /* -------------------------------------------------
-       ACCESSIBILITY
-       ------------------------------------------------- */
-
     accessibility: {
       title: "Accessibility",
-
       fontSize: "Text size",
-
       small: "Small",
-
       default: "Default",
-
       large: "Large",
-
       reduceMotion: "Reduce motion",
-
+      theme: "Appearance",
+      lightTheme: "Light",
+      darkTheme: "Dark",
+      highContrast: "High contrast",
       close: "Close accessibility settings",
     },
 
-    /* -------------------------------------------------
-       WELCOME / HERO
-       ------------------------------------------------- */
-
     hero: {
       ui: "UI Design",
-
       interaction: "Interaction Design",
-
       frontend: "Front-End",
-
-      statement: "I like making digital things that feel alive.",
-
+      statement: "I like making digital things feel alive.",
+      statementBefore: "I like making digital things feel",
+      statementAlive: "alive",
+      statementAfter: "",
       explore: "Scroll or click to explore",
-
-      /* Legacy compatibility */
       eyebrow: "Hello & welcome",
-
       portfolioOf: "Portfolio of",
     },
 
-    /* -------------------------------------------------
-       ABOUT
-       ------------------------------------------------- */
-
     about: {
       label: "About",
-
       eyebrow: "Okay, so who is F.Liyanto?",
-
       intro: "I'm",
-
       paragraphOne:
         "An Indonesian digital designer born and raised in Surabaya, now creating interactive digital experiences from Melbourne, Australia.",
-
       paragraphTwo:
         "My work sits between UI design, interaction design and front-end development, with a focus on making digital experiences feel clear, responsive and enjoyable to use.",
-
       paragraphThree:
         "I like work that feels clean without becoming boring, playful without becoming distracting, and functional without losing its personality.",
-
       indonesia: "Indonesia",
-
       australia: "Australia",
-
       surabayaCaption: "Born & raised",
-
       melbourneCaption: "Designing & creating",
-
       bridgeQuestion: "So, what do I actually do?",
-
       bridgeAction: "Explore what I do",
     },
 
-    /* -------------------------------------------------
-       WHAT I DO
-       ------------------------------------------------- */
-
     services: {
       label: "What I Do",
-
       eyebrow: "Where design meets interaction.",
-
       title:
         "I design digital experiences that invite people to interact, explore and enjoy.",
-
       instruction: "Choose one to see how I approach it.",
-
-      /* ---------------------------------------------
-         UI DESIGN
-         --------------------------------------------- */
 
       ui: {
         title: "UI Design",
-
         teaser:
           "Clear visual systems with enough personality to feel memorable.",
-
         description:
           "I shape interfaces around hierarchy, spacing, typography and visual rhythm so information feels easy to understand without making the experience feel generic.",
-
         skillOne: "Visual hierarchy",
-
         skillTwo: "Typography",
-
         skillThree: "Layout systems",
-
         skillFour: "Responsive UI",
-
         skillFive: "Accessibility",
-
         focusLabel: "What I notice first",
-
         focus:
           "I’m drawn to hierarchy, spacing, typography and the small details that make an interface easier to understand. I especially enjoy finding the balance between something visually expressive and something that still feels clear, accessible and comfortable to navigate.",
-
         approachLabel: "How I shape the interface",
-
         approach:
           "I start with what the user needs to notice and understand first, then build the interface around that hierarchy. From there, I refine spacing, colour, components and responsive behaviour so everything feels connected rather than designed as separate pieces.",
       },
 
-      /* ---------------------------------------------
-         INTERACTION DESIGN
-         --------------------------------------------- */
-
       interaction: {
         title: "Interaction Design",
-
         teaser:
           "Movement and feedback that help an interface feel responsive and alive.",
-
         description:
           "I think about what happens before, during and after an interaction, using motion and feedback to communicate change while keeping the experience understandable and comfortable to use.",
-
         skillOne: "Motion",
-
         skillTwo: "Feedback",
-
         skillThree: "Micro-interactions",
-
         skillFour: "Prototyping",
-
         skillFive: "Interaction states",
-
         focusLabel: "Where movement matters",
-
         focus:
           "I like the moments where an interface responds back — transitions, feedback, movement and small interactions that make something feel alive. I’m most interested in motion that helps communicate what is happening rather than movement added purely for decoration.",
-
         approachLabel: "How I make it respond",
-
         approach:
           "I think about what should happen before, during and after an interaction. I prototype behaviours early, test whether the response feels understandable, then refine timing and movement until the interaction feels natural without getting in the user’s way.",
       },
 
-      /* ---------------------------------------------
-         FRONT-END
-         --------------------------------------------- */
-
       frontend: {
         title: "Front-End",
-
         teaser:
           "Turning interface ideas into things people can actually click, scroll and use.",
-
         description:
           "I use HTML, CSS and JavaScript to move ideas beyond static screens, testing layouts and interactions directly in the browser so the design can respond to how it actually behaves.",
-
         skillOne: "HTML",
-
         skillTwo: "CSS",
-
         skillThree: "JavaScript",
-
         skillFour: "Responsive builds",
-
         skillFive: "Interactive prototypes",
-
         focusLabel: "What I like bringing to life",
-
         focus:
           "Front-end lets me take an idea beyond a static design and see how it actually behaves. I enjoy using HTML, CSS and JavaScript to experiment with layouts, interactions and the details that are difficult to communicate through mock-ups alone.",
-
         approachLabel: "How I build it",
-
         approach:
           "I usually build progressively: structure first, styling second, then interaction. I keep components organised and reusable while testing directly in the browser, because the real experience often reveals opportunities and problems that a static design cannot.",
       },
 
-      /* ---------------------------------------------
-         WEB DESIGN
-         --------------------------------------------- */
-
       web: {
         title: "Web Design",
-
         teaser:
           "Responsive experiences that keep their character across different screens.",
-
         description:
           "I design web experiences as flexible systems, considering how content should move, resize and simplify across screen sizes without making mobile feel like a compromised version of desktop.",
-
         skillOne: "Responsive design",
-
         skillTwo: "Information hierarchy",
-
         skillThree: "Layout adaptation",
-
         skillFour: "Web interaction",
-
         skillFive: "Cross-device design",
-
         focusLabel: "What I care about across screens",
-
         focus:
           "I’m interested in how a website keeps its personality while adapting to different screens. Responsive design, layout systems and visual rhythm matter to me because I don’t want mobile to feel like a compromised version of the desktop experience.",
-
         approachLabel: "How I keep it consistent",
-
         approach:
           "I design with change in mind from the beginning. Instead of treating each screen size as a separate composition, I think about how content should move, resize, simplify or become more prominent while keeping the overall experience recognisably the same.",
       },
     },
 
-    /* -------------------------------------------------
-       SELECTED WORK
-       ------------------------------------------------- */
-
     projects: {
       label: "Selected Work",
-
       eyebrow: "A closer look at the work behind the screen.",
-
       title: "Projects that best represent how I think, design and build.",
-
       interactionHint: "Select a project to take a closer look.",
-
       explore: "Explore project",
-
       visitLive: "Visit live project",
-
       close: "Close project",
-
-      /* Legacy compatibility */
       exploreStory: "Explore project",
-
       storyLabel: "Project",
-
       closeStory: "Close",
-
       readMore: "View project",
-
-      /* ---------------------------------------------
-         LEGA
-         --------------------------------------------- */
 
       lega: {
         title: "LEGA",
-
         year: "2026",
-
         role: "UI · Interaction · Front-End",
-
         type: "Emotional Reflection Tool",
-
         description:
           "LEGA is an emotional reflection tool designed for people who find traditional journaling difficult. It uses sliders, emojis and visual timelines to make checking in feel quicker, calmer and less demanding.",
-
         preview:
           "LEGA is an emotional reflection tool designed for people who find traditional journaling difficult. It uses sliders, emojis and visual timelines to make checking in feel quicker, calmer and less demanding.",
-
         problemLabel: "The problem I kept noticing",
-
         problem:
           "Emotional reflection can become difficult when the first thing someone is asked to do is name exactly what they feel. LEGA explores whether reflection can begin somewhere simpler, using interaction before asking for precise language.",
-
         ideaLabel: "Reflection without forcing a label",
-
         idea: "The experience uses sliders, optional notes, emojis, templates and visual timelines to let people describe different qualities of a moment without first choosing a named emotion.",
-
         buildLabel: "Building a lower-pressure experience",
-
         build:
           "LEGA developed ideas first explored through Pulse Diary into a more practical experience focused on repeated use, accessibility, responsive behaviour and flexible ways to begin a reflection.",
       },
 
-      /* ---------------------------------------------
-         PULSE DIARY
-         --------------------------------------------- */
-
       pulse: {
         title: "Pulse Diary",
-
         year: "2026",
-
         role: "UI · Interaction",
-
         type: "Interactive Digital Diary",
-
         description:
           "Pulse Diary explores how visual feedback, movement and small interactions can make digital journaling feel more expressive. The interface turns personal reflection into something more visual, responsive and enjoyable to revisit.",
-
         preview:
           "Pulse Diary explores how visual feedback, movement and small interactions can make digital journaling feel more expressive. The interface turns personal reflection into something more visual, responsive and enjoyable to revisit.",
-
         originLabel: "The thought behind it",
-
         origin:
           "Pulse Diary started as an experiment in making digital reflection feel more expressive. I was interested in what could happen when a diary behaved less like a text document and more like an interactive visual experience.",
-
         experienceLabel: "Making reflection feel engaging",
-
         experience:
           "I focused on interface behaviour, feedback and visual movement as ways to make reflection feel less passive and more responsive.",
-
         nextLabel: "Where the idea went next",
-
         next: "Pulse Diary became an early conceptual foundation for LEGA, helping shape a more practical reflection experience designed for repeated everyday use.",
       },
 
-      /* ---------------------------------------------
-         NADA NUSANTARA
-         --------------------------------------------- */
-
       nada: {
         title: "Nada Nusantara",
-
         year: "2025",
-
         role: "Web · Interaction · Front-End",
-
         type: "Interactive Web Experience",
-
         description:
           "Nada Nusantara is an interactive web experience celebrating Indonesian music and culture through digital storytelling. Sound, movement and playful interactions work together to make cultural exploration feel lively and approachable.",
-
         preview:
           "Nada Nusantara is an interactive web experience celebrating Indonesian music and culture through digital storytelling. Sound, movement and playful interactions work together to make cultural exploration feel lively and approachable.",
-
         originLabel: "Where it began",
-
         origin:
           "Nada Nusantara began from my interest in combining Indonesian culture with the kind of digital interaction I enjoy designing.",
-
         experienceLabel: "What I wanted people to experience",
-
         experience:
           "The goal was to make discovery feel active, using sound, movement and visual responses to encourage curiosity rather than presenting culture as static information.",
-
         processLabel: "Turning sound into interaction",
-
         process:
           "I focused on rhythm, motion and responsive feedback so movement, interaction and audio could work together as one digital experience.",
-
         disclaimerLabel: "Educational use disclaimer",
-
         disclaimer:
           "Nada Nusantara was created solely for educational and non-commercial purposes. Any third-party music, audio, imagery or other copyrighted material used within the project remains the property of its respective copyright holders. No ownership of third-party material is claimed.",
       },
     },
 
-    /* -------------------------------------------------
-       CONTACT
-       ------------------------------------------------- */
-
     contact: {
       label: "Contact",
-
       eyebrow: "Made it all the way here?",
-
       title: "Thanks for stopping by.",
-
       description:
         "Have an idea, opportunity, collaboration, or just want to say hello? Feel free to reach out.",
-
       email: "f.p.liyanto@gmail.com",
-
       linkedin: "Let's connect",
-
-      /* Legacy compatibility */
       social: "Social",
-
       socialValue: "More of F.Liyanto",
     },
-
-    /* -------------------------------------------------
-       FOOTER
-       ------------------------------------------------- */
 
     footer: {
       message: "Designed & developed with curiosity.",
     },
   },
 
-  /* =====================================================
-     BAHASA INDONESIA
-     ===================================================== */
-
   id: {
-    /* -------------------------------------------------
-       META
-       ------------------------------------------------- */
-
     meta: {
       title: "F.Liyanto — UI, Interaction & Front-End Designer",
-
       description:
-        "Portofolio F.Liyanto — desainer digital Indonesia yang bekerja di bidang UI design, interaction design, responsive web experience dan creative front-end development.",
+        "Portofolio F.Liyanto, desainer digital asal Indonesia yang berkarya di bidang UI design, interaction design, responsive web experience, dan creative front-end development.",
     },
-
-    /* -------------------------------------------------
-       NAVIGATION
-       ------------------------------------------------- */
 
     nav: {
-      about: "Tentang Saya",
-
+      about: "Tentang",
       whatIDo: "Yang Saya Kerjakan",
-
       projects: "Karya Pilihan",
-
       contact: "Kontak",
     },
-
-    /* -------------------------------------------------
-       SCENE LABELS
-       ------------------------------------------------- */
 
     scene: {
       welcome: "Selamat Datang",
-
-      about: "Tentang Saya",
-
+      about: "Tentang",
       services: "Yang Saya Kerjakan",
-
       projects: "Karya Pilihan",
-
       contact: "Kontak",
     },
 
-    /* -------------------------------------------------
-       GENERAL CONTROLS
-       ------------------------------------------------- */
-
     controls: {
       continue: "Lanjut",
-
       scrollOrClick: "Scroll atau klik untuk menjelajah",
-
       explore: "Jelajahi",
-
-      next: "Lihat yang saya kerjakan",
-
-      aboutToServices: "Lihat yang saya kerjakan",
-
+      next: "Lihat apa yang saya kerjakan",
+      aboutToServices: "Lihat apa yang saya kerjakan",
       projects: "Jelajahi karya pilihan",
-
       previousProject: "Proyek sebelumnya",
-
       nextProject: "Proyek berikutnya",
-
       contact: "Mari terhubung",
-
       restart: "Kembali ke awal",
-
       close: "Tutup",
-
       viewProject: "Lihat proyek",
-
-      visitLive: "Buka proyek langsung",
+      visitLive: "Kunjungi proyek live",
     },
-
-    /* -------------------------------------------------
-       ACCESSIBILITY
-       ------------------------------------------------- */
 
     accessibility: {
       title: "Aksesibilitas",
-
       fontSize: "Ukuran teks",
-
       small: "Kecil",
-
       default: "Normal",
-
       large: "Besar",
-
-      reduceMotion: "Kurangi animasi",
-
+      reduceMotion: "Kurangi gerakan",
+      theme: "Tampilan",
+      lightTheme: "Terang",
+      darkTheme: "Gelap",
+      highContrast: "Kontras tinggi",
       close: "Tutup pengaturan aksesibilitas",
     },
 
-    /* -------------------------------------------------
-       WELCOME / HERO
-       ------------------------------------------------- */
-
     hero: {
       ui: "UI Design",
-
       interaction: "Interaction Design",
-
       frontend: "Front-End",
-
-      statement: "Saya suka membuat pengalaman digital yang terasa hidup.",
-
+      statement: "Saya suka membuat pengalaman digital terasa hidup.",
+      statementBefore: "Saya suka membuat pengalaman digital terasa",
+      statementAlive: "hidup",
+      statementAfter: "",
       explore: "Scroll atau klik untuk menjelajah",
-
-      /* Legacy compatibility */
-      eyebrow: "Halo & selamat datang",
-
+      eyebrow: "Halo, selamat datang",
       portfolioOf: "Portofolio",
     },
 
-    /* -------------------------------------------------
-       ABOUT
-       ------------------------------------------------- */
-
     about: {
-      label: "Tentang Saya",
-
-      eyebrow: "Oke, jadi siapa sebenarnya F.Liyanto?",
-
-      intro: "Saya",
-
+      label: "Tentang",
+      eyebrow: "Jadi, siapa F.Liyanto?",
+      intro: "Perkenalkan, saya",
       paragraphOne:
-        "Seorang desainer digital Indonesia yang lahir dan besar di Surabaya, dan sekarang menciptakan pengalaman digital interaktif dari Melbourne, Australia.",
-
+        "Saya adalah desainer digital asal Indonesia yang lahir dan besar di Surabaya. Saat ini saya berkarya dari Melbourne, Australia, sambil terus mengeksplorasi cara membuat pengalaman digital terasa lebih hidup dan interaktif.",
       paragraphTwo:
-        "Pekerjaan saya berada di antara UI design, interaction design dan front-end development, dengan fokus pada pengalaman digital yang terasa jelas, responsif dan menyenangkan untuk digunakan.",
-
+        "Pekerjaan saya berada di antara UI design, interaction design, dan front-end development, dengan fokus pada pengalaman yang terasa jelas, responsif, dan menyenangkan digunakan.",
       paragraphThree:
-        "Saya suka karya yang terasa bersih tanpa menjadi membosankan, playful tanpa menjadi mengganggu, dan fungsional tanpa kehilangan kepribadiannya.",
-
+        "Saya menyukai desain yang rapi tanpa terasa membosankan, playful tanpa berlebihan, dan fungsional tanpa kehilangan karakter.",
       indonesia: "Indonesia",
-
       australia: "Australia",
-
-      surabayaCaption: "Lahir & besar",
-
-      melbourneCaption: "Mendesain & berkarya",
-
-      bridgeQuestion: "Jadi, sebenarnya apa yang saya kerjakan?",
-
-      bridgeAction: "Lihat yang saya kerjakan",
+      surabayaCaption: "Tempat saya tumbuh",
+      melbourneCaption: "Tempat saya berkarya sekarang",
+      bridgeQuestion: "Jadi, apa yang saya kerjakan?",
+      bridgeAction: "Jelajahi bidang saya",
     },
-
-    /* -------------------------------------------------
-       WHAT I DO
-       ------------------------------------------------- */
 
     services: {
       label: "Yang Saya Kerjakan",
-
       eyebrow: "Saat desain bertemu interaksi.",
-
       title:
-        "Saya merancang pengalaman digital yang mengajak orang untuk berinteraksi, menjelajah dan menikmatinya.",
-
+        "Saya merancang pengalaman digital yang mengundang orang untuk berinteraksi, menjelajah, dan menikmatinya.",
       instruction: "Pilih satu untuk melihat cara saya mengerjakannya.",
 
       ui: {
         title: "UI Design",
-
-        teaser:
-          "Sistem visual yang jelas dengan karakter yang tetap terasa kuat.",
-
+        teaser: "Sistem visual yang jelas, dengan karakter yang tetap terasa.",
         description:
-          "Saya membentuk interface melalui hierarchy, spacing, typography dan visual rhythm agar informasi mudah dipahami tanpa membuat pengalaman terasa generik.",
-
-        skillOne: "Visual hierarchy",
-
-        skillTwo: "Typography",
-
-        skillThree: "Layout systems",
-
-        skillFour: "Responsive UI",
-
-        skillFive: "Accessibility",
-
-        focusLabel: "Hal yang pertama saya perhatikan",
-
+          "Bagi saya, UI bukan sekadar soal tampilan. Hierarki, spacing, tipografi, dan ritme visual perlu bekerja bersama agar informasi mudah dipahami tanpa membuat interface terasa generik.",
+        skillOne: "Hierarki visual",
+        skillTwo: "Tipografi",
+        skillThree: "Sistem layout",
+        skillFour: "UI responsif",
+        skillFive: "Aksesibilitas",
+        focusLabel: "Yang pertama saya perhatikan",
         focus:
-          "Perhatian saya biasanya tertuju pada hierarchy, spacing, typography dan detail kecil yang membuat sebuah interface lebih mudah dipahami. Saya suka mencari keseimbangan antara tampilan yang ekspresif dengan pengalaman yang tetap jelas, aksesibel dan nyaman untuk digunakan.",
-
+          "Perhatian saya biasanya langsung tertuju pada hierarki, spacing, tipografi, dan detail kecil yang membantu interface terasa lebih mudah dipahami. Saya menikmati proses mencari keseimbangan antara visual yang ekspresif dan pengalaman yang tetap jelas, aksesibel, dan nyaman digunakan.",
         approachLabel: "Cara saya membentuk interface",
-
         approach:
-          "Saya mulai dari apa yang perlu dilihat dan dipahami pengguna terlebih dahulu, lalu membangun interface berdasarkan hierarchy tersebut. Setelah itu, saya menyempurnakan spacing, warna, komponen dan responsive behaviour agar semuanya terasa saling terhubung.",
+          "Saya mulai dari apa yang perlu dilihat dan dipahami pengguna terlebih dahulu, lalu membangun hierarki dari sana. Setelah itu, saya merapikan spacing, warna, komponen, dan responsive behaviour sampai semuanya terasa sebagai satu sistem yang utuh.",
       },
 
       interaction: {
         title: "Interaction Design",
-
         teaser:
           "Gerakan dan feedback yang membuat interface terasa responsif dan hidup.",
-
         description:
-          "Saya memikirkan apa yang terjadi sebelum, selama dan setelah sebuah interaksi, menggunakan motion dan feedback untuk menjelaskan perubahan tanpa membuat pengalaman terasa berlebihan.",
-
+          "Saya memikirkan apa yang terjadi sebelum, saat, dan setelah sebuah interaksi. Motion dan feedback saya gunakan untuk menjelaskan perubahan dengan jelas, bukan sekadar menambah dekorasi.",
         skillOne: "Motion",
-
         skillTwo: "Feedback",
-
         skillThree: "Micro-interactions",
-
         skillFour: "Prototyping",
-
         skillFive: "Interaction states",
-
-        focusLabel: "Saat gerakan punya peran",
-
+        focusLabel: "Saat gerakan punya tujuan",
         focus:
-          "Saya suka momen ketika sebuah interface memberikan respons — melalui transisi, feedback, gerakan dan interaksi kecil yang membuat pengalaman terasa hidup. Saya paling tertarik pada motion yang membantu menjelaskan apa yang sedang terjadi.",
-
-        approachLabel: "Cara saya membuatnya merespons",
-
+          "Saya tertarik pada momen ketika interface merespons kembali lewat transisi, feedback, gerakan, atau interaksi kecil. Bagi saya, motion paling efektif ketika membantu pengguna memahami apa yang sedang terjadi, bukan hanya membuat layar terlihat lebih ramai.",
+        approachLabel: "Cara saya merancang respons",
         approach:
-          "Saya memikirkan apa yang seharusnya terjadi sebelum, selama dan setelah sebuah interaksi. Saya mencoba behaviour sejak awal, melihat apakah responsnya mudah dipahami, lalu menyempurnakan timing dan gerakannya.",
+          "Saya memikirkan apa yang seharusnya terjadi sebelum, saat, dan setelah interaksi. Behaviour saya prototipe sejak awal, lalu saya uji apakah responsnya mudah dipahami. Setelah itu, timing dan gerakannya saya haluskan sampai terasa natural tanpa mengganggu.",
       },
 
       frontend: {
         title: "Front-End",
-
         teaser:
-          "Mengubah ide interface menjadi sesuatu yang benar-benar dapat diklik, di-scroll dan digunakan.",
-
+          "Membawa ide interface dari layar statis menjadi pengalaman yang benar-benar bisa digunakan.",
         description:
-          "Saya menggunakan HTML, CSS dan JavaScript untuk membawa ide melewati tahap desain statis, lalu menguji layout dan interaksi langsung di browser untuk melihat bagaimana desain benar-benar bekerja.",
-
+          "Saya menggunakan HTML, CSS, dan JavaScript untuk membawa ide melampaui layar statis. Layout dan interaksi saya uji langsung di browser agar desain dapat berkembang berdasarkan cara kerjanya saat benar-benar digunakan.",
         skillOne: "HTML",
-
         skillTwo: "CSS",
-
         skillThree: "JavaScript",
-
         skillFour: "Responsive builds",
-
         skillFive: "Interactive prototypes",
-
-        focusLabel: "Hal yang saya suka hidupkan",
-
+        focusLabel: "Yang paling saya suka hidupkan",
         focus:
-          "Front-end memberi saya kesempatan membawa sebuah ide melewati tahap desain statis dan melihat bagaimana ide itu benar-benar bekerja. Saya menikmati menggunakan HTML, CSS dan JavaScript untuk bereksperimen dengan layout dan interaksi.",
-
+          "Front-end memberi saya kesempatan untuk melihat bagaimana sebuah ide benar-benar terasa saat digunakan. Saya senang bereksperimen dengan HTML, CSS, dan JavaScript untuk menguji layout, interaksi, dan detail yang sulit terlihat dari mock-up saja.",
         approachLabel: "Cara saya membangunnya",
-
         approach:
-          "Biasanya saya membangun secara bertahap: struktur terlebih dahulu, kemudian styling, lalu interaksi. Saya menjaga komponen tetap terorganisir sambil terus menguji langsung di browser.",
+          "Biasanya saya membangun secara bertahap: struktur dulu, styling berikutnya, lalu interaksi. Komponen saya jaga tetap rapi dan reusable sambil terus diuji di browser, karena pengalaman nyata sering membuka peluang dan masalah yang tidak terlihat di desain statis.",
       },
 
       web: {
         title: "Web Design",
-
         teaser:
-          "Pengalaman responsif yang tetap mempertahankan karakternya di berbagai layar.",
-
+          "Pengalaman web yang tetap punya karakter di berbagai ukuran layar.",
         description:
-          "Saya merancang pengalaman web sebagai sistem yang fleksibel, mempertimbangkan bagaimana konten berpindah, berubah ukuran dan disederhanakan tanpa membuat mobile terasa seperti versi desktop yang dikompromikan.",
-
+          "Saya merancang web sebagai sistem yang fleksibel. Konten bisa berpindah, mengecil, membesar, atau disederhanakan, tetapi versi mobile tetap harus terasa sengaja dirancang, bukan sekadar desktop yang dipaksa muat.",
         skillOne: "Responsive design",
-
-        skillTwo: "Information hierarchy",
-
-        skillThree: "Layout adaptation",
-
+        skillTwo: "Hierarki informasi",
+        skillThree: "Adaptasi layout",
         skillFour: "Web interaction",
-
         skillFive: "Cross-device design",
-
-        focusLabel: "Hal yang saya jaga di berbagai layar",
-
+        focusLabel: "Yang saya jaga di setiap layar",
         focus:
-          "Saya tertarik pada bagaimana sebuah website dapat mempertahankan kepribadiannya sambil beradaptasi di berbagai ukuran layar. Responsive design, layout systems dan visual rhythm menjadi bagian penting dari proses tersebut.",
-
-        approachLabel: "Cara saya menjaga konsistensinya",
-
+          "Saya tertarik pada bagaimana sebuah website dapat mempertahankan karakternya saat berpindah dari satu ukuran layar ke ukuran lain. Responsive design, sistem layout, dan ritme visual penting agar pengalaman mobile tetap terasa utuh.",
+        approachLabel: "Cara saya menjaga konsistensi",
         approach:
-          "Sejak awal saya mendesain dengan perubahan ukuran layar sebagai bagian dari sistem. Saya memikirkan bagaimana konten perlu berpindah, berubah ukuran, disederhanakan atau menjadi lebih menonjol sambil tetap mempertahankan karakter yang sama.",
+          "Sejak awal, perubahan ukuran layar saya perlakukan sebagai bagian dari sistem desain. Saya menentukan apa yang perlu berpindah, mengecil, disederhanakan, atau justru lebih ditonjolkan, sambil menjaga pengalaman tetap terasa sebagai website yang sama.",
       },
     },
 
-    /* -------------------------------------------------
-       SELECTED WORK
-       ------------------------------------------------- */
-
     projects: {
       label: "Karya Pilihan",
-
-      eyebrow: "Melihat lebih dekat karya di balik layar.",
-
+      eyebrow: "Melihat lebih dekat apa yang terjadi di balik layar.",
       title:
-        "Proyek yang paling mewakili cara saya berpikir, mendesain dan membangun.",
-
-      interactionHint: "Pilih proyek untuk melihatnya lebih dekat.",
-
+        "Proyek yang paling mewakili cara saya berpikir, mendesain, dan membangun.",
+      interactionHint: "Pilih proyek untuk melihat lebih dekat.",
       explore: "Jelajahi proyek",
-
-      visitLive: "Buka proyek langsung",
-
+      visitLive: "Kunjungi proyek live",
       close: "Tutup proyek",
-
-      /* Legacy compatibility */
       exploreStory: "Jelajahi proyek",
-
       storyLabel: "Proyek",
-
       closeStory: "Tutup",
-
       readMore: "Lihat proyek",
 
       lega: {
         title: "LEGA",
-
         year: "2026",
-
         role: "UI · Interaction · Front-End",
-
-        type: "Alat Refleksi Emosional",
-
+        type: "Alat Refleksi Emosi",
         description:
-          "LEGA adalah alat refleksi emosional untuk orang yang merasa journaling tradisional cukup sulit. Slider, emoji dan timeline visual membantu proses check-in terasa lebih cepat, tenang dan tidak membebani.",
-
+          "LEGA adalah alat refleksi emosi untuk orang yang merasa journaling tradisional sulit dimulai atau terlalu menuntut. Slider, emoji, dan timeline visual membantu proses check-in terasa lebih cepat, tenang, dan ringan.",
         preview:
-          "LEGA adalah alat refleksi emosional untuk orang yang merasa journaling tradisional cukup sulit. Slider, emoji dan timeline visual membantu proses check-in terasa lebih cepat, tenang dan tidak membebani.",
-
-        problemLabel: "Masalah yang terus saya perhatikan",
-
+          "LEGA membuat proses refleksi terasa lebih ringan melalui slider, emoji, dan timeline visual, tanpa meminta pengguna langsung memberi nama pada emosinya.",
+        problemLabel: "Masalah yang terus saya temukan",
         problem:
-          "Refleksi emosional dapat terasa sulit ketika hal pertama yang diminta adalah menentukan dengan tepat emosi apa yang sedang dirasakan. LEGA mengeksplorasi cara memulai refleksi melalui interaksi sebelum meminta kata yang tepat.",
-
-        ideaLabel: "Refleksi tanpa memaksa sebuah label",
-
-        idea: "Pengalaman ini menggunakan slider, catatan opsional, emoji, template dan timeline visual agar pengguna dapat menggambarkan sebuah momen tanpa harus memilih nama emosi terlebih dahulu.",
-
-        buildLabel: "Membangun pengalaman dengan tekanan yang lebih rendah",
-
+          "Refleksi dapat menjadi lebih sulit ketika langkah pertama yang diminta adalah memberi nama tepat pada apa yang sedang dirasakan. LEGA mengeksplorasi pendekatan yang lebih sederhana: mulai dari interaksi terlebih dahulu, lalu menggunakan kata-kata jika memang diperlukan.",
+        ideaLabel: "Refleksi tanpa terburu-buru memberi label",
+        idea: "LEGA menggunakan slider, catatan opsional, emoji, template, dan timeline visual agar pengguna dapat menggambarkan kualitas sebuah momen tanpa harus langsung memilih satu nama emosi.",
+        buildLabel: "Membangun pengalaman yang lebih ringan",
         build:
-          "LEGA mengembangkan ide yang sebelumnya dieksplorasi melalui Pulse Diary menjadi pengalaman yang lebih praktis dengan fokus pada penggunaan berulang, aksesibilitas, responsive behaviour dan cara refleksi yang fleksibel.",
+          "LEGA mengembangkan ide yang sebelumnya saya eksplor melalui Pulse Diary menjadi pengalaman yang lebih praktis untuk penggunaan berulang. Fokusnya kemudian berkembang ke aksesibilitas, responsive behaviour, dan beberapa cara berbeda untuk memulai refleksi sesuai kondisi pengguna.",
       },
 
       pulse: {
         title: "Pulse Diary",
-
         year: "2026",
-
         role: "UI · Interaction",
-
-        type: "Digital Diary Interaktif",
-
+        type: "Diary Digital Interaktif",
         description:
-          "Pulse Diary mengeksplorasi bagaimana visual feedback, gerakan dan interaksi kecil dapat membuat digital journaling terasa lebih ekspresif. Interface mengubah refleksi pribadi menjadi pengalaman yang lebih visual, responsif dan menarik untuk dilihat kembali.",
-
+          "Pulse Diary mengeksplorasi bagaimana feedback visual, gerakan, dan interaksi kecil dapat membuat journaling digital terasa lebih ekspresif. Refleksi pribadi tidak hanya hadir sebagai teks, tetapi ikut terasa hidup melalui respons visual dan interaksi.",
         preview:
-          "Pulse Diary mengeksplorasi bagaimana visual feedback, gerakan dan interaksi kecil dapat membuat digital journaling terasa lebih ekspresif. Interface mengubah refleksi pribadi menjadi pengalaman yang lebih visual, responsif dan menarik untuk dilihat kembali.",
-
-        originLabel: "Pemikiran di balik idenya",
-
+          "Pulse Diary mengeksplorasi journaling digital yang lebih visual dan ekspresif melalui motion, feedback, dan interaksi kecil yang membuat proses refleksi terasa lebih hidup.",
+        originLabel: "Gagasan di baliknya",
         origin:
-          "Pulse Diary dimulai sebagai eksperimen untuk membuat refleksi digital terasa lebih ekspresif dan lebih responsif daripada diary digital berbasis teks biasa.",
-
-        experienceLabel: "Membuat refleksi terasa lebih menarik",
-
+          "Pulse Diary berawal dari satu pertanyaan: bagaimana jika diary digital tidak terasa seperti dokumen teks biasa? Saya ingin mengeksplorasi pengalaman refleksi yang lebih visual, responsif, dan memberi lebih banyak ruang untuk berinteraksi.",
+        experienceLabel: "Membuat refleksi terasa lebih aktif",
         experience:
-          "Saya berfokus pada interface behaviour, visual feedback dan movement untuk membuat refleksi terasa lebih aktif dan ekspresif.",
-
+          "Saya berfokus pada interface behaviour, visual feedback, dan motion agar proses refleksi terasa lebih aktif. Pengguna tidak hanya mengisi sesuatu, tetapi juga mendapat respons dari interface ketika mereka berinteraksi.",
         nextLabel: "Ke mana ide ini berkembang",
-
-        next: "Pulse Diary kemudian menjadi salah satu fondasi konseptual awal untuk LEGA dan membantu membentuk pengalaman refleksi yang lebih praktis untuk penggunaan sehari-hari.",
+        next: "Pulse Diary kemudian menjadi salah satu fondasi awal untuk LEGA. Banyak ide dari proyek ini berkembang menjadi pengalaman refleksi yang lebih praktis, fleksibel, dan dirancang untuk penggunaan sehari-hari.",
       },
 
       nada: {
         title: "Nada Nusantara",
-
         year: "2025",
-
         role: "Web · Interaction · Front-End",
-
         type: "Pengalaman Web Interaktif",
-
         description:
-          "Nada Nusantara adalah pengalaman web interaktif yang merayakan musik dan budaya Indonesia melalui digital storytelling. Suara, gerakan dan interaksi playful bekerja bersama untuk membuat eksplorasi budaya terasa hidup dan mudah didekati.",
-
+          "Nada Nusantara adalah pengalaman web interaktif yang membawa musik dan budaya Indonesia ke dalam digital storytelling. Suara, gerakan, dan interaksi playful bekerja bersama agar proses menjelajah budaya terasa hidup, menarik, dan mudah didekati.",
         preview:
-          "Nada Nusantara adalah pengalaman web interaktif yang merayakan musik dan budaya Indonesia melalui digital storytelling. Suara, gerakan dan interaksi playful bekerja bersama untuk membuat eksplorasi budaya terasa hidup dan mudah didekati.",
-
-        originLabel: "Awal mula idenya",
-
+          "Nada Nusantara menggabungkan musik, budaya Indonesia, dan interaksi digital dalam pengalaman web yang playful dan eksploratif.",
+        originLabel: "Dari mana ide ini berawal",
         origin:
-          "Nada Nusantara berawal dari ketertarikan saya untuk menggabungkan budaya Indonesia dengan jenis interaksi digital yang saya suka rancang.",
-
+          "Nada Nusantara berawal dari keinginan saya untuk menggabungkan dua hal yang saya sukai: budaya Indonesia dan interactive design. Saya ingin melihat bagaimana elemen budaya dapat dibawa ke dunia digital tanpa kehilangan energi dan karakternya.",
         experienceLabel: "Pengalaman yang ingin saya ciptakan",
-
         experience:
-          "Tujuannya adalah membuat eksplorasi terasa aktif melalui suara, gerakan dan visual response yang mendorong rasa penasaran.",
-
-        processLabel: "Mengubah suara menjadi interaksi",
-
+          "Saya ingin proses menemukan musik dan budaya terasa aktif, bukan seperti membaca arsip atau halaman informasi biasa. Karena itu, suara, motion, dan respons visual digunakan untuk membangun rasa penasaran dan mendorong orang untuk terus menjelajah.",
+        processLabel: "Menerjemahkan suara menjadi interaksi",
         process:
-          "Saya berfokus pada rhythm, motion dan responsive feedback agar gerakan, interaksi dan audio dapat bekerja bersama sebagai satu pengalaman digital.",
-
-        disclaimerLabel: "Pemberitahuan penggunaan edukasi",
-
+          "Fokus saya ada pada ritme, motion, dan responsive feedback agar audio, gerakan, dan interaksi tidak terasa seperti elemen terpisah, tetapi bekerja bersama sebagai satu pengalaman digital.",
+        disclaimerLabel: "Catatan penggunaan materi",
         disclaimer:
-          "Nada Nusantara dibuat semata-mata untuk tujuan pendidikan dan non-komersial. Musik, audio, gambar maupun materi berhak cipta dari pihak ketiga yang digunakan dalam proyek ini tetap menjadi milik masing-masing pemegang hak cipta. Tidak ada klaim kepemilikan atas materi pihak ketiga.",
+          "Nada Nusantara dibuat khusus untuk keperluan pendidikan dan bukan untuk tujuan komersial. Musik, audio, gambar, dan materi berhak cipta milik pihak ketiga yang digunakan dalam proyek ini tetap menjadi milik pemegang hak cipta masing-masing. Saya tidak mengklaim kepemilikan atas materi tersebut.",
       },
     },
 
-    /* -------------------------------------------------
-       CONTACT
-       ------------------------------------------------- */
-
     contact: {
       label: "Kontak",
-
-      eyebrow: "Sampai juga di bagian ini?",
-
-      title: "Terima kasih sudah mampir.",
-
+      eyebrow: "Sampai di bagian ini?",
+      title: "Terima kasih sudah berkunjung.",
       description:
-        "Punya ide, peluang, kolaborasi, atau sekadar ingin menyapa? Jangan ragu untuk menghubungi saya.",
-
+        "Punya ide, peluang, ingin berkolaborasi, atau sekadar ingin menyapa? Saya akan senang mendengarnya.",
       email: "f.p.liyanto@gmail.com",
-
       linkedin: "Mari terhubung",
-
-      /* Legacy compatibility */
       social: "Sosial",
-
       socialValue: "Lihat lebih banyak dari F.Liyanto",
     },
 
-    /* -------------------------------------------------
-       FOOTER
-       ------------------------------------------------- */
-
     footer: {
-      message: "Dirancang & dikembangkan dengan rasa penasaran.",
+      message: "Dirancang & dikembangkan dengan rasa ingin tahu.",
     },
   },
 };
-
-/* =========================================================
-   EXPOSE TRANSLATIONS
-   ========================================================= */
 
 window.FLTranslations = FLTranslations;

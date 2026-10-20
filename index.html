@@ -1,48 +1,58 @@
 <!doctype html>
-
-<html lang="en" data-font-size="default" data-reduce-motion="false">
+<html
+  lang="en"
+  data-language="en"
+  data-font-size="default"
+  data-reduce-motion="false"
+  data-theme="light"
+  data-site-ready="false"
+  data-modal-open="false"
+>
   <head>
-    <!-- =========================================================
-         DOCUMENT SETUP
-    ========================================================== -->
-
     <meta charset="UTF-8" />
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <meta
       name="description"
       content="Portfolio of F.Liyanto — an Indonesian digital designer working across UI design, interaction design, responsive web experiences and creative front-end development."
     />
-
     <meta name="author" content="Fatta Putra Liyanto" />
-
-    <meta name="theme-color" content="#efe5d5" />
-
+    <meta name="theme-color" content="#eee7dd" />
+    <meta name="color-scheme" content="light dark" />
     <title>F.Liyanto — UI, Interaction & Front-End Designer</title>
-
-    <!-- =========================================================
-         STYLESHEETS
-    ========================================================== -->
-
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23eee7dd'/%3E%3Ctext x='12' y='42' font-family='Arial,sans-serif' font-size='27' font-weight='800' fill='%23211e1b'%3EF.L%3C/text%3E%3Ccircle cx='51' cy='16' r='5' fill='%23e96f51'/%3E%3C/svg%3E"
+    />
+    <script>
+      (() => {
+        try {
+          const savedTheme = window.localStorage.getItem("fl-theme");
+          const validThemes = ["light", "dark", "contrast"];
+          if (validThemes.includes(savedTheme)) {
+            document.documentElement.dataset.theme = savedTheme;
+          }
+        } catch {
+          /* Local storage is optional. */
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="css/reset.css" />
-
     <link rel="stylesheet" href="css/style.css" />
-
     <link rel="stylesheet" href="css/responsive.css" />
   </head>
-
   <body>
-    <!-- =========================================================
-         ACCESSIBILITY
-    ========================================================== -->
-
     <a class="skip-link" href="#main-content"> Skip to content </a>
-
-    <!-- =========================================================
-         SITE HEADER
-    ========================================================== -->
-
+    <div
+      class="sr-only"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      data-live-region
+    ></div>
     <header class="site-header" data-header>
       <a
         class="site-logo"
@@ -52,9 +62,6 @@
       >
         <span class="site-logo__mark"> F.L </span>
       </a>
-
-      <!-- Desktop navigation -->
-
       <nav class="site-nav" aria-label="Portfolio navigation">
         <button
           class="site-nav__link"
@@ -64,7 +71,6 @@
         >
           About
         </button>
-
         <button
           class="site-nav__link"
           type="button"
@@ -73,7 +79,6 @@
         >
           What I Do
         </button>
-
         <button
           class="site-nav__link"
           type="button"
@@ -82,7 +87,6 @@
         >
           Selected Work
         </button>
-
         <button
           class="site-nav__link"
           type="button"
@@ -92,9 +96,6 @@
           Contact
         </button>
       </nav>
-
-      <!-- Header controls -->
-
       <div class="header-controls">
         <div
           class="language-switcher"
@@ -109,9 +110,7 @@
           >
             EN
           </button>
-
           <span class="language-switcher__divider" aria-hidden="true"> / </span>
-
           <button
             class="language-switcher__button"
             type="button"
@@ -121,18 +120,16 @@
             ID
           </button>
         </div>
-
         <button
           class="settings-toggle"
           type="button"
-          aria-label="Open accessibility settings"
+          aria-label="Open accessibility and appearance settings"
           aria-expanded="false"
           aria-controls="accessibility-panel"
           data-settings-toggle
         >
           <span class="settings-toggle__icon" aria-hidden="true"> Aa </span>
         </button>
-
         <button
           class="nav-toggle"
           type="button"
@@ -142,20 +139,14 @@
           data-nav-toggle
         >
           <span class="nav-toggle__line" aria-hidden="true"></span>
-
           <span class="nav-toggle__line" aria-hidden="true"></span>
         </button>
       </div>
     </header>
-
-    <!-- =========================================================
-         ACCESSIBILITY PANEL
-    ========================================================== -->
-
     <aside
       class="accessibility-panel"
       id="accessibility-panel"
-      aria-label="Accessibility settings"
+      aria-label="Accessibility and appearance settings"
       hidden
       data-settings-panel
     >
@@ -163,7 +154,6 @@
         <p class="accessibility-panel__title" data-i18n="accessibility.title">
           Accessibility
         </p>
-
         <button
           class="accessibility-panel__close"
           type="button"
@@ -173,7 +163,6 @@
           ×
         </button>
       </div>
-
       <div class="accessibility-option">
         <p
           class="accessibility-option__label"
@@ -181,7 +170,6 @@
         >
           Text size
         </p>
-
         <div class="font-size-controls" role="group" aria-label="Text size">
           <button
             type="button"
@@ -191,7 +179,6 @@
           >
             A
           </button>
-
           <button
             class="is-active"
             type="button"
@@ -201,7 +188,6 @@
           >
             A
           </button>
-
           <button
             type="button"
             data-font-size="large"
@@ -212,22 +198,62 @@
           </button>
         </div>
       </div>
-
+      <div class="accessibility-option accessibility-option--theme">
+        <p class="accessibility-option__label" data-i18n="accessibility.theme">
+          Appearance
+        </p>
+        <div
+          class="theme-controls"
+          role="group"
+          aria-label="Choose appearance"
+          data-theme-controls
+        >
+          <button
+            class="theme-control is-active"
+            type="button"
+            data-theme-option="light"
+            aria-pressed="true"
+          >
+            <span
+              class="theme-control__swatch theme-control__swatch--light"
+              aria-hidden="true"
+            ></span>
+            <span data-i18n="accessibility.lightTheme"> Light </span>
+          </button>
+          <button
+            class="theme-control"
+            type="button"
+            data-theme-option="dark"
+            aria-pressed="false"
+          >
+            <span
+              class="theme-control__swatch theme-control__swatch--dark"
+              aria-hidden="true"
+            ></span>
+            <span data-i18n="accessibility.darkTheme"> Dark </span>
+          </button>
+          <button
+            class="theme-control"
+            type="button"
+            data-theme-option="contrast"
+            aria-pressed="false"
+          >
+            <span
+              class="theme-control__swatch theme-control__swatch--contrast"
+              aria-hidden="true"
+            ></span>
+            <span data-i18n="accessibility.highContrast"> High contrast </span>
+          </button>
+        </div>
+      </div>
       <div class="accessibility-option">
         <label class="motion-control">
           <span data-i18n="accessibility.reduceMotion"> Reduce motion </span>
-
           <input type="checkbox" data-reduce-motion />
-
           <span class="motion-control__switch" aria-hidden="true"></span>
         </label>
       </div>
     </aside>
-
-    <!-- =========================================================
-         MOBILE NAVIGATION
-    ========================================================== -->
-
     <nav
       class="mobile-nav"
       id="mobile-navigation"
@@ -243,7 +269,6 @@
       >
         About
       </button>
-
       <button
         class="mobile-nav__link"
         type="button"
@@ -252,7 +277,6 @@
       >
         What I Do
       </button>
-
       <button
         class="mobile-nav__link"
         type="button"
@@ -261,7 +285,6 @@
       >
         Selected Work
       </button>
-
       <button
         class="mobile-nav__link"
         type="button"
@@ -271,90 +294,101 @@
         Contact
       </button>
     </nav>
-
-    <!-- =========================================================
-         MAIN PORTFOLIO
-    ========================================================== -->
-
     <main class="portfolio-experience" id="main-content">
-      <!-- =====================================================
-           SCENE 00 — WELCOME
-      ====================================================== -->
-
       <section
         class="scene scene--welcome"
         id="welcome"
         data-scene="welcome"
         data-scene-index="0"
         data-scene-status="active"
+        data-welcome-running="false"
       >
         <div class="scene-shapes scene-shapes--welcome" aria-hidden="true">
           <span
             class="shape shape--welcome-one"
             data-shape="welcome-one"
           ></span>
-
           <span
             class="shape shape--welcome-two"
             data-shape="welcome-two"
           ></span>
-
           <span
             class="shape shape--welcome-three"
             data-shape="welcome-three"
           ></span>
-
           <span
             class="shape shape--welcome-four"
             data-shape="welcome-four"
           ></span>
         </div>
-
         <div class="scene__inner welcome">
-          <div class="welcome__sequence">
-            <!-- State 01 — Name -->
-
-            <div class="welcome__intro" data-welcome-state="intro">
+          <div class="welcome__sequence" data-welcome-sequence>
+            <div
+              class="welcome__intro"
+              data-welcome-state="intro"
+              data-welcome-step="0"
+            >
               <h1 class="welcome__title">
                 <span class="welcome__name" data-welcome-name> F.Liyanto </span>
               </h1>
-
               <p class="welcome__explore" data-i18n="controls.scrollOrClick">
                 Scroll or click to explore
               </p>
             </div>
-
-            <!-- State 02 — Specialisms -->
-
             <div
               class="welcome__specialisms"
               data-welcome-state="specialisms"
+              data-welcome-step="1"
               aria-label="Design specialisms"
             >
-              <div class="welcome-specialism welcome-specialism--ui">
+              <div
+                class="welcome-specialism welcome-specialism--ui bubble-word bubble-word--ui"
+                data-bubble-word="ui"
+              >
                 <span data-i18n="hero.ui"> UI Design </span>
+                <span class="bubble-word__shine" aria-hidden="true"></span>
               </div>
-
-              <div class="welcome-specialism welcome-specialism--interaction">
+              <div
+                class="welcome-specialism welcome-specialism--interaction bubble-word bubble-word--interaction"
+                data-bubble-word="interaction"
+              >
                 <span data-i18n="hero.interaction"> Interaction Design </span>
+                <span class="bubble-word__shine" aria-hidden="true"></span>
               </div>
-
-              <div class="welcome-specialism welcome-specialism--frontend">
+              <div
+                class="welcome-specialism welcome-specialism--frontend bubble-word bubble-word--frontend"
+                data-bubble-word="frontend"
+              >
                 <span data-i18n="hero.frontend"> Front-End </span>
+                <span class="bubble-word__shine" aria-hidden="true"></span>
               </div>
             </div>
-
-            <!-- State 03 — Statement -->
-
-            <div class="welcome__statement" data-welcome-state="statement">
-              <p class="welcome__statement-text" data-i18n="hero.statement">
-                I like making digital things that feel alive.
+            <div
+              class="welcome__statement"
+              data-welcome-state="statement"
+              data-welcome-step="2"
+            >
+              <p class="welcome__statement-text" data-welcome-statement>
+                <span
+                  class="welcome__statement-before"
+                  data-i18n="hero.statementBefore"
+                >
+                  I like making digital things feel
+                </span>
+                <span
+                  class="welcome__statement-alive bubble-word bubble-word--alive"
+                  data-bubble-word="alive"
+                  data-i18n="hero.statementAlive"
+                >
+                  alive
+                </span>
+                <span
+                  class="welcome__statement-after"
+                  data-i18n="hero.statementAfter"
+                ></span>
               </p>
             </div>
           </div>
-
-          <!-- Welcome progress -->
-
           <div class="scene-progress">
             <button
               class="scene-progress__continue"
@@ -362,10 +396,8 @@
               data-welcome-continue
             >
               <span data-i18n="controls.continue"> Continue </span>
-
               <span class="scene-progress__arrow" aria-hidden="true"> ↓ </span>
             </button>
-
             <div
               class="scene-progress__steps"
               data-welcome-progress
@@ -375,18 +407,12 @@
               <span></span>
               <span></span>
             </div>
-
             <p class="scene-progress__hint" data-i18n="controls.scrollOrClick">
               Scroll or click to explore
             </p>
           </div>
         </div>
       </section>
-
-      <!-- =====================================================
-           SCENE 01 — ABOUT
-      ====================================================== -->
-
       <section
         class="scene scene--about"
         id="about"
@@ -396,50 +422,37 @@
       >
         <div class="scene-shapes scene-shapes--about" aria-hidden="true">
           <span class="shape shape--about-one" data-shape="about-one"></span>
-
           <span class="shape shape--about-two" data-shape="about-two"></span>
-
           <span
             class="shape shape--about-three"
             data-shape="about-three"
           ></span>
         </div>
-
         <div class="scene__inner about">
           <div class="scene-indicator">
-            <span>01</span>
-
+            <span> 01 </span>
             <span class="scene-indicator__line" aria-hidden="true"></span>
-
             <span data-i18n="about.label"> About </span>
           </div>
-
-          <!-- About copy -->
-
           <div class="about__content">
             <p class="about__eyebrow" data-i18n="about.eyebrow">
               Okay, so who is F.Liyanto?
             </p>
-
             <h2 class="about__title">
               <span data-i18n="about.intro"> I'm </span>
-
-              <span class="about__name"> Fatta Putra Liyanto. </span>
+              <span class="about__name"> Fatta Putra Liyanto </span>
             </h2>
-
             <div class="about__story">
               <p data-i18n="about.paragraphOne">
                 An Indonesian digital designer born and raised in Surabaya, now
                 creating interactive digital experiences from Melbourne,
                 Australia.
               </p>
-
               <p data-i18n="about.paragraphTwo">
                 My work sits between UI design, interaction design and front-end
                 development, with a focus on making digital experiences feel
                 clear, responsive and enjoyable to use.
               </p>
-
               <p data-i18n="about.paragraphThree">
                 I like work that feels clean without becoming boring, playful
                 without becoming distracting, and functional without losing its
@@ -447,22 +460,16 @@
               </p>
             </div>
           </div>
-
-          <!-- Surabaya → Melbourne -->
-
           <div class="travel-story" data-travel-story>
             <div
               class="travel-location travel-location--origin"
               data-travel-origin
             >
               <span class="travel-location__dot" aria-hidden="true"></span>
-
               <p class="travel-location__city">Surabaya</p>
-
               <p class="travel-location__country" data-i18n="about.indonesia">
                 Indonesia
               </p>
-
               <p
                 class="travel-location__caption"
                 data-i18n="about.surabayaCaption"
@@ -470,7 +477,6 @@
                 Born &amp; raised
               </p>
             </div>
-
             <div class="travel-route" aria-hidden="true">
               <svg
                 class="travel-route__svg"
@@ -488,22 +494,17 @@
                   "
                 />
               </svg>
-
               <span class="travel-plane" data-travel-plane> ✈ </span>
             </div>
-
             <div
               class="travel-location travel-location--destination"
               data-travel-destination
             >
               <span class="travel-location__dot" aria-hidden="true"></span>
-
               <p class="travel-location__city">Melbourne</p>
-
               <p class="travel-location__country" data-i18n="about.australia">
                 Australia
               </p>
-
               <p
                 class="travel-location__caption"
                 data-i18n="about.melbourneCaption"
@@ -512,9 +513,6 @@
               </p>
             </div>
           </div>
-
-          <!-- About → What I Do -->
-
           <button
             class="scene-next"
             type="button"
@@ -524,20 +522,12 @@
             <span data-i18n="about.bridgeQuestion">
               So, what do I actually do?
             </span>
-
             <span aria-hidden="true"> — </span>
-
             <span data-i18n="about.bridgeAction"> Explore what I do </span>
-
             <span aria-hidden="true"> ↓ </span>
           </button>
         </div>
       </section>
-
-      <!-- =====================================================
-           SCENE 02 — WHAT I DO
-      ====================================================== -->
-
       <section
         class="scene scene--services"
         id="what-i-do"
@@ -550,44 +540,45 @@
             class="shape shape--services-one"
             data-shape="services-one"
           ></span>
-
           <span
             class="shape shape--services-two"
             data-shape="services-two"
           ></span>
         </div>
-
         <div class="scene__inner services">
           <div class="scene-indicator">
-            <span>02</span>
-
+            <span> 02 </span>
             <span class="scene-indicator__line" aria-hidden="true"></span>
-
             <span data-i18n="services.label"> What I Do </span>
           </div>
-
-          <!-- Introduction -->
-
           <div class="services__intro">
-            <p class="services__eyebrow" data-i18n="services.eyebrow">
-              Where design meets interaction.
-            </p>
-
-            <h2 class="services__title" data-i18n="services.title">
-              I design digital experiences that invite people to interact,
-              explore and enjoy.
-            </h2>
-
-            <p class="services__instruction" data-i18n="services.instruction">
-              Choose one to see how I approach it.
-            </p>
+            <div class="services__intro-copy">
+              <p class="services__eyebrow" data-i18n="services.eyebrow">
+                Where design meets interaction.
+              </p>
+              <h2 class="services__title" data-i18n="services.title">
+                I design digital experiences that invite people to interact,
+                explore and enjoy.
+              </h2>
+              <p class="services__instruction" data-i18n="services.instruction">
+                Choose one to see how I approach it.
+              </p>
+            </div>
+            <div class="services__intro-action services__intro-action--desktop">
+              <button
+                class="scene-next scene-next--projects scene-next--projects-desktop"
+                type="button"
+                data-scene-continue
+                data-scene-target="projects"
+              >
+                <span data-i18n="controls.projects">
+                  Explore selected work
+                </span>
+                <span aria-hidden="true"> ↓ </span>
+              </button>
+            </div>
           </div>
-
-          <!-- Discipline cards -->
-
           <div class="discipline-playground" data-discipline-playground>
-            <!-- UI Design -->
-
             <article class="discipline discipline--ui" data-discipline="ui">
               <button
                 class="discipline__trigger"
@@ -599,12 +590,10 @@
                 data-discipline-trigger="ui"
               >
                 <span class="discipline__number"> 01 </span>
-
                 <span class="discipline__content">
                   <span class="discipline__title" data-i18n="services.ui.title">
                     UI Design
                   </span>
-
                   <span
                     class="discipline__teaser"
                     data-i18n="services.ui.teaser"
@@ -613,13 +602,9 @@
                     memorable.
                   </span>
                 </span>
-
                 <span class="discipline__symbol" aria-hidden="true"> + </span>
               </button>
             </article>
-
-            <!-- Interaction Design -->
-
             <article
               class="discipline discipline--interaction"
               data-discipline="interaction"
@@ -634,7 +619,6 @@
                 data-discipline-trigger="interaction"
               >
                 <span class="discipline__number"> 02 </span>
-
                 <span class="discipline__content">
                   <span
                     class="discipline__title"
@@ -642,7 +626,6 @@
                   >
                     Interaction Design
                   </span>
-
                   <span
                     class="discipline__teaser"
                     data-i18n="services.interaction.teaser"
@@ -651,13 +634,9 @@
                     and alive.
                   </span>
                 </span>
-
                 <span class="discipline__symbol" aria-hidden="true"> + </span>
               </button>
             </article>
-
-            <!-- Front-End -->
-
             <article
               class="discipline discipline--frontend"
               data-discipline="frontend"
@@ -672,7 +651,6 @@
                 data-discipline-trigger="frontend"
               >
                 <span class="discipline__number"> 03 </span>
-
                 <span class="discipline__content">
                   <span
                     class="discipline__title"
@@ -680,7 +658,6 @@
                   >
                     Front-End
                   </span>
-
                   <span
                     class="discipline__teaser"
                     data-i18n="services.frontend.teaser"
@@ -689,13 +666,9 @@
                     click, scroll and use.
                   </span>
                 </span>
-
                 <span class="discipline__symbol" aria-hidden="true"> + </span>
               </button>
             </article>
-
-            <!-- Web Design -->
-
             <article class="discipline discipline--web" data-discipline="web">
               <button
                 class="discipline__trigger"
@@ -707,7 +680,6 @@
                 data-discipline-trigger="web"
               >
                 <span class="discipline__number"> 04 </span>
-
                 <span class="discipline__content">
                   <span
                     class="discipline__title"
@@ -715,7 +687,6 @@
                   >
                     Web Design
                   </span>
-
                   <span
                     class="discipline__teaser"
                     data-i18n="services.web.teaser"
@@ -724,33 +695,21 @@
                     different screens.
                   </span>
                 </span>
-
                 <span class="discipline__symbol" aria-hidden="true"> + </span>
               </button>
             </article>
           </div>
-
-          <!-- What I Do → Selected Work -->
-
           <button
-            class="scene-next scene-next--projects"
+            class="scene-next scene-next--projects scene-next--projects-mobile"
             type="button"
             data-scene-continue
             data-scene-target="projects"
           >
             <span data-i18n="controls.projects"> Explore selected work </span>
-
             <span aria-hidden="true"> ↓ </span>
           </button>
         </div>
       </section>
-
-      <!-- =====================================================
-           WHAT I DO DIALOGS
-      ====================================================== -->
-
-      <!-- UI Design -->
-
       <dialog
         class="discipline-modal discipline-modal--ui"
         id="discipline-modal-ui"
@@ -766,9 +725,7 @@
           >
             ×
           </button>
-
           <div class="discipline-modal__number" aria-hidden="true">01</div>
-
           <div class="discipline-modal__content">
             <h2
               class="discipline-modal__title"
@@ -777,19 +734,13 @@
             >
               UI Design
             </h2>
-
             <ul class="discipline-modal__skills" aria-label="UI Design skills">
               <li data-i18n="services.ui.skillOne">Visual hierarchy</li>
-
               <li data-i18n="services.ui.skillTwo">Typography</li>
-
               <li data-i18n="services.ui.skillThree">Layout systems</li>
-
               <li data-i18n="services.ui.skillFour">Responsive UI</li>
-
               <li data-i18n="services.ui.skillFive">Accessibility</li>
             </ul>
-
             <p
               class="discipline-modal__description"
               data-i18n="services.ui.description"
@@ -798,12 +749,41 @@
               visual rhythm so information feels easy to understand without
               making the experience feel generic.
             </p>
+            <div class="discipline-modal__details">
+              <div class="discipline-modal__detail">
+                <p
+                  class="discipline-modal__detail-label"
+                  data-i18n="services.ui.focusLabel"
+                >
+                  What I notice first
+                </p>
+                <p
+                  class="discipline-modal__detail-copy"
+                  data-i18n="services.ui.focus"
+                >
+                  I’m drawn to hierarchy, spacing, typography and the small
+                  details that make an interface easier to understand.
+                </p>
+              </div>
+              <div class="discipline-modal__detail">
+                <p
+                  class="discipline-modal__detail-label"
+                  data-i18n="services.ui.approachLabel"
+                >
+                  How I shape the interface
+                </p>
+                <p
+                  class="discipline-modal__detail-copy"
+                  data-i18n="services.ui.approach"
+                >
+                  I start with what the user needs to notice and understand
+                  first, then build the interface around that hierarchy.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </dialog>
-
-      <!-- Interaction Design -->
-
       <dialog
         class="discipline-modal discipline-modal--interaction"
         id="discipline-modal-interaction"
@@ -819,9 +799,7 @@
           >
             ×
           </button>
-
           <div class="discipline-modal__number" aria-hidden="true">02</div>
-
           <div class="discipline-modal__content">
             <h2
               class="discipline-modal__title"
@@ -830,26 +808,20 @@
             >
               Interaction Design
             </h2>
-
             <ul
               class="discipline-modal__skills"
               aria-label="Interaction Design skills"
             >
               <li data-i18n="services.interaction.skillOne">Motion</li>
-
               <li data-i18n="services.interaction.skillTwo">Feedback</li>
-
               <li data-i18n="services.interaction.skillThree">
                 Micro-interactions
               </li>
-
               <li data-i18n="services.interaction.skillFour">Prototyping</li>
-
               <li data-i18n="services.interaction.skillFive">
                 Interaction states
               </li>
             </ul>
-
             <p
               class="discipline-modal__description"
               data-i18n="services.interaction.description"
@@ -858,12 +830,42 @@
               interaction, using motion and feedback to communicate change while
               keeping the experience understandable and comfortable to use.
             </p>
+            <div class="discipline-modal__details">
+              <div class="discipline-modal__detail">
+                <p
+                  class="discipline-modal__detail-label"
+                  data-i18n="services.interaction.focusLabel"
+                >
+                  Where movement matters
+                </p>
+                <p
+                  class="discipline-modal__detail-copy"
+                  data-i18n="services.interaction.focus"
+                >
+                  I like the moments where an interface responds back —
+                  transitions, feedback, movement and small interactions that
+                  make something feel alive.
+                </p>
+              </div>
+              <div class="discipline-modal__detail">
+                <p
+                  class="discipline-modal__detail-label"
+                  data-i18n="services.interaction.approachLabel"
+                >
+                  How I make it respond
+                </p>
+                <p
+                  class="discipline-modal__detail-copy"
+                  data-i18n="services.interaction.approach"
+                >
+                  I think about what should happen before, during and after an
+                  interaction, then refine timing and movement.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </dialog>
-
-      <!-- Front-End -->
-
       <dialog
         class="discipline-modal discipline-modal--frontend"
         id="discipline-modal-frontend"
@@ -879,9 +881,7 @@
           >
             ×
           </button>
-
           <div class="discipline-modal__number" aria-hidden="true">03</div>
-
           <div class="discipline-modal__content">
             <h2
               class="discipline-modal__title"
@@ -890,35 +890,57 @@
             >
               Front-End
             </h2>
-
             <ul class="discipline-modal__skills" aria-label="Front-End skills">
               <li data-i18n="services.frontend.skillOne">HTML</li>
-
               <li data-i18n="services.frontend.skillTwo">CSS</li>
-
               <li data-i18n="services.frontend.skillThree">JavaScript</li>
-
               <li data-i18n="services.frontend.skillFour">Responsive builds</li>
-
               <li data-i18n="services.frontend.skillFive">
                 Interactive prototypes
               </li>
             </ul>
-
             <p
               class="discipline-modal__description"
               data-i18n="services.frontend.description"
             >
               I use HTML, CSS and JavaScript to move ideas beyond static
-              screens, testing layouts and interactions directly in the browser
-              so the design can respond to how it actually behaves.
+              screens, testing layouts and interactions directly in the browser.
             </p>
+            <div class="discipline-modal__details">
+              <div class="discipline-modal__detail">
+                <p
+                  class="discipline-modal__detail-label"
+                  data-i18n="services.frontend.focusLabel"
+                >
+                  What I like bringing to life
+                </p>
+                <p
+                  class="discipline-modal__detail-copy"
+                  data-i18n="services.frontend.focus"
+                >
+                  Front-end lets me take an idea beyond a static design and see
+                  how it actually behaves.
+                </p>
+              </div>
+              <div class="discipline-modal__detail">
+                <p
+                  class="discipline-modal__detail-label"
+                  data-i18n="services.frontend.approachLabel"
+                >
+                  How I build it
+                </p>
+                <p
+                  class="discipline-modal__detail-copy"
+                  data-i18n="services.frontend.approach"
+                >
+                  I usually build progressively: structure first, styling
+                  second, then interaction.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </dialog>
-
-      <!-- Web Design -->
-
       <dialog
         class="discipline-modal discipline-modal--web"
         id="discipline-modal-web"
@@ -934,9 +956,7 @@
           >
             ×
           </button>
-
           <div class="discipline-modal__number" aria-hidden="true">04</div>
-
           <div class="discipline-modal__content">
             <h2
               class="discipline-modal__title"
@@ -945,34 +965,55 @@
             >
               Web Design
             </h2>
-
             <ul class="discipline-modal__skills" aria-label="Web Design skills">
               <li data-i18n="services.web.skillOne">Responsive design</li>
-
               <li data-i18n="services.web.skillTwo">Information hierarchy</li>
-
               <li data-i18n="services.web.skillThree">Layout adaptation</li>
-
               <li data-i18n="services.web.skillFour">Web interaction</li>
-
               <li data-i18n="services.web.skillFive">Cross-device design</li>
             </ul>
-
             <p
               class="discipline-modal__description"
               data-i18n="services.web.description"
             >
               I design web experiences as flexible systems, considering how
-              content should move, resize and simplify across screen sizes
-              without making mobile feel like a compromised version of desktop.
+              content should move, resize and simplify across screen sizes.
             </p>
+            <div class="discipline-modal__details">
+              <div class="discipline-modal__detail">
+                <p
+                  class="discipline-modal__detail-label"
+                  data-i18n="services.web.focusLabel"
+                >
+                  What I care about across screens
+                </p>
+                <p
+                  class="discipline-modal__detail-copy"
+                  data-i18n="services.web.focus"
+                >
+                  I’m interested in how a website keeps its personality while
+                  adapting to different screens.
+                </p>
+              </div>
+              <div class="discipline-modal__detail">
+                <p
+                  class="discipline-modal__detail-label"
+                  data-i18n="services.web.approachLabel"
+                >
+                  How I keep it consistent
+                </p>
+                <p
+                  class="discipline-modal__detail-copy"
+                  data-i18n="services.web.approach"
+                >
+                  I design with change in mind from the beginning so the
+                  experience remains recognisably the same.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </dialog>
-      <!-- =====================================================
-           SCENE 03 — SELECTED WORK
-      ====================================================== -->
-
       <section
         class="scene scene--projects"
         id="selected-work"
@@ -985,43 +1026,26 @@
             class="shape shape--projects-one"
             data-shape="projects-one"
           ></span>
-
           <span
             class="shape shape--projects-two"
             data-shape="projects-two"
           ></span>
         </div>
-
         <div class="scene__inner projects">
           <div class="scene-indicator">
-            <span>03</span>
-
+            <span> 03 </span>
             <span class="scene-indicator__line" aria-hidden="true"></span>
-
             <span data-i18n="projects.label"> Selected Work </span>
           </div>
-
-          <!-- Selected Work introduction -->
-
           <div class="projects__heading">
             <p class="projects__eyebrow" data-i18n="projects.eyebrow">
               A closer look at the work behind the screen.
             </p>
-
             <h2 class="projects__title" data-i18n="projects.title">
               Projects that best represent how I think, design and build.
             </h2>
           </div>
-
-          <!-- =================================================
-               SELECTED PROJECTS
-          ================================================== -->
-
           <div class="selected-work" data-project-stage>
-            <!-- =============================================
-                 PROJECT 01 — LEGA
-            ============================================== -->
-
             <article
               class="selected-project selected-project--lega"
               data-project="lega"
@@ -1031,33 +1055,33 @@
                 type="button"
                 aria-haspopup="dialog"
                 aria-controls="project-modal-lega"
+                aria-expanded="false"
                 data-project-open="lega"
               >
                 <div class="selected-project__body">
                   <div class="selected-project__meta">
                     <span class="selected-project__number"> 01 </span>
-
-                    <span data-i18n="projects.lega.year"> 2026 </span>
+                    <span
+                      class="selected-project__year selected-project__year--featured"
+                      data-i18n="projects.lega.year"
+                    >
+                      2026
+                    </span>
                   </div>
-
                   <h3
                     class="selected-project__name"
                     data-i18n="projects.lega.title"
                   >
                     LEGA
                   </h3>
-
                   <ul
                     class="selected-project__disciplines"
                     aria-label="LEGA disciplines"
                   >
                     <li>UI</li>
-
                     <li>Interaction</li>
-
                     <li>Front-End</li>
                   </ul>
-
                   <p
                     class="selected-project__preview"
                     data-i18n="projects.lega.preview"
@@ -1067,74 +1091,84 @@
                     emojis and visual timelines to make checking in feel
                     quicker, calmer and less demanding.
                   </p>
-
                   <span class="selected-project__action">
                     <span data-i18n="projects.explore"> Explore project </span>
-
                     <span aria-hidden="true"> ↗ </span>
                   </span>
                 </div>
-
-                <!-- LEGA visual -->
-
-                <div class="selected-project__visual" aria-hidden="true">
+                <div
+                  class="selected-project__visual selected-project__visual--lega"
+                  aria-hidden="true"
+                  data-project-visual="lega"
+                >
                   <div class="project-visual project-visual--lega">
-                    <div class="lega-visual__orb">
-                      <span
-                        class="lega-visual__ring lega-visual__ring--outer"
-                      ></span>
-
-                      <span
-                        class="lega-visual__ring lega-visual__ring--middle"
-                      ></span>
-
-                      <span
-                        class="lega-visual__ring lega-visual__ring--inner"
-                      ></span>
-
-                      <span class="lega-visual__core"> ✦ </span>
+                    <div class="lega-visual__identity">
+                      <span class="lega-visual__mini-label"> A moment </span>
+                      <span class="lega-visual__emoji"> ☁ </span>
                     </div>
-
+                    <div class="lega-visual__moment">
+                      <div class="lega-visual__orb">
+                        <span
+                          class="lega-visual__ring lega-visual__ring--outer"
+                        ></span>
+                        <span
+                          class="lega-visual__ring lega-visual__ring--middle"
+                        ></span>
+                        <span
+                          class="lega-visual__ring lega-visual__ring--inner"
+                        ></span>
+                        <span class="lega-visual__core"> ✦ </span>
+                      </div>
+                      <div class="lega-visual__timeline">
+                        <span class="lega-visual__timeline-ring"></span>
+                        <span
+                          class="lega-visual__timeline-marker lega-visual__timeline-marker--one"
+                        ></span>
+                        <span
+                          class="lega-visual__timeline-marker lega-visual__timeline-marker--two"
+                        ></span>
+                        <span
+                          class="lega-visual__timeline-marker lega-visual__timeline-marker--three"
+                        ></span>
+                        <span class="lega-visual__timeline-time"> 14:32 </span>
+                      </div>
+                    </div>
                     <div class="lega-visual__sliders">
                       <span
                         class="lega-visual__slider lega-visual__slider--one"
                       >
                         <span></span>
                       </span>
-
                       <span
                         class="lega-visual__slider lega-visual__slider--two"
                       >
                         <span></span>
                       </span>
-
                       <span
                         class="lega-visual__slider lega-visual__slider--three"
                       >
                         <span></span>
                       </span>
-
                       <span
                         class="lega-visual__slider lega-visual__slider--four"
                       >
                         <span></span>
                       </span>
-
                       <span
                         class="lega-visual__slider lega-visual__slider--five"
                       >
                         <span></span>
                       </span>
                     </div>
+                    <div class="lega-visual__chips">
+                      <span> calm </span>
+                      <span> heavy </span>
+                      <span> low energy </span>
+                    </div>
                   </div>
                 </div>
               </button>
             </article>
-
-            <!-- =============================================
-                 PROJECT 02 — PULSE DIARY
-            ============================================== -->
-
             <article
               class="selected-project selected-project--pulse"
               data-project="pulse-diary"
@@ -1144,74 +1178,62 @@
                 type="button"
                 aria-haspopup="dialog"
                 aria-controls="project-modal-pulse-diary"
+                aria-expanded="false"
                 data-project-open="pulse-diary"
               >
-                <!-- Pulse visual -->
-
-                <div class="selected-project__visual" aria-hidden="true">
+                <div
+                  class="selected-project__visual selected-project__visual--pulse"
+                  aria-hidden="true"
+                  data-project-visual="pulse-diary"
+                >
                   <div class="project-visual project-visual--pulse">
                     <span class="pulse-ring pulse-ring--outer"></span>
-
                     <span class="pulse-ring pulse-ring--middle"></span>
-
                     <span class="pulse-ring pulse-ring--inner"></span>
-
                     <span class="pulse-core"></span>
-
                     <span class="pulse-marker pulse-marker--one"> + </span>
-
                     <span class="pulse-marker pulse-marker--two"> ✦ </span>
-
                     <span class="pulse-marker pulse-marker--three"> • </span>
                   </div>
                 </div>
-
                 <div class="selected-project__body">
                   <div class="selected-project__meta">
                     <span class="selected-project__number"> 02 </span>
-
-                    <span data-i18n="projects.pulse.year"> 2026 </span>
+                    <span
+                      class="selected-project__year"
+                      data-i18n="projects.pulse.year"
+                    >
+                      2026
+                    </span>
                   </div>
-
                   <h3
                     class="selected-project__name"
                     data-i18n="projects.pulse.title"
                   >
                     Pulse Diary
                   </h3>
-
                   <ul
                     class="selected-project__disciplines"
                     aria-label="Pulse Diary disciplines"
                   >
                     <li>UI</li>
-
                     <li>Interaction</li>
                   </ul>
-
                   <p
                     class="selected-project__preview"
                     data-i18n="projects.pulse.preview"
                   >
                     Pulse Diary explores how visual feedback, movement and small
                     interactions can make digital journaling feel more
-                    expressive. The interface turns personal reflection into
-                    something more visual, responsive and enjoyable to revisit.
+                    expressive.
                   </p>
-
                   <span class="selected-project__action">
                     <span data-i18n="projects.explore"> Explore project </span>
-
                     <span aria-hidden="true"> ↗ </span>
                   </span>
                 </div>
               </button>
             </article>
-
-            <!-- =============================================
-                 PROJECT 03 — NADA NUSANTARA
-            ============================================== -->
-
             <article
               class="selected-project selected-project--nada"
               data-project="nada-nusantara"
@@ -1221,11 +1243,14 @@
                 type="button"
                 aria-haspopup="dialog"
                 aria-controls="project-modal-nada-nusantara"
+                aria-expanded="false"
                 data-project-open="nada-nusantara"
               >
-                <!-- Nada visual -->
-
-                <div class="selected-project__visual" aria-hidden="true">
+                <div
+                  class="selected-project__visual selected-project__visual--nada"
+                  aria-hidden="true"
+                  data-project-visual="nada-nusantara"
+                >
                   <div class="project-visual project-visual--rhythm">
                     <span class="rhythm-line"></span>
                     <span class="rhythm-line"></span>
@@ -1235,61 +1260,51 @@
                     <span class="rhythm-line"></span>
                   </div>
                 </div>
-
                 <div class="selected-project__body">
                   <div class="selected-project__meta">
                     <span class="selected-project__number"> 03 </span>
-
-                    <span data-i18n="projects.nada.year"> 2025 </span>
+                    <span
+                      class="selected-project__year"
+                      data-i18n="projects.nada.year"
+                    >
+                      2025
+                    </span>
                   </div>
-
                   <h3
                     class="selected-project__name"
                     data-i18n="projects.nada.title"
                   >
                     Nada Nusantara
                   </h3>
-
                   <ul
                     class="selected-project__disciplines"
                     aria-label="Nada Nusantara disciplines"
                   >
                     <li>Web</li>
-
                     <li>Interaction</li>
-
                     <li>Front-End</li>
                   </ul>
-
                   <p
                     class="selected-project__preview"
                     data-i18n="projects.nada.preview"
                   >
                     Nada Nusantara is an interactive web experience celebrating
                     Indonesian music and culture through digital storytelling.
-                    Sound, movement and playful interactions work together to
-                    make cultural exploration feel lively and approachable.
                   </p>
-
                   <span class="selected-project__action">
                     <span data-i18n="projects.explore"> Explore project </span>
-
                     <span aria-hidden="true"> ↗ </span>
                   </span>
                 </div>
               </button>
             </article>
           </div>
-
           <p
             class="projects__interaction-hint"
             data-i18n="projects.interactionHint"
           >
             Select a project to take a closer look.
           </p>
-
-          <!-- Selected Work → Contact -->
-
           <button
             class="scene-next scene-next--contact"
             type="button"
@@ -1297,24 +1312,15 @@
             data-scene-target="contact"
           >
             <span data-i18n="controls.contact"> Let's connect </span>
-
             <span aria-hidden="true"> ↓ </span>
           </button>
         </div>
       </section>
-
-      <!-- =====================================================
-           PROJECT DIALOGS
-      ====================================================== -->
-
-      <!-- =====================================================
-           LEGA
-      ====================================================== -->
-
       <dialog
         class="project-modal project-modal--lega"
         id="project-modal-lega"
         aria-labelledby="project-modal-lega-title"
+        aria-describedby="project-modal-lega-description"
         data-project-modal="lega"
       >
         <div class="project-modal__surface">
@@ -1326,58 +1332,73 @@
           >
             ×
           </button>
-
-          <!-- Visual -->
-
-          <div class="project-modal__visual" aria-hidden="true">
-            <div class="project-visual project-visual--lega">
-              <div class="lega-visual__orb">
-                <span class="lega-visual__ring lega-visual__ring--outer"></span>
-
-                <span
-                  class="lega-visual__ring lega-visual__ring--middle"
-                ></span>
-
-                <span class="lega-visual__ring lega-visual__ring--inner"></span>
-
-                <span class="lega-visual__core"> ✦ </span>
+          <div
+            class="project-modal__visual"
+            aria-hidden="true"
+            data-project-modal-visual="lega"
+          >
+            <div
+              class="project-visual project-visual--lega project-visual--lega-modal"
+            >
+              <div class="lega-visual__identity">
+                <span class="lega-visual__mini-label"> Today's moment </span>
+                <span class="lega-visual__emoji"> ☁ </span>
               </div>
-
+              <div class="lega-visual__moment">
+                <div class="lega-visual__orb">
+                  <span
+                    class="lega-visual__ring lega-visual__ring--outer"
+                  ></span>
+                  <span
+                    class="lega-visual__ring lega-visual__ring--middle"
+                  ></span>
+                  <span
+                    class="lega-visual__ring lega-visual__ring--inner"
+                  ></span>
+                  <span class="lega-visual__core"> ✦ </span>
+                </div>
+                <div class="lega-visual__timeline">
+                  <span class="lega-visual__timeline-ring"></span>
+                  <span
+                    class="lega-visual__timeline-marker lega-visual__timeline-marker--one"
+                  ></span>
+                  <span
+                    class="lega-visual__timeline-marker lega-visual__timeline-marker--two"
+                  ></span>
+                  <span
+                    class="lega-visual__timeline-marker lega-visual__timeline-marker--three"
+                  ></span>
+                  <span class="lega-visual__timeline-time"> 14:32 </span>
+                </div>
+              </div>
               <div class="lega-visual__sliders">
                 <span class="lega-visual__slider lega-visual__slider--one">
                   <span></span>
                 </span>
-
                 <span class="lega-visual__slider lega-visual__slider--two">
                   <span></span>
                 </span>
-
                 <span class="lega-visual__slider lega-visual__slider--three">
                   <span></span>
                 </span>
-
                 <span class="lega-visual__slider lega-visual__slider--four">
                   <span></span>
                 </span>
-
                 <span class="lega-visual__slider lega-visual__slider--five">
                   <span></span>
                 </span>
               </div>
             </div>
           </div>
-
-          <!-- Content -->
-
           <div class="project-modal__content">
             <div class="project-modal__meta">
               <span data-i18n="projects.lega.type">
                 Emotional Reflection Tool
               </span>
-
-              <span data-i18n="projects.lega.year"> 2026 </span>
+              <span class="project-modal__year" data-i18n="projects.lega.year">
+                2026
+              </span>
             </div>
-
             <h2
               class="project-modal__title"
               id="project-modal-lega-title"
@@ -1385,21 +1406,16 @@
             >
               LEGA
             </h2>
-
             <ul class="project-modal__disciplines" aria-label="LEGA role">
               <li>UI Design</li>
-
               <li>Interaction Design</li>
-
               <li>Responsive Design</li>
-
               <li>Accessibility</li>
-
               <li>Front-End</li>
             </ul>
-
             <p
               class="project-modal__description"
+              id="project-modal-lega-description"
               data-i18n="projects.lega.description"
             >
               LEGA is an emotional reflection tool designed for people who find
@@ -1407,32 +1423,26 @@
               visual timelines to make checking in feel quicker, calmer and less
               demanding.
             </p>
-
             <div class="project-modal__actions">
               <a
                 class="project-modal__link"
-                href="#"
-                aria-disabled="true"
-                tabindex="-1"
+                href="https://lega-moments.netlify.app/"
+                target="_blank"
+                rel="noopener noreferrer"
                 data-project-live="lega"
               >
                 <span data-i18n="projects.visitLive"> Visit live project </span>
-
                 <span aria-hidden="true"> ↗ </span>
               </a>
             </div>
           </div>
         </div>
       </dialog>
-
-      <!-- =====================================================
-           PULSE DIARY
-      ====================================================== -->
-
       <dialog
         class="project-modal project-modal--pulse"
         id="project-modal-pulse-diary"
         aria-labelledby="project-modal-pulse-diary-title"
+        aria-describedby="project-modal-pulse-diary-description"
         data-project-modal="pulse-diary"
       >
         <div class="project-modal__surface">
@@ -1444,38 +1454,32 @@
           >
             ×
           </button>
-
-          <!-- Visual -->
-
-          <div class="project-modal__visual" aria-hidden="true">
-            <div class="project-visual project-visual--pulse">
+          <div
+            class="project-modal__visual"
+            aria-hidden="true"
+            data-project-modal-visual="pulse-diary"
+          >
+            <div
+              class="project-visual project-visual--pulse project-visual--pulse-modal"
+            >
               <span class="pulse-ring pulse-ring--outer"></span>
-
               <span class="pulse-ring pulse-ring--middle"></span>
-
               <span class="pulse-ring pulse-ring--inner"></span>
-
               <span class="pulse-core"></span>
-
               <span class="pulse-marker pulse-marker--one"> + </span>
-
               <span class="pulse-marker pulse-marker--two"> ✦ </span>
-
               <span class="pulse-marker pulse-marker--three"> • </span>
             </div>
           </div>
-
-          <!-- Content -->
-
           <div class="project-modal__content">
             <div class="project-modal__meta">
               <span data-i18n="projects.pulse.type">
                 Interactive Digital Diary
               </span>
-
-              <span data-i18n="projects.pulse.year"> 2026 </span>
+              <span class="project-modal__year" data-i18n="projects.pulse.year">
+                2026
+              </span>
             </div>
-
             <h2
               class="project-modal__title"
               id="project-modal-pulse-diary-title"
@@ -1483,18 +1487,16 @@
             >
               Pulse Diary
             </h2>
-
             <ul
               class="project-modal__disciplines"
               aria-label="Pulse Diary role"
             >
               <li>UI Design</li>
-
               <li>Interaction Design</li>
             </ul>
-
             <p
               class="project-modal__description"
+              id="project-modal-pulse-diary-description"
               data-i18n="projects.pulse.description"
             >
               Pulse Diary explores how visual feedback, movement and small
@@ -1502,7 +1504,6 @@
               interface turns personal reflection into something more visual,
               responsive and enjoyable to revisit.
             </p>
-
             <div class="project-modal__actions">
               <a
                 class="project-modal__link"
@@ -1512,22 +1513,17 @@
                 data-project-live="pulse-diary"
               >
                 <span data-i18n="projects.visitLive"> Visit live project </span>
-
                 <span aria-hidden="true"> ↗ </span>
               </a>
             </div>
           </div>
         </div>
       </dialog>
-
-      <!-- =====================================================
-           NADA NUSANTARA
-      ====================================================== -->
-
       <dialog
         class="project-modal project-modal--nada"
         id="project-modal-nada-nusantara"
         aria-labelledby="project-modal-nada-nusantara-title"
+        aria-describedby="project-modal-nada-nusantara-description"
         data-project-modal="nada-nusantara"
       >
         <div class="project-modal__surface">
@@ -1539,11 +1535,14 @@
           >
             ×
           </button>
-
-          <!-- Visual -->
-
-          <div class="project-modal__visual" aria-hidden="true">
-            <div class="project-visual project-visual--rhythm">
+          <div
+            class="project-modal__visual"
+            aria-hidden="true"
+            data-project-modal-visual="nada-nusantara"
+          >
+            <div
+              class="project-visual project-visual--rhythm project-visual--rhythm-modal"
+            >
               <span class="rhythm-line"></span>
               <span class="rhythm-line"></span>
               <span class="rhythm-line"></span>
@@ -1552,18 +1551,15 @@
               <span class="rhythm-line"></span>
             </div>
           </div>
-
-          <!-- Content -->
-
           <div class="project-modal__content">
             <div class="project-modal__meta">
               <span data-i18n="projects.nada.type">
                 Interactive Web Experience
               </span>
-
-              <span data-i18n="projects.nada.year"> 2025 </span>
+              <span class="project-modal__year" data-i18n="projects.nada.year">
+                2025
+              </span>
             </div>
-
             <h2
               class="project-modal__title"
               id="project-modal-nada-nusantara-title"
@@ -1571,20 +1567,17 @@
             >
               Nada Nusantara
             </h2>
-
             <ul
               class="project-modal__disciplines"
               aria-label="Nada Nusantara role"
             >
               <li>Web Design</li>
-
               <li>Interaction Design</li>
-
               <li>Front-End</li>
             </ul>
-
             <p
               class="project-modal__description"
+              id="project-modal-nada-nusantara-description"
               data-i18n="projects.nada.description"
             >
               Nada Nusantara is an interactive web experience celebrating
@@ -1592,7 +1585,6 @@
               movement and playful interactions work together to make cultural
               exploration feel lively and approachable.
             </p>
-
             <div class="project-modal__actions">
               <a
                 class="project-modal__link"
@@ -1602,16 +1594,13 @@
                 data-project-live="nada-nusantara"
               >
                 <span data-i18n="projects.visitLive"> Visit live project </span>
-
                 <span aria-hidden="true"> ↗ </span>
               </a>
             </div>
-
             <details class="project-disclaimer">
               <summary data-i18n="projects.nada.disclaimerLabel">
                 Educational use disclaimer
               </summary>
-
               <p data-i18n="projects.nada.disclaimer">
                 Nada Nusantara was created solely for educational and
                 non-commercial purposes. Any third-party music, audio, imagery
@@ -1623,11 +1612,6 @@
           </div>
         </div>
       </dialog>
-
-      <!-- =====================================================
-           SCENE 04 — CONTACT
-      ====================================================== -->
-
       <section
         class="scene scene--contact"
         id="contact"
@@ -1640,60 +1624,44 @@
             class="shape shape--contact-one"
             data-shape="contact-one"
           ></span>
-
           <span
             class="shape shape--contact-two"
             data-shape="contact-two"
           ></span>
-
           <span
             class="shape shape--contact-three"
             data-shape="contact-three"
           ></span>
         </div>
-
         <div class="scene__inner contact">
           <div class="scene-indicator">
-            <span>04</span>
-
+            <span> 04 </span>
             <span class="scene-indicator__line" aria-hidden="true"></span>
-
             <span data-i18n="contact.label"> Contact </span>
           </div>
-
           <div class="contact__content">
             <p class="contact__eyebrow" data-i18n="contact.eyebrow">
               Made it all the way here?
             </p>
-
             <h2 class="contact__title" data-i18n="contact.title">
               Thanks for stopping by.
             </h2>
-
             <p class="contact__description" data-i18n="contact.description">
               Have an idea, opportunity, collaboration, or just want to say
               hello? Feel free to reach out.
             </p>
-
             <div class="contact-links">
-              <!-- Email -->
-
               <a
                 class="contact-link"
                 href="mailto:f.p.liyanto@gmail.com"
                 data-contact="email"
               >
                 <span class="contact-link__type"> Email </span>
-
                 <span class="contact-link__value" data-i18n="contact.email">
                   f.p.liyanto@gmail.com
                 </span>
-
                 <span class="contact-link__arrow" aria-hidden="true"> ↗ </span>
               </a>
-
-              <!-- LinkedIn -->
-
               <a
                 class="contact-link"
                 href="https://www.linkedin.com/in/fattaliyanto"
@@ -1702,88 +1670,43 @@
                 data-contact="linkedin"
               >
                 <span class="contact-link__type"> LinkedIn </span>
-
                 <span class="contact-link__value" data-i18n="contact.linkedin">
                   Let's connect
                 </span>
-
                 <span class="contact-link__arrow" aria-hidden="true"> ↗ </span>
               </a>
             </div>
           </div>
-
-          <!-- Decorative brand -->
-
           <div class="contact__brand" aria-hidden="true" data-contact-brand>
             F.L
           </div>
-
-          <!-- Restart -->
-
           <button
             class="contact__restart"
             type="button"
             data-scene-target="welcome"
           >
             <span data-i18n="controls.restart"> Back to the beginning </span>
-
             <span aria-hidden="true"> ↑ </span>
           </button>
         </div>
       </section>
     </main>
-
-    <!-- =========================================================
-         FOOTER
-    ========================================================== -->
-
     <footer class="site-footer">
       <p class="site-footer__identity">F.Liyanto</p>
-
       <p class="site-footer__message" data-i18n="footer.message">
         Designed &amp; developed with curiosity.
       </p>
-
       <p class="site-footer__copyright">© 2026</p>
     </footer>
-
-    <!-- =========================================================
-         CUSTOM CURSOR
-
-         Only visible during the first Welcome state.
-         animations.js controls when it appears.
-    ========================================================== -->
-
     <div class="custom-cursor" aria-hidden="true" data-cursor>
       <span class="custom-cursor__label" data-cursor-label> Click </span>
     </div>
-
-    <!-- =========================================================
-         GSAP
-    ========================================================== -->
-
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/MotionPathPlugin.min.js"></script>
-
-    <!-- =========================================================
-         PORTFOLIO JAVASCRIPT
-
-         Load order:
-         1. Translation content
-         2. Project content/state
-         3. Core application behaviour
-         4. Animation controller
-    ========================================================== -->
-
     <script src="js/translations.js"></script>
-
     <script src="js/projects.js"></script>
-
     <script src="js/main.js"></script>
-
     <script src="js/animations.js"></script>
   </body>
 </html>
