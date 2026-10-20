@@ -1,72 +1,3 @@
-html[data-theme="light"] .welcome-specialism--ui > span:first-child {
-  background: linear-gradient(
-    180deg,
-    #eaf6ff 0%,
-    #bdddf1 18%,
-    #8fc2e2 53%,
-    #72a9cc 78%,
-    #6298bb 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: #78aecd;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 0.45px rgba(62, 100, 126, 0.48);
-  text-shadow:
-    0 -1px 0 rgba(255, 255, 255, 0.82),
-    0 2px 0 rgba(91, 134, 162, 0.24),
-    0 5px 1px rgba(74, 107, 129, 0.17),
-    0 9px 15px rgba(54, 74, 88, 0.13);
-}
-html[data-theme="light"] .welcome-specialism--interaction > span:first-child {
-  background: linear-gradient(
-    180deg,
-    #fff8cf 0%,
-    #f8df78 19%,
-    #eac85a 52%,
-    #dcb445 78%,
-    #cda43d 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: #dfbc4b;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 0.45px rgba(138, 106, 32, 0.5);
-  text-shadow:
-    0 -1px 0 rgba(255, 255, 255, 0.84),
-    0 2px 0 rgba(164, 127, 37, 0.25),
-    0 5px 1px rgba(129, 96, 30, 0.17),
-    0 9px 15px rgba(74, 60, 31, 0.12);
-}
-html[data-theme="light"] .welcome-specialism--frontend > span:first-child {
-  background: linear-gradient(
-    180deg,
-    #edf7e9 0%,
-    #c8dfbf 18%,
-    #9fc18f 52%,
-    #83aa72 79%,
-    #71965f 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: #8bad7b;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 0.45px rgba(75, 105, 62, 0.5);
-  text-shadow:
-    0 -1px 0 rgba(255, 255, 255, 0.78),
-    0 2px 0 rgba(91, 126, 75, 0.25),
-    0 5px 1px rgba(69, 99, 57, 0.18),
-    0 9px 15px rgba(54, 70, 47, 0.12);
-}
-.welcome-specialism > span:first-child,
-[data-bubble-word] {
-  display: inline-block;
-  max-width: 100%;
-  line-height: 0.92;
-  text-rendering: geometricPrecision;
-  -webkit-font-smoothing: antialiased;
-  backface-visibility: hidden;
-}
 html,
 body {
   max-width: 100%;
@@ -105,7 +36,6 @@ textarea {
   max-width: none;
   margin-inline: auto;
 }
-
 @media (min-width: 1441px) {
   .welcome__sequence {
     width: min(100%, 1540px);
@@ -147,7 +77,6 @@ textarea {
     max-width: 980px;
   }
 }
-
 @media (max-width: 1280px) {
   :root {
     --page-width: 1180px;
@@ -296,7 +225,6 @@ textarea {
     font-size: clamp(3.6rem, 6.4vw, 7rem);
   }
 }
-
 @media (max-width: 1100px) {
   .site-nav {
     gap: 0.85rem;
@@ -341,7 +269,6 @@ textarea {
     width: min(100%, 980px);
   }
 }
-
 @media (min-width: 961px) and (max-height: 820px) {
   :root {
     --header-height: 72px;
@@ -455,7 +382,6 @@ textarea {
     font-size: clamp(2.9rem, 5vw, 5.3rem);
   }
 }
-
 @media (min-width: 961px) and (max-height: 690px) {
   .scene--welcome,
   .scene--about,
@@ -492,7 +418,6 @@ textarea {
     min-height: 245px;
   }
 }
-
 @media (max-width: 960px) {
   :root {
     --header-height: 72px;
@@ -514,6 +439,29 @@ textarea {
     border: 1px solid var(--color-border);
     border-radius: 50%;
     background: var(--color-surface-glass);
+  }
+  .nav-toggle__line {
+    position: absolute;
+    width: 1.05rem;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--color-text);
+    transform-origin: center;
+    transition:
+      transform var(--transition-base),
+      opacity var(--transition-base);
+  }
+  .nav-toggle__line:first-child {
+    transform: translateY(-0.22rem);
+  }
+  .nav-toggle__line:last-child {
+    transform: translateY(0.22rem);
+  }
+  .nav-toggle[aria-expanded="true"] .nav-toggle__line:first-child {
+    transform: rotate(45deg);
+  }
+  .nav-toggle[aria-expanded="true"] .nav-toggle__line:last-child {
+    transform: rotate(-45deg);
   }
   .header-controls {
     justify-self: end;
@@ -801,7 +749,6 @@ textarea {
     display: none;
   }
 }
-
 @media (max-width: 720px) {
   :root {
     --header-height: 68px;
@@ -1191,17 +1138,13 @@ textarea {
     position: relative;
     display: grid;
     width: 100%;
-    min-height: 390px;
-    grid-template-columns:
-      minmax(0, 1fr)
-      minmax(72px, 0.34fr);
-    grid-template-rows:
-      auto
-      minmax(170px, 1fr)
-      auto;
-    gap: 0.65rem 0.9rem;
+    min-height: clamp(270px, 72vw, 320px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto 1fr auto;
+    gap: 0.5rem 0.75rem;
     margin-top: 2rem;
     padding: 1.15rem 1rem;
+    overflow: hidden;
     border-radius: clamp(22px, 7vw, 32px);
   }
   .travel-location {
@@ -1215,16 +1158,18 @@ textarea {
     align-self: start;
     justify-self: start;
     width: auto;
+    z-index: 4;
   }
   .travel-location--destination {
-    grid-column: 1;
+    grid-column: 2;
     grid-row: 3;
     align-self: end;
-    justify-self: start;
+    justify-self: end;
     width: auto;
     min-width: 0;
-    align-items: flex-start;
-    text-align: left;
+    align-items: flex-end;
+    text-align: right;
+    z-index: 4;
   }
   .travel-location--destination .travel-location__city {
     white-space: normal;
@@ -1243,13 +1188,14 @@ textarea {
     height: 0.8rem;
   }
   .travel-route {
-    position: relative;
-    grid-column: 2;
-    grid-row: 1 / 4;
-    width: 100%;
-    height: 100%;
-    min-height: 315px;
-    align-self: stretch;
+    position: absolute;
+    top: 24%;
+    right: 7%;
+    bottom: 18%;
+    left: 7%;
+    width: auto;
+    height: auto;
+    min-height: 0;
   }
   .travel-route svg,
   .travel-route__svg {
@@ -1262,9 +1208,39 @@ textarea {
     height: clamp(2.15rem, 11vw, 3rem);
   }
   .about .scene-next {
-    align-self: flex-start;
-    min-height: 48px;
-    margin-top: 1.8rem;
+    display: grid;
+    width: 100%;
+    min-height: 72px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-self: stretch;
+    gap: 0.12rem 0.75rem;
+    margin-top: 1.35rem;
+    padding: 0.8rem 0.95rem;
+    border-radius: clamp(20px, 6vw, 28px);
+    text-align: left;
+  }
+  .about .scene-next > span:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+  .about .scene-next > span:nth-child(2) {
+    display: none;
+  }
+  .about .scene-next > span:nth-child(3) {
+    grid-column: 1;
+    grid-row: 2;
+    color: var(--color-text-soft);
+    font-size: 0.72rem;
+    font-weight: 650;
+  }
+  .about .scene-next > span:nth-child(4) {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: center;
+    font-size: 1rem;
   }
   .services {
     display: flex;
@@ -1290,8 +1266,8 @@ textarea {
     font-size: 0.7rem;
   }
   .services__title {
-    max-width: 11ch;
-    font-size: clamp(2.45rem, 11.5vw, 3.75rem);
+    max-width: 13.5ch;
+    font-size: clamp(2.2rem, 9.8vw, 3.3rem);
     line-height: 0.96;
     letter-spacing: -0.06em;
     text-wrap: balance;
@@ -1448,7 +1424,6 @@ textarea {
     margin-top: 0.25rem;
   }
 }
-
 @media (max-width: 720px) {
   .projects {
     display: flex;
@@ -1471,7 +1446,7 @@ textarea {
   }
   .projects__title {
     max-width: 12ch;
-    font-size: clamp(2.4rem, 11vw, 3.7rem);
+    font-size: clamp(2.3rem, 10vw, 3.45rem);
     line-height: 0.96;
     letter-spacing: -0.06em;
     text-wrap: balance;
@@ -1926,8 +1901,10 @@ textarea {
   }
   .settings-toggle,
   .nav-toggle {
-    width: 2.45rem;
-    height: 2.45rem;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
   }
   .welcome__sequence {
     min-height: clamp(410px, 64svh, 540px);
@@ -1985,28 +1962,41 @@ textarea {
     font-size: clamp(0.9rem, 4vw, 0.98rem);
   }
   .travel-story {
-    min-height: 360px;
-    grid-template-columns: minmax(0, 1fr) 62px;
-    gap: 0.6rem 0.7rem;
+    min-height: clamp(250px, 67vw, 295px);
+    gap: 0.4rem 0.6rem;
     margin-top: 1.7rem;
     padding: 0.95rem;
   }
   .travel-route {
-    min-height: 290px;
+    top: 25%;
+    right: 5%;
+    bottom: 19%;
+    left: 5%;
   }
   .travel-location__city {
     font-size: clamp(1.15rem, 5.8vw, 1.5rem);
   }
   .travel-location__caption {
-    max-width: 22ch;
+    max-width: 20ch;
     font-size: 0.64rem;
   }
   .travel-plane {
     width: clamp(2rem, 10vw, 2.6rem);
     height: clamp(2rem, 10vw, 2.6rem);
   }
+  .about .scene-next {
+    min-height: 68px;
+    margin-top: 1.15rem;
+    padding: 0.72rem 0.85rem;
+  }
+  .about .scene-next > span:nth-child(1) {
+    font-size: 0.74rem;
+  }
+  .about .scene-next > span:nth-child(3) {
+    font-size: 0.68rem;
+  }
   .services__title {
-    font-size: clamp(2.25rem, 12vw, 3.3rem);
+    font-size: clamp(2.1rem, 9.4vw, 3rem);
   }
   .services__instruction {
     font-size: 0.82rem;
@@ -2040,16 +2030,20 @@ textarea {
     font-size: 0.96rem;
   }
   .projects__title {
-    font-size: clamp(2.25rem, 11.5vw, 3.3rem);
+    font-size: clamp(2.15rem, 9.5vw, 3rem);
   }
   .selected-project .selected-project__trigger,
   .selected-project:nth-child(1) .selected-project__trigger,
   .selected-project:nth-child(2) .selected-project__trigger,
   .selected-project:nth-child(3) .selected-project__trigger {
-    grid-template-rows: minmax(195px, 58vw) auto;
+    grid-template-rows:
+      minmax(195px, 58vw)
+      auto;
   }
   .selected-project:nth-child(1) .selected-project__trigger {
-    grid-template-rows: minmax(230px, 67vw) auto;
+    grid-template-rows:
+      minmax(230px, 67vw)
+      auto;
   }
   .selected-project__body {
     padding: 1rem 0.95rem 1.15rem;
@@ -2118,8 +2112,8 @@ textarea {
   }
   .settings-toggle,
   .nav-toggle {
-    width: 2.35rem;
-    height: 2.35rem;
+    width: 44px;
+    height: 44px;
     min-width: 44px;
     min-height: 44px;
   }
@@ -2141,15 +2135,15 @@ textarea {
   .scene-progress__continue {
     min-height: 44px;
   }
-  .scene-progress__hint {
-    max-width: 10ch;
-    font-size: 0.59rem;
-  }
   .travel-story {
-    grid-template-columns: minmax(0, 1fr) 54px;
+    min-height: 245px;
+  }
+  .travel-route {
+    right: 4%;
+    left: 4%;
   }
   .travel-location__caption {
-    max-width: 20ch;
+    max-width: 18ch;
   }
   .discipline__teaser {
     padding-right: 1.7rem;
@@ -2217,7 +2211,11 @@ textarea {
     justify-content: flex-start;
   }
   .travel-story {
-    min-height: 330px;
+    min-height: 245px;
+  }
+  .travel-route {
+    top: 18%;
+    bottom: 15%;
   }
   .discipline-modal__surface,
   .project-modal__surface {
@@ -2233,7 +2231,9 @@ textarea {
   .selected-project:nth-child(1) .selected-project__trigger,
   .selected-project:nth-child(2) .selected-project__trigger,
   .selected-project:nth-child(3) .selected-project__trigger {
-    grid-template-rows: minmax(190px, 220px) auto;
+    grid-template-rows:
+      minmax(190px, 220px)
+      auto;
   }
 }
 @media (max-height: 520px) and (max-width: 960px) {
@@ -2397,7 +2397,9 @@ textarea {
     line-height: 1.65;
   }
   html[data-font-size="large"] .contact-link {
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto;
     row-gap: 0.3rem;
   }
   html[data-font-size="large"] .contact-link__type {
@@ -2958,8 +2960,11 @@ html[data-reduce-motion="true"] .contact__restart {
     justify-content: center;
   }
   .welcome__sequence {
-    min-height: clamp(460px, 70svh, 620px);
-    margin-top: 0.35rem;
+    min-height: clamp(450px, 68svh, 605px);
+    margin-top: 0;
+  }
+  .welcome__intro {
+    transform: translateY(-1.5vh);
   }
   .welcome__title {
     max-width: 7ch;
@@ -3049,7 +3054,7 @@ html[data-reduce-motion="true"] .contact__restart {
   }
   .scene--about {
     padding-top: calc(var(--header-height) + 1.45rem);
-    padding-bottom: 5.25rem;
+    padding-bottom: 4.5rem;
   }
   .about .scene-indicator {
     margin-bottom: 1.45rem;
@@ -3068,10 +3073,41 @@ html[data-reduce-motion="true"] .contact__restart {
     line-height: 1.62;
   }
   .travel-story {
-    min-height: 365px;
-    margin-top: 2.15rem;
-    padding: 1.1rem;
+    min-height: clamp(255px, 66vw, 305px);
+    margin-top: 1.8rem;
+    padding: 1.05rem;
     border-radius: clamp(26px, 7vw, 34px);
+  }
+  .travel-location--origin {
+    max-width: 46%;
+  }
+  .travel-location--destination {
+    max-width: 48%;
+  }
+  .travel-location__city {
+    font-size: clamp(1.18rem, 5.3vw, 1.5rem);
+  }
+  .travel-location__country {
+    font-size: 0.76rem;
+  }
+  .travel-location__caption {
+    font-size: 0.62rem;
+  }
+  .travel-route {
+    top: 24%;
+    right: 6%;
+    bottom: 20%;
+    left: 6%;
+  }
+  .travel-plane {
+    width: clamp(2.1rem, 9.5vw, 2.7rem);
+    height: clamp(2.1rem, 9.5vw, 2.7rem);
+  }
+  .about .scene-next {
+    width: 100%;
+    min-height: 70px;
+    margin-top: 1.1rem;
+    padding: 0.78rem 0.95rem;
   }
   .scene--services,
   .scene--projects {
@@ -3091,9 +3127,9 @@ html[data-reduce-motion="true"] .contact__restart {
     margin-bottom: 0.75rem;
   }
   .services__title {
-    max-width: 13ch;
-    font-size: clamp(2.25rem, 9.8vw, 3.25rem);
-    line-height: 0.95;
+    max-width: 14ch;
+    font-size: clamp(2.1rem, 9vw, 3rem);
+    line-height: 0.96;
     letter-spacing: -0.055em;
   }
   .services__instruction {
@@ -3158,7 +3194,7 @@ html[data-reduce-motion="true"] .contact__restart {
   }
   .projects__title {
     max-width: 13ch;
-    font-size: clamp(2.25rem, 9.8vw, 3.25rem);
+    font-size: clamp(2.2rem, 9.4vw, 3.1rem);
     line-height: 0.95;
   }
   .projects__interaction-hint {
@@ -3170,10 +3206,14 @@ html[data-reduce-motion="true"] .contact__restart {
   .selected-project .selected-project__trigger,
   .selected-project:nth-child(2) .selected-project__trigger,
   .selected-project:nth-child(3) .selected-project__trigger {
-    grid-template-rows: minmax(200px, 54vw) auto;
+    grid-template-rows:
+      minmax(200px, 54vw)
+      auto;
   }
   .selected-project:nth-child(1) .selected-project__trigger {
-    grid-template-rows: minmax(235px, 62vw) auto;
+    grid-template-rows:
+      minmax(235px, 62vw)
+      auto;
   }
   .selected-project__body,
   .selected-project:nth-child(1) .selected-project__body,
@@ -3299,9 +3339,15 @@ html[data-reduce-motion="true"] .contact__restart {
     width: 78vw;
     font-size: clamp(2.05rem, 10.9vw, 2.85rem);
   }
+  .travel-story {
+    min-height: 238px;
+  }
+  .travel-location__city {
+    font-size: 1.12rem;
+  }
   .services__title,
   .projects__title {
-    font-size: clamp(2.1rem, 9.5vw, 2.85rem);
+    font-size: clamp(2rem, 9vw, 2.7rem);
   }
   .discipline-modal__number {
     font-size: clamp(3.15rem, 14vw, 4.3rem);
