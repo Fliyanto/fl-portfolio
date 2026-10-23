@@ -266,17 +266,17 @@ textarea {
     height: min(84dvh, 820px);
     min-height: min(620px, calc(100dvh - 2.5rem));
     grid-template-columns:
-      minmax(330px, 0.78fr)
-      minmax(0, 1.22fr);
+      minmax(350px, 0.86fr)
+      minmax(0, 1.14fr);
   }
 
   .project-modal__visual {
     min-height: 0;
-    padding: clamp(1.35rem, 2.3vw, 2.4rem);
+    padding: clamp(1rem, 1.7vw, 1.7rem);
   }
 
   .project-modal__preview {
-    width: min(88%, 540px);
+    width: min(95%, 610px);
   }
 
   .project-modal__title {
@@ -356,17 +356,17 @@ textarea {
     height: min(86dvh, 790px);
     min-height: min(590px, calc(100dvh - 2rem));
     grid-template-columns:
-      minmax(300px, 0.76fr)
-      minmax(0, 1.24fr);
+      minmax(315px, 0.82fr)
+      minmax(0, 1.18fr);
   }
 
   .project-modal__visual {
     min-height: 0;
-    padding: clamp(1.2rem, 2vw, 2rem);
+    padding: clamp(0.9rem, 1.6vw, 1.5rem);
   }
 
   .project-modal__preview {
-    width: min(90%, 500px);
+    width: min(95%, 560px);
   }
 
   .project-modal__story {
@@ -928,17 +928,17 @@ textarea {
     min-height: 0;
     max-height: calc(100dvh - 1.5rem);
     grid-template-columns:
-      minmax(260px, 0.74fr)
-      minmax(0, 1.26fr);
+      minmax(275px, 0.8fr)
+      minmax(0, 1.2fr);
   }
 
   .project-modal__visual {
     min-height: 0;
-    padding: clamp(1rem, 2.2vw, 1.6rem);
+    padding: clamp(0.8rem, 1.8vw, 1.3rem);
   }
 
   .project-modal__preview {
-    width: min(90%, 440px);
+    width: min(95%, 500px);
   }
 
   .project-modal__content {
@@ -1854,7 +1854,7 @@ textarea {
     min-height: 0;
     grid-template-columns: 1fr;
     grid-template-rows:
-      minmax(210px, 58vw)
+      minmax(220px, 60vw)
       auto;
     overflow: hidden;
     touch-action: manipulation;
@@ -1862,7 +1862,7 @@ textarea {
 
   .selected-project:nth-child(1) .selected-project__trigger {
     grid-template-rows:
-      minmax(245px, 68vw)
+      minmax(255px, 70vw)
       auto;
   }
 
@@ -2039,24 +2039,24 @@ textarea {
     display: grid;
     width: 100%;
     height: auto;
-    min-height: clamp(265px, 72vw, 375px);
+    min-height: clamp(300px, 78vw, 430px);
     flex: 0 0 auto;
     place-items: center;
-    padding: calc(4.65rem + env(safe-area-inset-top, 0px)) var(--page-padding)
-      clamp(1.5rem, 5vw, 2rem);
+    padding: calc(4.75rem + env(safe-area-inset-top, 0px)) 0
+      clamp(1.45rem, 5vw, 2rem);
     overflow: hidden;
     border-right: 0;
     border-bottom: 1px solid var(--color-border);
   }
 
   .project-modal__visual--screenshot::before {
-    width: min(76vw, 350px);
+    width: min(82vw, 410px);
     opacity: 0.52;
   }
 
   .project-modal__preview {
-    width: min(88%, 520px);
-    max-width: 520px;
+    width: min(calc(100% - (var(--page-padding) * 1.4)), 620px);
+    max-width: 620px;
   }
 
   .project-modal__preview-frame {
@@ -2072,14 +2072,8 @@ textarea {
     object-position: center;
   }
 
-  .project-modal__preview-image--lega {
-    object-position: 50% 50%;
-  }
-
-  .project-modal__preview-image--pulse {
-    object-position: 50% 50%;
-  }
-
+  .project-modal__preview-image--lega,
+  .project-modal__preview-image--pulse,
   .project-modal__preview-image--nada {
     object-position: 50% 50%;
   }
@@ -2245,6 +2239,58 @@ textarea {
     line-height: 1.55;
   }
 
+  .contact-form {
+    display: grid;
+    width: 100%;
+    gap: 0.9rem;
+    margin-top: 1.5rem;
+  }
+
+  .contact-form__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .contact-form__field {
+    display: grid;
+    min-width: 0;
+    gap: 0.4rem;
+  }
+
+  .contact-form__field--full {
+    grid-column: 1 / -1;
+  }
+
+  .contact-form label {
+    font-size: 0.7rem;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+  }
+
+  .contact-form textarea {
+    min-height: 150px;
+    resize: vertical;
+  }
+
+  .contact-form__submit {
+    width: 100%;
+    min-height: 50px;
+    justify-content: space-between;
+    touch-action: manipulation;
+  }
+
+  .contact-form__status {
+    max-width: 38ch;
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
   .contact-links {
     display: grid;
     width: 100%;
@@ -2341,6 +2387,7 @@ textarea {
   .project-modal__close,
   .project-modal__link,
   .contact-link,
+  .contact-form__submit,
   .scene-next,
   .scene-progress__continue,
   .contact__restart {
@@ -2359,6 +2406,7 @@ textarea {
   }
 
   .project-modal__link,
+  .contact-form__submit,
   .scene-next,
   .scene-progress__continue,
   .contact__restart {
@@ -2403,7 +2451,8 @@ textarea {
   .discipline-modal__description,
   .project-disclaimer,
   .project-disclaimer p,
-  .contact-link__value {
+  .contact-link__value,
+  .contact-form__status {
     overflow-wrap: anywhere;
   }
 }
@@ -2611,13 +2660,13 @@ textarea {
   .selected-project:nth-child(2) .selected-project__trigger,
   .selected-project:nth-child(3) .selected-project__trigger {
     grid-template-rows:
-      minmax(195px, 58vw)
+      minmax(210px, 61vw)
       auto;
   }
 
   .selected-project:nth-child(1) .selected-project__trigger {
     grid-template-rows:
-      minmax(230px, 67vw)
+      minmax(245px, 70vw)
       auto;
   }
 
@@ -2646,17 +2695,16 @@ textarea {
   }
 
   .project-modal__visual {
-    min-height: clamp(245px, 68vw, 325px);
-    padding: calc(4.35rem + env(safe-area-inset-top, 0px)) var(--page-padding)
-      1.35rem;
+    min-height: clamp(280px, 76vw, 370px);
+    padding: calc(4.35rem + env(safe-area-inset-top, 0px)) 0 1.35rem;
   }
 
   .project-modal__visual--screenshot::before {
-    width: min(72vw, 310px);
+    width: min(80vw, 360px);
   }
 
   .project-modal__preview {
-    width: min(90%, 440px);
+    width: min(calc(100% - (var(--page-padding) * 1.15)), 540px);
   }
 
   .project-modal__preview-frame {
@@ -2734,6 +2782,29 @@ textarea {
 
   .contact__description {
     font-size: 0.9rem;
+  }
+
+  .contact-form {
+    gap: 0.8rem;
+    margin-top: 1.35rem;
+  }
+
+  .contact-form__grid {
+    gap: 0.75rem;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    font-size: 0.9rem;
+  }
+
+  .contact-form textarea {
+    min-height: 140px;
+  }
+
+  .contact-form__submit {
+    min-height: 50px;
+    padding-inline: 0.9rem;
   }
 
   .contact-link {
@@ -2831,12 +2902,12 @@ textarea {
   }
 
   .project-modal__visual {
-    min-height: clamp(225px, 66vw, 285px);
+    min-height: clamp(255px, 72vw, 320px);
     padding-top: calc(4.15rem + env(safe-area-inset-top, 0px));
   }
 
   .project-modal__preview {
-    width: min(92%, 390px);
+    width: min(calc(100% - 1.1rem), 460px);
   }
 
   .project-modal__preview-frame {
@@ -2859,6 +2930,15 @@ textarea {
 
   .project-modal__link {
     font-size: 0.76rem;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    font-size: 0.86rem;
+  }
+
+  .contact-form textarea {
+    min-height: 132px;
   }
 
   .contact-link__value {
@@ -2957,13 +3037,13 @@ textarea {
   }
 
   .project-modal__visual {
-    min-height: 230px;
+    min-height: 250px;
     padding: calc(4rem + env(safe-area-inset-top, 0px)) var(--page-padding)
       1.1rem;
   }
 
   .project-modal__preview {
-    width: min(72%, 460px);
+    width: min(86%, 560px);
   }
 
   .project-modal__preview-frame {
@@ -3040,7 +3120,7 @@ textarea {
   }
 
   .project-modal__preview {
-    width: min(66%, 420px);
+    width: min(82%, 500px);
   }
 }
 
@@ -3097,7 +3177,7 @@ textarea {
   }
 
   .project-modal__preview {
-    width: min(86%, 410px);
+    width: min(92%, 470px);
   }
 }
 
@@ -3126,12 +3206,12 @@ textarea {
 
   html[data-font-size="large"] .project-modal__surface {
     grid-template-columns:
-      minmax(245px, 0.68fr)
-      minmax(0, 1.32fr);
+      minmax(270px, 0.76fr)
+      minmax(0, 1.24fr);
   }
 
   html[data-font-size="large"] .project-modal__preview {
-    width: min(88%, 420px);
+    width: min(94%, 500px);
   }
 
   html[data-font-size="large"] .project-modal__story {
@@ -3227,11 +3307,11 @@ textarea {
   }
 
   html[data-font-size="large"] .project-modal__visual {
-    min-height: clamp(255px, 71vw, 355px);
+    min-height: clamp(290px, 78vw, 395px);
   }
 
   html[data-font-size="large"] .project-modal__preview {
-    width: min(90%, 500px);
+    width: min(calc(100% - (var(--page-padding) * 1.15)), 580px);
   }
 
   html[data-font-size="large"] .project-modal__content {
@@ -3282,6 +3362,20 @@ textarea {
     line-height: 1.65;
   }
 
+  html[data-font-size="large"] .contact-form label {
+    font-size: 0.76rem;
+  }
+
+  html[data-font-size="large"] .contact-form input,
+  html[data-font-size="large"] .contact-form textarea {
+    font-size: 1rem;
+  }
+
+  html[data-font-size="large"] .contact-form__submit {
+    min-height: 54px;
+    font-size: 0.92rem;
+  }
+
   html[data-font-size="large"] .contact-link {
     grid-template-columns:
       minmax(0, 1fr)
@@ -3325,8 +3419,16 @@ textarea {
     border-color: rgba(243, 238, 230, 0.14);
   }
 
-  html[data-theme="dark"] .contact-link {
+  html[data-theme="dark"] .contact-link,
+  html[data-theme="dark"] .contact-form input,
+  html[data-theme="dark"] .contact-form textarea {
     border-color: rgba(243, 238, 230, 0.17);
+  }
+
+  html[data-theme="dark"] .contact-form input,
+  html[data-theme="dark"] .contact-form textarea {
+    background: rgba(34, 33, 30, 0.78);
+    color: var(--color-text);
   }
 
   html[data-theme="dark"] .discipline-modal__surface,
@@ -3524,6 +3626,42 @@ textarea {
     background: #050505;
     color: #ffffff;
   }
+
+  html[data-theme="contrast"] .contact-form input,
+  html[data-theme="contrast"] .contact-form textarea {
+    border: 2px solid #ffffff;
+    background: #000000;
+    color: #ffffff;
+    box-shadow: none;
+  }
+
+  html[data-theme="contrast"] .contact-form input::placeholder,
+  html[data-theme="contrast"] .contact-form textarea::placeholder {
+    color: #d7d7d7;
+    opacity: 1;
+  }
+
+  html[data-theme="contrast"] .contact-form label {
+    color: #ffffff;
+  }
+
+  html[data-theme="contrast"] .contact-form__submit {
+    border: 2px solid #ffffff;
+    background: #ffffff;
+    color: #000000;
+    box-shadow: none;
+  }
+
+  html[data-theme="contrast"] .contact-form__submit:hover,
+  html[data-theme="contrast"] .contact-form__submit:focus-visible {
+    border-color: var(--color-yellow);
+    background: var(--color-yellow);
+    color: #000000;
+  }
+
+  html[data-theme="contrast"] .contact-form__status {
+    color: #ffffff;
+  }
 }
 
 @media (max-width: 720px) {
@@ -3558,6 +3696,15 @@ textarea {
 
   html[data-theme="contrast"] .contact-link {
     border-radius: 14px;
+  }
+
+  html[data-theme="contrast"] .contact-form input,
+  html[data-theme="contrast"] .contact-form textarea {
+    border-radius: 14px;
+  }
+
+  html[data-theme="contrast"] .contact-form__submit {
+    border-radius: var(--radius-pill);
   }
 }
 
@@ -3600,6 +3747,7 @@ textarea {
   .lega-visual__chips span,
   .contact-link,
   .contact-link__arrow,
+  .contact-form__submit,
   .contact__brand,
   .scene-progress__arrow,
   .scene-progress__continue,
@@ -3612,6 +3760,7 @@ textarea {
   .discipline:hover,
   .selected-project__trigger:hover,
   .contact-link:hover,
+  .contact-form__submit:hover,
   .scene-progress__continue:hover,
   .scene-next:hover,
   .contact__restart:hover {
@@ -3657,6 +3806,7 @@ html[data-reduce-motion="true"] .lega-visual__slider > span,
 html[data-reduce-motion="true"] .lega-visual__chips span,
 html[data-reduce-motion="true"] .contact-link,
 html[data-reduce-motion="true"] .contact-link__arrow,
+html[data-reduce-motion="true"] .contact-form__submit,
 html[data-reduce-motion="true"] .contact__brand,
 html[data-reduce-motion="true"] .scene-progress__arrow,
 html[data-reduce-motion="true"] .scene-progress__continue,
@@ -3668,6 +3818,16 @@ html[data-reduce-motion="true"] .contact__restart {
 
 html[data-reduce-motion="true"] .project-modal__preview-image {
   transform: none;
+}
+
+html[data-reduce-motion="true"] .discipline:hover,
+html[data-reduce-motion="true"] .selected-project__trigger:hover,
+html[data-reduce-motion="true"] .contact-link:hover,
+html[data-reduce-motion="true"] .contact-form__submit:hover,
+html[data-reduce-motion="true"] .scene-progress__continue:hover,
+html[data-reduce-motion="true"] .scene-next:hover,
+html[data-reduce-motion="true"] .contact__restart:hover {
+  transform: none !important;
 }
 
 @media (hover: none) {
@@ -3691,6 +3851,7 @@ html[data-reduce-motion="true"] .project-modal__preview-image {
   .discipline:hover,
   .selected-project__trigger:hover,
   .contact-link:hover,
+  .contact-form__submit:hover,
   .scene-progress__continue:hover,
   .scene-next:hover,
   .contact__restart:hover {
@@ -3718,6 +3879,7 @@ html[data-reduce-motion="true"] .project-modal__preview-image {
   .project-modal__link,
   .discipline-modal__close,
   .contact-link,
+  .contact-form__submit,
   .scene-next,
   .scene-progress__continue,
   .contact__restart {
@@ -3799,11 +3961,16 @@ html[data-reduce-motion="true"] .project-modal__preview-image {
     }
 
     .project-modal__visual {
+      padding-left: max(0.5rem, env(safe-area-inset-left, 0px));
+      padding-right: max(0.5rem, env(safe-area-inset-right, 0px));
+    }
+
+    .project-modal__content {
       padding-left: max(var(--page-padding), env(safe-area-inset-left, 0px));
       padding-right: max(var(--page-padding), env(safe-area-inset-right, 0px));
     }
 
-    .project-modal__content {
+    .discipline-modal__surface {
       padding-left: max(var(--page-padding), env(safe-area-inset-left, 0px));
       padding-right: max(var(--page-padding), env(safe-area-inset-right, 0px));
     }
@@ -3843,6 +4010,9 @@ html[data-reduce-motion="true"] .project-modal__preview-image {
   .discipline,
   .selected-project__trigger,
   .contact-link,
+  .contact-form input,
+  .contact-form textarea,
+  .contact-form__submit,
   .scene-progress__continue,
   .scene-next,
   .contact__restart,
@@ -3854,6 +4024,16 @@ html[data-reduce-motion="true"] .project-modal__preview-image {
     background: Canvas !important;
     color: CanvasText !important;
     box-shadow: none !important;
+  }
+
+  .contact-form input::placeholder,
+  .contact-form textarea::placeholder {
+    color: GrayText !important;
+  }
+
+  .contact-form__submit {
+    background: ButtonFace !important;
+    color: ButtonText !important;
   }
 
   .project-modal__visual {
@@ -3908,6 +4088,7 @@ html[data-reduce-motion="true"] .project-modal__preview-image {
   .scene-progress,
   .scene-next,
   .contact__restart,
+  .contact-form,
   .custom-cursor {
     display: none !important;
   }
@@ -4368,13 +4549,13 @@ html[data-reduce-motion="true"] .project-modal__preview-image {
   .selected-project:nth-child(2) .selected-project__trigger,
   .selected-project:nth-child(3) .selected-project__trigger {
     grid-template-rows:
-      minmax(200px, 54vw)
+      minmax(215px, 58vw)
       auto;
   }
 
   .selected-project:nth-child(1) .selected-project__trigger {
     grid-template-rows:
-      minmax(235px, 62vw)
+      minmax(250px, 67vw)
       auto;
   }
 
@@ -4428,17 +4609,17 @@ html[data-reduce-motion="true"] .project-modal__preview-image {
   }
 
   .project-modal__visual {
-    min-height: clamp(245px, 64vw, 335px);
-    padding: calc(4.4rem + env(safe-area-inset-top, 0px)) var(--page-padding)
+    min-height: clamp(300px, 77vw, 410px);
+    padding: calc(4.4rem + env(safe-area-inset-top, 0px)) 0
       clamp(1.4rem, 5vw, 1.8rem);
   }
 
   .project-modal__visual--screenshot::before {
-    width: min(74vw, 330px);
+    width: min(81vw, 390px);
   }
 
   .project-modal__preview {
-    width: min(88%, 470px);
+    width: min(calc(100% - 1.25rem), 590px);
   }
 
   .project-modal__preview-frame {
@@ -4538,6 +4719,34 @@ html[data-reduce-motion="true"] .project-modal__preview-image {
     line-height: 1.58;
   }
 
+  .contact-form {
+    width: 100%;
+    margin-top: 1.55rem;
+  }
+
+  .contact-form__grid {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .contact-form__field {
+    width: 100%;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+  }
+
+  .contact-form textarea {
+    min-height: 150px;
+  }
+
+  .contact-form__submit {
+    width: 100%;
+    min-height: 52px;
+  }
+
   .contact-links {
     gap: 0.7rem;
     margin-top: 1.6rem;
@@ -4565,15 +4774,40 @@ html[data-reduce-motion="true"] .project-modal__preview-image {
   }
 }
 
-@media (max-width: 380px) and (orientation: portrait) {
-  .settings-toggle,
-  .nav-toggle {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    min-height: 44px;
+@media (max-width: 430px) and (orientation: portrait) {
+  .welcome__sequence {
+    min-height: clamp(440px, 68svh, 575px);
   }
 
+  .selected-project .selected-project__trigger,
+  .selected-project:nth-child(2) .selected-project__trigger,
+  .selected-project:nth-child(3) .selected-project__trigger {
+    grid-template-rows:
+      minmax(205px, 59vw)
+      auto;
+  }
+
+  .selected-project:nth-child(1) .selected-project__trigger {
+    grid-template-rows:
+      minmax(240px, 68vw)
+      auto;
+  }
+
+  .project-modal__visual {
+    min-height: clamp(285px, 76vw, 370px);
+  }
+
+  .project-modal__preview {
+    width: calc(100% - 1rem);
+    max-width: 540px;
+  }
+
+  .contact-form textarea {
+    min-height: 145px;
+  }
+}
+
+@media (max-width: 390px) and (orientation: portrait) {
   .welcome__sequence {
     min-height: clamp(430px, 69svh, 560px);
   }
@@ -4628,17 +4862,18 @@ html[data-reduce-motion="true"] .project-modal__preview-image {
   }
 
   .project-modal__visual {
-    min-height: clamp(215px, 64vw, 275px);
+    min-height: clamp(265px, 74vw, 335px);
     padding-top: calc(4.1rem + env(safe-area-inset-top, 0px));
-    padding-bottom: 1.1rem;
+    padding-bottom: 1.15rem;
   }
 
   .project-modal__visual--screenshot::before {
-    width: min(70vw, 275px);
+    width: min(76vw, 320px);
   }
 
   .project-modal__preview {
-    width: min(92%, 360px);
+    width: calc(100% - 0.9rem);
+    max-width: 500px;
   }
 
   .project-modal__preview-frame {
@@ -4680,8 +4915,83 @@ html[data-reduce-motion="true"] .project-modal__preview-image {
     font-size: 0.74rem;
   }
 
+  .contact-form {
+    margin-top: 1.35rem;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    min-height: 48px;
+  }
+
+  .contact-form textarea {
+    min-height: 135px;
+  }
+
   .contact__title {
     font-size: clamp(2.55rem, 12vw, 3.6rem);
+  }
+}
+
+@media (max-width: 360px) and (orientation: portrait) {
+  :root {
+    --page-padding: 0.8rem;
+  }
+
+  .site-header {
+    column-gap: 0.16rem;
+  }
+
+  .language-switcher {
+    padding-inline: 0.14rem;
+  }
+
+  .language-switcher__button {
+    min-width: 1.2rem;
+    font-size: 0.53rem;
+  }
+
+  .welcome__title {
+    font-size: clamp(2.7rem, 16.4vw, 3.8rem);
+  }
+
+  .selected-project__body {
+    padding-inline: 0.9rem;
+  }
+
+  .selected-project__disciplines {
+    gap: 0.28rem;
+  }
+
+  .selected-project__disciplines li {
+    padding-inline: 0.46rem;
+    font-size: 0.6rem;
+  }
+
+  .project-modal__visual {
+    min-height: clamp(250px, 73vw, 310px);
+  }
+
+  .project-modal__preview {
+    width: calc(100% - 0.7rem);
+    max-width: 460px;
+  }
+
+  .project-modal__content {
+    padding-left: var(--page-padding);
+    padding-right: var(--page-padding);
+  }
+
+  .project-modal__story-block {
+    padding-inline: 0.72rem;
+  }
+
+  .contact-form__grid {
+    gap: 0.7rem;
+  }
+
+  .contact-form textarea {
+    min-height: 130px;
   }
 }
 
@@ -4753,12 +5063,14 @@ html[data-reduce-motion="true"] .project-modal__preview-image {
   }
 
   .project-modal__visual {
-    min-height: 205px;
+    min-height: 240px;
     padding-top: calc(4rem + env(safe-area-inset-top, 0px));
+    padding-bottom: 1rem;
   }
 
   .project-modal__preview {
-    width: min(94%, 325px);
+    width: calc(100% - 0.5rem);
+    max-width: 425px;
   }
 
   .project-modal__content {
@@ -4783,6 +5095,24 @@ html[data-reduce-motion="true"] .project-modal__preview-image {
 
   .project-modal__story-copy {
     font-size: 0.8rem;
+  }
+
+  .contact-form {
+    gap: 0.7rem;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    font-size: 0.82rem;
+  }
+
+  .contact-form textarea {
+    min-height: 125px;
+  }
+
+  .contact-form__submit {
+    min-height: 48px;
+    font-size: 0.78rem;
   }
 
   .contact-link {

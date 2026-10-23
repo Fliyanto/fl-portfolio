@@ -77,6 +77,7 @@
     currentScene: "welcome",
     settingsOpen: false,
     mobileNavOpen: false,
+    contactSubmitting: false,
     openDisciplineModal: null,
     openProjectModal: null,
     disciplineReturnFocus: null,
@@ -138,6 +139,9 @@
     FLDom.contactLinks = Array.from(
       document.querySelectorAll("[data-contact]"),
     );
+    FLDom.contactForm = document.querySelector("[data-contact-form]");
+    FLDom.contactSubmit = document.querySelector("[data-contact-submit]");
+    FLDom.contactStatus = document.querySelector("[data-contact-status]");
   }
 
   function FLReadStorage(key, fallback = null) {
@@ -468,10 +472,12 @@
       STORAGE_KEYS.language,
       DEFAULTS.language,
     );
+
     const savedFontSize = FLReadStorage(
       STORAGE_KEYS.fontSize,
       DEFAULTS.fontSize,
     );
+
     const savedMotion = FLReadStorage(STORAGE_KEYS.reducedMotion, null);
 
     const savedTheme =
@@ -898,6 +904,7 @@
       updateHash: true,
     });
   }
+
   function FLHandleSceneTargetClick(event) {
     const control = event.currentTarget;
     const target = control.dataset.sceneTarget;
@@ -1000,7 +1007,6 @@
 
     FLAdvanceScene(sceneName);
   }
-
   function FLInitialiseBackgroundAdvance() {
     ["services", "projects"].forEach((sceneName) => {
       const scene = FLGetSceneElement(sceneName);
@@ -1808,6 +1814,7 @@
 
     return FLChangeProject(nextId);
   }
+
   function FLShowPreviousProject() {
     const currentId = FLState.openProjectModal;
 
@@ -1917,6 +1924,213 @@
     });
   }
 
+  function FLGetContactTranslation(key) {
+    return (
+      FLGetTranslation(FLState.language, `contact.form.${key}`) ||
+      FLGetTranslation(DEFAULTS.language, `contact.form.${key}`) ||
+      ""
+    );
+  }
+
+  function FLGetContactSubmitLabel() {
+    return FLDom.contactSubmit?.querySelector(
+      '[data-i18n="contact.form.submit"]',
+    );
+  }
+
+  function FLSetContactSubmitCopy(key = "submit") {
+    const label = FLGetContactSubmitLabel();
+    const translation = FLGetContactTranslation(key);
+
+    if (label && translation) {
+      label.textContent = translation;
+    }
+  }
+
+  function FLSetContactSubmitting(submitting) {
+    const active = Boolean(submitting);
+
+    FLState.contactSubmitting = active;
+
+    if (FLDom.contactSubmit) {
+      FLDom.contactSubmit.disabled = active;
+      FLDom.contactSubmit.setAttribute("aria-disabled", String(active));
+      FLDom.contactSubmit.dataset.submitting = String(active);
+    }
+
+    FLSetContactSubmitCopy(active ? "sending" : "submit");
+  }
+
+  function FLClearContactStatus() {
+    if (!FLDom.contactStatus) {
+      return;
+    }
+
+    FLDom.contactStatus.hidden = true;
+    FLDom.contactStatus.textContent = "";
+    FLDom.contactStatus.removeAttribute("data-state");
+    FLDom.contactStatus.removeAttribute("data-message-key");
+  }
+
+  function FLShowContactStatus(messageKey, state = "info") {
+    if (!FLDom.contactStatus || !messageKey) {
+      return false;
+    }
+
+    const message = FLGetContactTranslation(messageKey);
+
+    if (!message) {
+      FLClearContactStatus();
+      return false;
+    }
+
+    FLDom.contactStatus.textContent = message;
+    FLDom.contactStatus.dataset.state = state;
+    FLDom.contactStatus.dataset.messageKey = messageKey;
+    FLDom.contactStatus.hidden = false;
+
+    return true;
+  }
+
+  function FLRefreshContactFormLanguage() {
+    if (FLState.contactSubmitting) {
+      FLSetContactSubmitCopy("sending");
+    } else {
+      FLSetContactSubmitCopy("submit");
+    }
+
+    const messageKey = FLDom.contactStatus?.dataset.messageKey;
+
+    if (
+      messageKey &&
+      FLDom.contactStatus &&
+      FLDom.contactStatus.hidden === false
+    ) {
+      FLShowContactStatus(
+        messageKey,
+        FLDom.contactStatus.dataset.state || "info",
+      );
+    }
+  }
+
+  function FLEncodeNetlifyForm(form) {
+    const formData = new FormData(form);
+    const params = new URLSearchParams();
+
+    formData.forEach((value, key) => {
+      if (typeof value === "string") {
+        params.append(key, value);
+      }
+    });
+
+    return params.toString();
+  }
+
+  async function FLSubmitContactForm(form) {
+    const action = form.getAttribute("action") || "/";
+    const body = FLEncodeNetlifyForm(form);
+
+    const response = await window.fetch(action, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
+      body,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Contact form submission failed: ${response.status}`);
+    }
+
+    return response;
+  }
+
+  async function FLHandleContactSubmit(event) {
+    const form = event.currentTarget;
+
+    if (!(form instanceof HTMLFormElement)) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (FLState.contactSubmitting) {
+      return;
+    }
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    FLClearContactStatus();
+    FLSetContactSubmitting(true);
+    FLShowContactStatus("sending", "sending");
+
+    try {
+      await FLSubmitContactForm(form);
+
+      form.reset();
+
+      FLSetContactSubmitting(false);
+      FLShowContactStatus("success", "success");
+
+      window.dispatchEvent(
+        new CustomEvent("flContactFormSubmit", {
+          detail: {
+            success: true,
+          },
+        }),
+      );
+    } catch (error) {
+      console.error(error);
+
+      FLSetContactSubmitting(false);
+      FLShowContactStatus("error", "error");
+
+      window.dispatchEvent(
+        new CustomEvent("flContactFormSubmit", {
+          detail: {
+            success: false,
+            error,
+          },
+        }),
+      );
+    }
+  }
+
+  function FLHandleContactInput() {
+    if (
+      !FLDom.contactStatus ||
+      FLDom.contactStatus.hidden ||
+      FLState.contactSubmitting
+    ) {
+      return;
+    }
+
+    if (FLDom.contactStatus.dataset.state === "error") {
+      FLClearContactStatus();
+    }
+  }
+
+  function FLInitialiseContactForm() {
+    if (!FLDom.contactForm) {
+      return false;
+    }
+
+    FLState.contactSubmitting = false;
+
+    FLDom.contactForm.addEventListener("submit", FLHandleContactSubmit);
+    FLDom.contactForm.addEventListener("input", FLHandleContactInput);
+
+    window.addEventListener("flLanguageChange", FLRefreshContactFormLanguage);
+
+    FLClearContactStatus();
+    FLSetContactSubmitting(false);
+
+    return true;
+  }
   function FLUpdateHeaderState() {
     FLDom.header?.classList.toggle("is-scrolled", window.scrollY > 12);
   }
@@ -2361,6 +2575,10 @@
       return Boolean(FLState.openProjectModal);
     },
 
+    isContactSubmitting() {
+      return FLState.contactSubmitting;
+    },
+
     closeAllModals(options = {}) {
       return FLCloseAllModals(options);
     },
@@ -2382,6 +2600,7 @@
         currentScene: FLState.currentScene,
         settingsOpen: FLState.settingsOpen,
         mobileNavOpen: FLState.mobileNavOpen,
+        contactSubmitting: FLState.contactSubmitting,
         sceneNavigationPending: FLState.sceneNavigationPending,
         openDisciplineModal: FLState.openDisciplineModal,
         openProjectModal: FLState.openProjectModal,
@@ -2408,6 +2627,7 @@
     FLInitialiseSceneEvents();
     FLInitialiseModalEvents();
     FLInitialiseContactPlaceholders();
+    FLInitialiseContactForm();
     FLInitialiseHistoryEvents();
     FLInitialiseGlobalSiteEvents();
     FLInitialiseViewportEvents();
@@ -2428,6 +2648,7 @@
           reducedMotion: FLState.reducedMotion,
           theme: FLState.theme,
           highContrast: FLState.theme === "contrast",
+          contactSubmitting: FLState.contactSubmitting,
           openDisciplineModal: FLState.openDisciplineModal,
           openProjectModal: FLState.openProjectModal,
           openProjectStory: FLState.openProjectModal,

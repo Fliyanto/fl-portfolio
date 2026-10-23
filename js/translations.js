@@ -264,12 +264,28 @@ const FLTranslations = {
 
     contact: {
       label: "Contact",
-      eyebrow: "Made it all the way here?",
-      title: "Thanks for stopping by.",
+      eyebrow: "Thanks for stopping by.",
+      title: "Let’s make something worth interacting with.",
       description:
-        "Have an idea, opportunity, collaboration, or just want to say hello? Feel free to reach out.",
-      email: "f.p.liyanto@gmail.com",
-      linkedin: "Let's connect",
+        "Have an idea, opportunity, collaboration, or just want to say hello? Send me a message below.",
+      linkedinLabel: "LinkedIn",
+      linkedin: "Or find me on LinkedIn",
+      form: {
+        nameLabel: "Name",
+        namePlaceholder: "Your name",
+        emailLabel: "Your email",
+        emailPlaceholder: "you@example.com",
+        subjectLabel: "Subject",
+        subjectPlaceholder: "What would you like to talk about?",
+        messageLabel: "Message",
+        messagePlaceholder:
+          "Tell me a little about your idea, opportunity, or project.",
+        submit: "Send message",
+        sending: "Sending…",
+        success: "Thanks — your message has been sent.",
+        error:
+          "Something went wrong while sending your message. Please try again.",
+      },
       social: "Social",
       socialValue: "More of F.Liyanto",
     },
@@ -278,6 +294,7 @@ const FLTranslations = {
       message: "Designed & developed with curiosity.",
     },
   },
+
   id: {
     meta: {
       title: "F.Liyanto — UI, Interaction & Front-End Designer",
@@ -541,12 +558,27 @@ const FLTranslations = {
 
     contact: {
       label: "Kontak",
-      eyebrow: "Sampai di bagian ini?",
-      title: "Terima kasih sudah berkunjung.",
+      eyebrow: "Terima kasih sudah mampir.",
+      title: "Mari buat sesuatu yang layak untuk diinteraksikan.",
       description:
-        "Punya ide, peluang, ingin berkolaborasi, atau sekadar ingin menyapa? Saya akan senang mendengarnya.",
-      email: "f.p.liyanto@gmail.com",
-      linkedin: "Mari terhubung",
+        "Punya ide, peluang, ingin berkolaborasi, atau sekadar ingin menyapa? Kirim pesan melalui form di bawah ini.",
+      linkedinLabel: "LinkedIn",
+      linkedin: "Atau temukan saya di LinkedIn",
+      form: {
+        nameLabel: "Nama",
+        namePlaceholder: "Nama Anda",
+        emailLabel: "Email Anda",
+        emailPlaceholder: "anda@contoh.com",
+        subjectLabel: "Subjek",
+        subjectPlaceholder: "Apa yang ingin Anda bicarakan?",
+        messageLabel: "Pesan",
+        messagePlaceholder:
+          "Ceritakan sedikit tentang ide, peluang, atau proyek Anda.",
+        submit: "Kirim pesan",
+        sending: "Mengirim…",
+        success: "Terima kasih — pesan Anda sudah terkirim.",
+        error: "Terjadi masalah saat mengirim pesan. Silakan coba lagi.",
+      },
       social: "Sosial",
       socialValue: "Lihat lebih banyak dari F.Liyanto",
     },
