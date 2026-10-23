@@ -526,7 +526,7 @@
   }
 
   function FLIsMobileLayout() {
-    return window.innerWidth <= 960;
+    return window.innerWidth <= 1024;
   }
 
   function FLGetNavigationToggleLabel() {
@@ -904,7 +904,6 @@
       updateHash: true,
     });
   }
-
   function FLHandleSceneTargetClick(event) {
     const control = event.currentTarget;
     const target = control.dataset.sceneTarget;
@@ -1007,6 +1006,7 @@
 
     FLAdvanceScene(sceneName);
   }
+
   function FLInitialiseBackgroundAdvance() {
     ["services", "projects"].forEach((sceneName) => {
       const scene = FLGetSceneElement(sceneName);
@@ -1588,6 +1588,7 @@
 
     if (!FLShowDialog(modal)) {
       FLState.openProjectModal = null;
+      FLState.projectReturnFocus = null;
       FLSetProjectTriggerState(projectId, false);
 
       return false;
@@ -1693,16 +1694,46 @@
     return closed;
   }
 
-  function FLHandleProjectOpen(event) {
-    event.preventDefault();
-    event.stopPropagation();
+  function FLGetProjectTriggerFromEvent(event) {
+    if (!(event.target instanceof Element)) {
+      return null;
+    }
 
-    const trigger = event.currentTarget;
-    const projectId = trigger.dataset.projectOpen;
+    const trigger = event.target.closest("[data-project-open]");
 
-    if (!projectId) {
+    if (!(trigger instanceof HTMLElement)) {
+      return null;
+    }
+
+    if (!FLDom.projectTriggers.includes(trigger)) {
+      return null;
+    }
+
+    return trigger;
+  }
+
+  function FLHandleProjectOpenCapture(event) {
+    const trigger = FLGetProjectTriggerFromEvent(event);
+
+    if (!trigger) {
       return;
     }
+
+    if (
+      trigger.hasAttribute("disabled") ||
+      trigger.getAttribute("aria-disabled") === "true"
+    ) {
+      return;
+    }
+
+    const projectId = trigger.dataset.projectOpen;
+
+    if (!projectId || !FLGetProjectModal(projectId)) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
 
     FLOpenProjectModal(projectId, {
       returnFocusElement: trigger,
@@ -1721,8 +1752,9 @@
   function FLInitialiseProjectDialogEvents() {
     FLDom.projectTriggers.forEach((trigger) => {
       trigger.setAttribute("aria-expanded", "false");
-      trigger.addEventListener("click", FLHandleProjectOpen);
     });
+
+    document.addEventListener("click", FLHandleProjectOpenCapture, true);
 
     FLDom.projectCloseButtons.forEach((button) => {
       button.addEventListener("click", FLHandleProjectClose);
@@ -1895,7 +1927,6 @@
 
     return false;
   }
-
   function FLMakePlaceholderLinkInert(link) {
     if (!link) {
       return false;
@@ -2131,6 +2162,7 @@
 
     return true;
   }
+
   function FLUpdateHeaderState() {
     FLDom.header?.classList.toggle("is-scrolled", window.scrollY > 12);
   }
@@ -2372,7 +2404,7 @@
   }
 
   function FLHandleViewportChange() {
-    if (window.innerWidth > 960 && FLState.mobileNavOpen) {
+    if (window.innerWidth > 1024 && FLState.mobileNavOpen) {
       FLCloseMobileNav();
     }
 
